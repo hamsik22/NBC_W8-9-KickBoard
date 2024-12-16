@@ -13,8 +13,6 @@ final class SearchKickboardMapView: MKMapView {
     private let mapView: MKMapView = {
         let map = MKMapView()
         map.preferredConfiguration = MKHybridMapConfiguration()
-        map.showsUserLocation = true
-        map.setUserTrackingMode(.follow, animated: true)
         return map
     }()
     
@@ -28,6 +26,7 @@ final class SearchKickboardMapView: MKMapView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
+        setupMapView()
     }
     
     required init?(coder: NSCoder) {
@@ -42,5 +41,11 @@ final class SearchKickboardMapView: MKMapView {
         mapView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+    
+    private func setupMapView() {
+        locationManager.startUpdatingLocation()
+        mapView.showsUserLocation = true
+        mapView.setUserTrackingMode(.follow, animated: true)
     }
 }
