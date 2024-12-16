@@ -9,11 +9,14 @@ import SnapKit
 
 final class SearchKickboardView: UIView {
     private let searchKickboardMapView = SearchKickboardMapView()
-    private let searchLocationBarView = SearchLocationBarView()
+    private lazy var searchLocationBarView: SearchLocationBarView = {
+        let view = SearchLocationBarView()
+        view.mapView = searchKickboardMapView
+        return view
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        searchLocationBarView.mapView = searchKickboardMapView
         setupSubviews()
     }
     
@@ -28,7 +31,7 @@ final class SearchKickboardView: UIView {
         }
         
         self.addSubview(searchLocationBarView)
-        self.searchLocationBarView.snp.makeConstraints {
+        searchLocationBarView.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).offset(20)
             $0.trailing.leading.equalToSuperview().inset(20)
             $0.height.equalTo(60)
