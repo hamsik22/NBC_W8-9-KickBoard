@@ -23,15 +23,24 @@ final class MainTabBar: UIView {
         return collectionView
     }()
     
+    private let tabBarBackgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.PersonalLight.light
+        
+        return view
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        setupTabBarBackgorundView()
         setupTabBar()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        
+    
+        setupTabBarBackgorundView()
         setupTabBar()
     }
     
@@ -46,8 +55,18 @@ final class MainTabBar: UIView {
         self.addSubview(self.tabBar)
         
         self.tabBar.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(self.tabBarBackgroundView.snp.top)
             $0.height.equalTo(50)
+        }
+    }
+    
+    private func setupTabBarBackgorundView() {
+        self.addSubview(self.tabBarBackgroundView)
+        
+        self.tabBarBackgroundView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(30)
         }
     }
 }
