@@ -11,7 +11,7 @@ import SnapKit
 final class SearchKickboardMapView: MKMapView {
     private let mapView: MKMapView = {
         let map = MKMapView()
-        map.mapType = .hybrid
+        map.preferredConfiguration = MKHybridMapConfiguration()
         map.showsUserLocation = true
         return map
     }()
