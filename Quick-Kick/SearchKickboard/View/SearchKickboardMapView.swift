@@ -27,14 +27,14 @@ final class SearchKickboardMapView: MKMapView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupMapView()
+        setupLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupMapView() {
+    private func setupLayout() {
         addSubview(mapView)
         
         mapView.translatesAutoresizingMaskIntoConstraints = false
