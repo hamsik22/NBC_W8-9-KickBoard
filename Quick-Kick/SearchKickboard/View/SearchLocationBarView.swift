@@ -40,4 +40,5 @@ final class SearchLocationBarView: UIView {
     
     private let searchCompleter = MKLocalSearchCompleter()
     private var searchResults: [MKLocalSearchCompletion] = []
+    weak var mapView: MKMapView?
 }
