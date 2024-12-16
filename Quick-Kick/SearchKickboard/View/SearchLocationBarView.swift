@@ -7,5 +7,10 @@
 import UIKit
 
 final class SearchLocationBarView: UIView {
-    
+    private let containerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 25
+        return view
+    }()
 }
