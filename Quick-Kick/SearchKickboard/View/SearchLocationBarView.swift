@@ -70,5 +70,12 @@ final class SearchLocationBarView: UIView {
         searchStackView.snp.makeConstraints {
             $0.edges.equalToSuperview().inset(10)
         }
+        
+        self.addSubview(searchResultsTableView)
+        searchResultsTableView.snp.makeConstraints {
+            $0.top.equalTo(containerView.snp.bottom).offset(5)
+            $0.leading.trailing.equalToSuperview().inset(10)
+            $0.height.equalTo(200)
+        }
     }
 }
