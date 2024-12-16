@@ -7,6 +7,7 @@
 import UIKit
 import MapKit
 import SnapKit
+import CoreLocation
 
 final class SearchKickboardMapView: MKMapView {
     private let mapView: MKMapView = {
@@ -15,6 +16,13 @@ final class SearchKickboardMapView: MKMapView {
         map.showsUserLocation = true
         map.setUserTrackingMode(.follow, animated: true)
         return map
+    }()
+    
+    private let locationManager: CLLocationManager = {
+        let manager = CLLocationManager()
+        manager.requestWhenInUseAuthorization()
+        manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        return manager
     }()
     
     override init(frame: CGRect) {
