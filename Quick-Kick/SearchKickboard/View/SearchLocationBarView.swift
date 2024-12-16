@@ -118,6 +118,10 @@ extension SearchLocationBarView: MKLocalSearchCompleterDelegate {
         searchResults = completer.results
         searchResultsTableView.reloadData()
     }
+    
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        print("주소 검색 오류: \(error.localizedDescription)")
+    }
 }
 
 extension SearchLocationBarView: UITableViewDelegate {
