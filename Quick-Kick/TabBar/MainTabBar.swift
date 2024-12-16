@@ -10,7 +10,7 @@ import SnapKit
 
 final class MainTabBar: UIView {
     
-    private let tabTitle: [String] = ["킥보드 찾기", "킥보드 등록", "마이 페이지"]
+    weak var tabBarDelegate: TabBarDelegate?
     
     private lazy var tabBar: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -65,5 +65,9 @@ extension MainTabBar: UICollectionViewDelegate, UICollectionViewDataSource {
         cell.setupButtonConfig(indexPath.row)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.tabBarDelegate?.changeVC(indexPath.row)
     }
 }
