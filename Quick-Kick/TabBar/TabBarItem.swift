@@ -10,6 +10,8 @@ import SnapKit
 
 final class TabBarItem: UICollectionViewCell {
     
+    static let id: String = "TabBarItem"
+    
     private let tabTitle: [String] = ["킥보드 찾기", "킥보드 등록", "마이 페이지"]
     private let tabImage: [UIImage] = []
     
@@ -43,6 +45,15 @@ final class TabBarItem: UICollectionViewCell {
         self.tabButton.setTitleColor(UIColor.PersonalDark.darker, for: .normal)
         self.tabButton.setTitleColor(UIColor.PersonalNomal.nomal, for: .selected)
         self.tabButton.backgroundColor = .clear
+        self.tabButton.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func buttonTapped() {
+        self.tabButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        self.tabButton.isSelected = true
+        self.tabButton.layoutIfNeeded()
+        // VC 변경 메소드
+        print(#function)
     }
     
     private func setupLayout() {
@@ -54,5 +65,13 @@ final class TabBarItem: UICollectionViewCell {
     func setupButtonConfig(_ row: Int) {
         self.tabButton.setTitle(self.tabTitle[row], for: .normal)
         self.tabButton.setTitle(self.tabTitle[row], for: .selected)
+    }
+    
+    func selectedTab(_ isSelected: Bool) {
+        guard isSelected else { return }
+        
+        self.tabButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        self.tabButton.isSelected = true
+        self.tabButton.layoutIfNeeded()
     }
 }
