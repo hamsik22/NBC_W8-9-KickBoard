@@ -8,5 +8,10 @@ import UIKit
 import MapKit
 
 final class SearchKickboardMapView: MKMapView {
-    
+    private let mapView: MKMapView = {
+        let map = MKMapView()
+        map.mapType = .hybrid
+        map.showsUserLocation = true
+        return map
+    }()
 }
