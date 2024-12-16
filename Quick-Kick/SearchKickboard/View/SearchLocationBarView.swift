@@ -20,16 +20,17 @@ final class SearchLocationBarView: UIView {
         searchBar.placeholder = "주소 검색"
         searchBar.searchTextField.backgroundColor = .clear
         searchBar.searchBarStyle = .minimal
+        searchBar.setSearchFieldBackgroundImage(UIImage(), for: .normal)
         return searchBar
     }()
     
-    private let searchButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "SearchIcon.png"), for: .normal)
-        button.tintColor = .black
-        button.backgroundColor = .clear
-        return button
-    }()
+//    private let searchButton: UIButton = {
+//        let button = UIButton()
+//        button.setImage(UIImage(named: "SearchIcon.png"), for: .normal)
+//        button.tintColor = .black
+//        button.backgroundColor = .clear
+//        return button
+//    }()
     
     private let searchResultsTableView: UITableView = {
         let tableView = UITableView()
@@ -40,14 +41,14 @@ final class SearchLocationBarView: UIView {
         return tableView
     }()
     
-    private lazy var searchStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [searchBar, searchButton])
-        stackView.axis = .horizontal
-        stackView.distribution = .fill
-        stackView.alignment = .fill
-        stackView.spacing = 10
-        return stackView
-    }()
+//    private lazy var searchStackView: UIStackView = {
+//        let stackView = UIStackView(arrangedSubviews: [searchBar, searchButton])
+//        stackView.axis = .horizontal
+//        stackView.distribution = .fill
+//        stackView.alignment = .fill
+//        stackView.spacing = 10
+//        return stackView
+//    }()
     
     private let searchCompleter: MKLocalSearchCompleter = {
         let completer = MKLocalSearchCompleter()
@@ -74,8 +75,8 @@ final class SearchLocationBarView: UIView {
             $0.edges.equalToSuperview()
         }
         
-        containerView.addSubview(searchStackView)
-        searchStackView.snp.makeConstraints {
+        containerView.addSubview(searchBar)
+        searchBar.snp.makeConstraints {
             $0.edges.equalToSuperview().inset(10)
         }
         
@@ -83,7 +84,7 @@ final class SearchLocationBarView: UIView {
         searchResultsTableView.snp.makeConstraints {
             $0.top.equalTo(containerView.snp.bottom).offset(5)
             $0.leading.trailing.equalToSuperview().inset(10)
-            $0.height.equalTo(200)
+            $0.height.equalTo(180)
         }
     }
     
