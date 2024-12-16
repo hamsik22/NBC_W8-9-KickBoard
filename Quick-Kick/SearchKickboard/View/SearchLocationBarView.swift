@@ -38,6 +38,15 @@ final class SearchLocationBarView: UIView {
         return tableView
     }()
     
+    private lazy var searchStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [searchBar, searchButton])
+        stackView.axis = .horizontal
+        stackView.distribution = .fillProportionally
+        stackView.alignment = .fill
+        stackView.spacing = 10
+        return stackView
+    }()
+    
     private let searchCompleter = MKLocalSearchCompleter()
     private var searchResults: [MKLocalSearchCompletion] = []
     weak var mapView: MKMapView?
@@ -57,8 +66,8 @@ final class SearchLocationBarView: UIView {
             $0.edges.equalToSuperview()
         }
         
-        containerView.addSubview(searchBar)
-        searchBar.snp.makeConstraints {
+        containerView.addSubview(searchStackView)
+        searchStackView.snp.makeConstraints {
             $0.edges.equalToSuperview().inset(10)
         }
     }
