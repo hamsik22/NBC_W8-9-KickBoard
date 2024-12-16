@@ -60,6 +60,7 @@ final class SearchLocationBarView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSearchBar()
+        setupDelegate()
     }
     
     required init?(coder: NSCoder) {
@@ -94,7 +95,14 @@ final class SearchLocationBarView: UIView {
 }
 
 extension SearchLocationBarView: UISearchBarDelegate {
-    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            searchResults = []
+            searchResultsTableView.reloadData()
+        } else {
+            searchCompleter.queryFragment = searchText
+        }
+    }
 }
 
 extension SearchLocationBarView: MKLocalSearchCompleterDelegate {
