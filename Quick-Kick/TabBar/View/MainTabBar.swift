@@ -33,12 +33,15 @@ final class MainTabBar: UIView {
         return view
     }()
     
+    private let indicator = UIView()
+    
     // MARK: - MainTabBar Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         setupTabBarBackgorundView()
         setupTabBar()
+        setupIndicator()
     }
     
     required init?(coder: NSCoder) {
@@ -46,6 +49,7 @@ final class MainTabBar: UIView {
     
         setupTabBarBackgorundView()
         setupTabBar()
+        setupIndicator()
     }
     
     // MARK: - MainTabBar UI Setting Method
@@ -58,6 +62,7 @@ final class MainTabBar: UIView {
         self.tabBar.backgroundColor = .PersonalLight.light
         self.tabBar.showsVerticalScrollIndicator = false
         self.tabBar.showsHorizontalScrollIndicator = false
+        self.tabBar.clipsToBounds = true
         
         self.addSubview(self.tabBar)
         
@@ -76,6 +81,18 @@ final class MainTabBar: UIView {
             $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(30)
         }
+    }
+    
+    private func setupIndicator() {
+        self.indicator.backgroundColor = .PersonalNomal.nomal
+        self.indicator.layer.cornerRadius = 3
+        
+        let constraintX = (UIScreen.main.bounds.width / 3) / 2 - 25
+        self.indicator.frame = .init(x: constraintX, y: self.tabBar.frame.origin.y - 3, width: 50, height: 6)
+        
+        self.tabBar.addSubview(self.indicator)
+        
+        print(self.tabBar.frame.origin.x)
     }
 }
 
