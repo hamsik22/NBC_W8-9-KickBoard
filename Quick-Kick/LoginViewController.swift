@@ -25,15 +25,13 @@ class LoginViewController: UIViewController {
         return uiView
     }()
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // TODO: UI 세팅하기
         setupUI()
     }
     
-    // TODO: UI 세팅 함수
+    // MARK: - UI 세팅 함수
     private func setupUI() {
         
         [appLogoImageView,
@@ -76,19 +74,26 @@ class LoginViewController: UIViewController {
     }
 }
 
+// MARK: - Extensions
 extension LoginViewController {
+    
+    // 입력값들을 받는 뷰
     private func setupLoginFieldView() {
         let emailTextField = UITextField()
         let passwordTextField = UITextField()
         
+        // 필드 UI 설정
+        emailTextField.font = .systemFont(ofSize: 14)
         emailTextField.placeholder = "이메일"
-        passwordTextField.placeholder = "비밀번호"
-        
         emailTextField.borderStyle = .roundedRect
+        emailTextField.backgroundColor = UIColor.PersonalNomal.nomal
+        emailTextField.setPlaceholder(color: .white)
+        passwordTextField.font = .systemFont(ofSize: 14)
+        passwordTextField.placeholder = "비밀번호"
         passwordTextField.borderStyle = .roundedRect
-        
-        emailTextField.backgroundColor = .systemBackground
         passwordTextField.backgroundColor = .systemBackground
+        passwordTextField.backgroundColor = UIColor.PersonalNomal.nomal
+        passwordTextField.setPlaceholder(color: .white)
         
         [emailTextField, passwordTextField]
             .forEach{loginFieldView.addSubview($0)}
@@ -97,21 +102,24 @@ extension LoginViewController {
             make.top.equalToSuperview()
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
-            make.height.equalTo(50)
+            make.height.equalTo(40)
         }
         
         passwordTextField.snp.makeConstraints { make in
             make.top.equalTo(emailTextField.snp.bottom).offset(5)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
-            make.height.equalTo(50)
+            make.height.equalTo(40)
         }
     }
+    
+    // 로그인 저장옵션 뷰
     private func setupAuthOptionView() {
         let saveId = UIView()
         let saveIDLable: UILabel = {
             let label = UILabel()
             label.text = "아이디 저장"
+            label.textColor = UIColor.PersonalNomal.nomal
             label.font = .systemFont(ofSize: 15)
             return label
         }()
@@ -119,6 +127,7 @@ extension LoginViewController {
             let icon = UIImageView()
             icon.image = UIImage(systemName: "checkmark.square")
             icon.contentMode = .scaleAspectFit
+            icon.tintColor = UIColor.PersonalNomal.nomal
             return icon
         }()
         let autoLogIn = UIView()
@@ -126,19 +135,21 @@ extension LoginViewController {
             let label = UILabel()
             label.text = "자동 로그인"
             label.font = .systemFont(ofSize: 15)
+            label.textColor = UIColor.PersonalNomal.nomal
             return label
         }()
         let autoLogincheckBox: UIImageView = {
             let icon = UIImageView()
             icon.image = UIImage(systemName: "checkmark.square")
             icon.contentMode = .scaleAspectFit
+            icon.tintColor = UIColor.PersonalNomal.nomal
             return icon
         }()
         let findPasswordButton: UIButton = {
             let button = UIButton()
             button.setTitle("비밀번호를 잊어버렸습니까?", for: .normal)
             button.titleLabel?.font = .systemFont(ofSize: 15)
-            button.setTitleColor(.black, for: .normal)
+            button.setTitleColor(UIColor.PersonalNomal.nomal, for: .normal)
             return button
         }()
         
@@ -189,18 +200,21 @@ extension LoginViewController {
             make.left.equalToSuperview()
         }
     }
+    
+    // 로그인/회원가입 뷰
     private func setupLoginButtonView() {
         let loginButton: UIButton = {
             let button = UIButton()
             button.setTitle("로그인", for: .normal)
-            button.backgroundColor = .purple
+            button.backgroundColor = UIColor.PersonalNomal.nomal
             button.layer.cornerRadius = 25
             return button
         }()
         let signupButton: UIButton = {
             let button = UIButton()
             button.setTitle("회원가입", for: .normal)
-            button.backgroundColor = .purple
+            button.setTitleColor(UIColor.PersonalNomal.nomal, for: .normal)
+            button.backgroundColor = UIColor.PersonalLight.hover
             button.layer.cornerRadius = 25
             return button
         }()
@@ -224,13 +238,16 @@ extension LoginViewController {
         
     }
 }
-
-struct LoginViewPreview: PreviewProvider {
-    static var previews: some View {
-        LoginViewController().toPreview()
+extension UITextField {
+    
+    // UITextField 색깔 변경 하는 함수
+    func setPlaceholder(color: UIColor) {
+        guard let string = self.placeholder else {
+            return
+        }
+        attributedPlaceholder = NSAttributedString(string: string, attributes: [.foregroundColor: color])
     }
 }
-
 #if DEBUG
 extension UIViewController {
     private struct Preview: UIViewControllerRepresentable {
@@ -249,3 +266,10 @@ extension UIViewController {
     }
 }
 #endif
+
+// 프리뷰
+struct LoginViewPreview: PreviewProvider {
+    static var previews: some View {
+        LoginViewController().toPreview()
+    }
+}
