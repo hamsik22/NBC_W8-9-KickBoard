@@ -10,8 +10,15 @@ import SnapKit
 
 // 탭바 UI를 구현하는 UIView
 final class MainTabBar: UIView {
+    fileprivate enum PageIndex {
+        case search
+        case registration
+        case myPage
+    }
     
     weak var tabBarDelegate: TabBarDelegate? // 탭바의 데이터 전송 델리게이트
+    
+    private var pageIndex: PageIndex = .search
     
     // 탭바
     private lazy var tabBar: UICollectionView = {
@@ -94,6 +101,24 @@ final class MainTabBar: UIView {
         
         print(self.tabBar.frame.origin.x)
     }
+    
+    private func moveIndicator() {
+        let constraintX: CGFloat
+        
+        switch self.pageIndex {
+        case .search:
+            constraintX = (UIScreen.main.bounds.width / 3) / 2 - 25
+        case .registration:
+            constraintX = (UIScreen.main.bounds.width / 2) - 25
+        case .myPage:
+            constraintX = (UIScreen.main.bounds.width - ((UIScreen.main.bounds.width / 3) / 2 + 25))
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+            self.indicator.frame.origin.x = constraintX
+            self.indicator.layoutIfNeeded()
+        }
+    }
 }
 
 // MARK: - MainTabBar CollectionView Method
@@ -117,6 +142,17 @@ extension MainTabBar: UICollectionViewDelegate, UICollectionViewDataSource {
     
     // 셀이 선택되었을 때 액션 구현
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch indexPath.row {
+        case 0:
+            self.pageIndex = .search
+        case 1:
+            self.pageIndex = .registration
+        case 2:
+            self.pageIndex = .myPage
+        default: break
+        }
+        
+        moveIndicator()
         self.tabBarDelegate?.changeVC(indexPath.row)
     }
 }
