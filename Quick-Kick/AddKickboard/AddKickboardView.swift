@@ -12,6 +12,17 @@ class AddKickboardView: UIView {
     
     private lazy var mapView: MapView = .init()
     
+    private lazy var addButton: UIButton = {
+        let button = UIButton()
+        
+        button.tintColor = UIColor.PersonalNomal.nomal
+        
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 70)
+        button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: imageConfig), for: .normal)
+        
+        return button
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubviews()
@@ -22,8 +33,14 @@ class AddKickboardView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        addButton.layer.cornerRadius = addButton.bounds.width / 2
+    }
+    
     private func addSubviews() {
-        addSubview(mapView)
+        [mapView, addButton]
+            .forEach { addSubview($0) }
     }
     
     private func layout() {
@@ -31,6 +48,11 @@ class AddKickboardView: UIView {
         
         mapView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalToSuperview()
+        }
+        
+        addButton.snp.makeConstraints {
+            $0.trailing.bottom.equalToSuperview().offset(-32)
+            $0.height.width.equalTo(70)
         }
     }
 }
