@@ -8,13 +8,15 @@
 import UIKit
 import SnapKit
 
+// 커스텀 탭바 컨트롤러
 final class MainTabBarController: UIViewController {
     
-    private let tabBar = MainTabBar()
+    private let tabBar = MainTabBar() // 탭바 UI
     
-    private let viewControllers: [UIViewController]
-    private var currentVC: UIViewController?
+    private let viewControllers: [UIViewController] // 표시할 VC 목록
+    private var currentVC: UIViewController? // 현재 VC
     
+    // MARK: - MainTabBarController Initializer
     init(viewControllers: [UIViewController]) {
         self.viewControllers = viewControllers
         
@@ -25,6 +27,7 @@ final class MainTabBarController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - MainTabBarController LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .PersonalLight.light
@@ -33,6 +36,8 @@ final class MainTabBarController: UIViewController {
         displayViewController(0)
     }
     
+    // MARK: - MainTabBarController UI Setting Method
+    /// 탭바의 UI를 세팅하는 메소드
     private func setupTabBar() {
         self.tabBar.tabBarDelegate = self
         view.addSubview(self.tabBar)
@@ -44,6 +49,8 @@ final class MainTabBarController: UIViewController {
         }
     }
     
+    /// 현재 보여지는 뷰를 관리하는 메소드
+    /// - Parameter index: 몇 번째 뷰를 보여줄 것인지
     private func displayViewController(_ index: Int) {
         if let currentVC = self.currentVC {
             currentVC.view.removeFromSuperview()
@@ -59,10 +66,11 @@ final class MainTabBarController: UIViewController {
         }
         selectedVC.didMove(toParent: self)
         
-        self.currentVC = selectedVC
+        self.currentVC = selectedVC // 현재 VC를 선택한 VC로 변경
     }
 }
 
+// MARK: - MainTabBarController Delegate Method
 extension MainTabBarController: TabBarDelegate {
     func changeVC(_ index: Int) {
         UIView.transition(with: view, duration: 0.3, options: .transitionCrossDissolve) {

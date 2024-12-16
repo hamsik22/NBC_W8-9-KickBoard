@@ -8,10 +8,12 @@
 import UIKit
 import SnapKit
 
+// 탭바 UI를 구현하는 UIView
 final class MainTabBar: UIView {
     
-    weak var tabBarDelegate: TabBarDelegate?
+    weak var tabBarDelegate: TabBarDelegate? // 탭바의 데이터 전송 델리게이트
     
+    // 탭바
     private lazy var tabBar: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = .init(width: UIScreen.main.bounds.width / 3, height: 50)
@@ -23,6 +25,7 @@ final class MainTabBar: UIView {
         return collectionView
     }()
     
+    // 탭바의 하단 -> safeArea 바깥을 표현하는 용도
     private let tabBarBackgroundView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.PersonalLight.light
@@ -30,6 +33,7 @@ final class MainTabBar: UIView {
         return view
     }()
     
+    // MARK: - MainTabBar Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -44,6 +48,9 @@ final class MainTabBar: UIView {
         setupTabBar()
     }
     
+    // MARK: - MainTabBar UI Setting Method
+    
+    /// 탭바의 UI를 세팅하는 메소드
     private func setupTabBar() {
         self.tabBar.delegate = self
         self.tabBar.dataSource = self
@@ -61,6 +68,7 @@ final class MainTabBar: UIView {
         }
     }
     
+    /// 탭바 하단의 UI를 세팅하는 메소드
     private func setupTabBarBackgorundView() {
         self.addSubview(self.tabBarBackgroundView)
         
@@ -71,21 +79,26 @@ final class MainTabBar: UIView {
     }
 }
 
+// MARK: - MainTabBar CollectionView Method
 extension MainTabBar: UICollectionViewDelegate, UICollectionViewDataSource {
+    // 셀의 수량 설정
+    // 킥보드 찾기, 킥보드 등록, 마이 페이지로 3개의 셀
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 3
     }
     
+    // 셀의 모양을 설정
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TabBarItem.id, for: indexPath) as? TabBarItem else {
             return UICollectionViewCell()
         }
         
-        cell.setupButtonConfig(indexPath.row)
+        cell.setupLabelConfig(indexPath.row)
         
         return cell
     }
     
+    // 셀이 선택되었을 때 액션 구현
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.tabBarDelegate?.changeVC(indexPath.row)
     }

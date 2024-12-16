@@ -7,7 +7,8 @@
 
 import UIKit
 
+// 탭바의 데이터 전송을 위한 델리게이트
 protocol TabBarDelegate: AnyObject {
     
-    func changeVC(_ index: Int)
+    func changeVC(_ index: Int) // 현재 보여지는 VC를 변경하는 메소드
 }
