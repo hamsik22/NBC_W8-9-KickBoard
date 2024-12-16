@@ -7,5 +7,16 @@
 import UIKit
 
 final class SearchKickboardViewController: UIViewController {
+    private let searchKickboardView = SearchKickboardView()
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view = searchKickboardView
+    }
 }
+
+//@available(iOS 17.0, *)
+//#Preview {
+//    SearchKickboardViewController()
+//}
+
