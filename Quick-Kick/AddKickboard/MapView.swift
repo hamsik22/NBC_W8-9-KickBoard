@@ -16,6 +16,8 @@ class MapView: MKMapView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        isPitchEnabled = false
+        delegate = self
         setup()
     }
     
@@ -26,5 +28,11 @@ class MapView: MKMapView {
     private func setup() {
         centerCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 200, maxCenterCoordinateDistance: 2000), animated: true)
+    }
+}
+
+extension MapView: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        print(centerCoordinate)
     }
 }
