@@ -34,29 +34,21 @@ final class MainTabBar: UIView {
         return collectionView
     }()
     
-    // 탭바의 하단 -> safeArea 바깥을 표현하는 용도
-    private let tabBarBackgroundView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.PersonalLight.light
-        
-        return view
-    }()
-    
     private let indicator = UIView()
     
     // MARK: - MainTabBar Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
+        self.backgroundColor = .PersonalLight.light
         
-        setupTabBarBackgorundView()
         setupTabBar()
         setupIndicator()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        self.backgroundColor = .PersonalLight.light
     
-        setupTabBarBackgorundView()
         setupTabBar()
         setupIndicator()
     }
@@ -76,19 +68,8 @@ final class MainTabBar: UIView {
         self.addSubview(self.tabBar)
         
         self.tabBar.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(self.tabBarBackgroundView.snp.top)
-            $0.height.equalTo(50)
-        }
-    }
-    
-    /// 탭바 하단의 UI를 세팅하는 메소드
-    private func setupTabBarBackgorundView() {
-        self.addSubview(self.tabBarBackgroundView)
-        
-        self.tabBarBackgroundView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(30)
+            $0.height.equalTo(50)
         }
     }
     

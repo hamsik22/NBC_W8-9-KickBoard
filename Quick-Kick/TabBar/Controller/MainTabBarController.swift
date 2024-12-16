@@ -43,9 +43,9 @@ final class MainTabBarController: UIViewController {
         view.addSubview(self.tabBar)
         
         self.tabBar.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(80)
+            $0.height.equalTo(50)
         }
     }
     
@@ -62,7 +62,8 @@ final class MainTabBarController: UIViewController {
         self.view.insertSubview(selectedVC.view, belowSubview: self.tabBar)
         
         selectedVC.view.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(self.tabBar.snp.top)
         }
         selectedVC.didMove(toParent: self)
         
