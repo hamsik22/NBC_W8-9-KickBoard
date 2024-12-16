@@ -13,4 +13,11 @@ final class SearchLocationBarView: UIView {
         view.layer.cornerRadius = 25
         return view
     }()
+    
+    private let searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.placeholder = "주소 검색"
+        searchBar.searchTextField.backgroundColor = .clear
+        return searchBar
+    }()
 }
