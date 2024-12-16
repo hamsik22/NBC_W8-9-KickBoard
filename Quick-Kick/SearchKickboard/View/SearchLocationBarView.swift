@@ -20,4 +20,12 @@ final class SearchLocationBarView: UIView {
         searchBar.searchTextField.backgroundColor = .clear
         return searchBar
     }()
+    
+    private let searchButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "SearchIcon.png"), for: .normal)
+        button.tintColor = .black
+        button.backgroundColor = .clear
+        return button
+    }()
 }
