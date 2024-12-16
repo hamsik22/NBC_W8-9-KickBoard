@@ -12,6 +12,8 @@ class AddKickboardView: UIView {
     
     private lazy var mapView: MapView = .init()
     
+    private lazy var noticeView: NoticeView = .init()
+    
     private lazy var addButton: UIButton = {
         let button = UIButton()
         
@@ -39,15 +41,24 @@ class AddKickboardView: UIView {
     }
     
     private func addSubviews() {
-        [mapView, addButton]
+        [mapView, noticeView, addButton]
             .forEach { addSubview($0) }
     }
     
     private func layout() {
         backgroundColor = .systemBackground
         
+        let safeArea = safeAreaLayoutGuide
+        
         mapView.snp.makeConstraints {
             $0.top.bottom.leading.trailing.equalToSuperview()
+        }
+        
+        noticeView.snp.makeConstraints {
+            $0.top.equalTo(safeArea)
+            $0.leading.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-16)
+            $0.height.equalTo(100)
         }
         
         addButton.snp.makeConstraints {
