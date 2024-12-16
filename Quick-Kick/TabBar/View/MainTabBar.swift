@@ -88,11 +88,11 @@ final class MainTabBar: UIView {
         
         switch self.pageIndex {
         case .search:
-            constraintX = (UIScreen.main.bounds.width / 3) / 2 - 25
+            constraintX = (self.bounds.width / 3) / 2 - 25
         case .registration:
-            constraintX = (UIScreen.main.bounds.width / 2) - 25
+            constraintX = (self.bounds.width / 2) - 25
         case .myPage:
-            constraintX = (UIScreen.main.bounds.width - ((UIScreen.main.bounds.width / 3) / 2 + 25))
+            constraintX = (self.bounds.width - ((self.bounds.width / 3) / 2 + 25))
         }
         
         UIView.animate(withDuration: 0.3) {
