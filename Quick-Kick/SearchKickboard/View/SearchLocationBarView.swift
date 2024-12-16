@@ -42,7 +42,7 @@ final class SearchLocationBarView: UIView {
     private lazy var searchStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [searchBar, searchButton])
         stackView.axis = .horizontal
-        stackView.distribution = .fillProportionally
+        stackView.distribution = .fill
         stackView.alignment = .fill
         stackView.spacing = 10
         return stackView

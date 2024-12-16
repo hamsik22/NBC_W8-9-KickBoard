@@ -19,4 +19,3 @@ final class SearchKickboardViewController: UIViewController {
 //#Preview {
 //    SearchKickboardViewController()
 //}
-
