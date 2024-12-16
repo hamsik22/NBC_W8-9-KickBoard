@@ -5,8 +5,11 @@
 //  Created by 이명지 on 12/16/24.
 //
 import UIKit
+import SnapKit
 
 final class SearchKickboardView: UIView {
+    private let searchKickboardMapView = SearchKickboardMapView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
@@ -17,6 +20,10 @@ final class SearchKickboardView: UIView {
     }
     
     private func setupSubviews() {
+        self.addSubview(searchKickboardMapView)
         
+        self.searchKickboardMapView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
 }
