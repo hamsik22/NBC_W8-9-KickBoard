@@ -49,9 +49,6 @@ final class TabBarItem: UICollectionViewCell {
     }
     
     @objc private func buttonTapped() {
-        self.tabButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        self.tabButton.isSelected = true
-        self.tabButton.layoutIfNeeded()
         // VC 변경 메소드
         print(#function)
     }
@@ -65,6 +62,7 @@ final class TabBarItem: UICollectionViewCell {
     func setupButtonConfig(_ row: Int) {
         self.tabButton.setTitle(self.tabTitle[row], for: .normal)
         self.tabButton.setTitle(self.tabTitle[row], for: .selected)
+        self.tabButton.tag = row
     }
     
     func selectedTab(_ isSelected: Bool) {
