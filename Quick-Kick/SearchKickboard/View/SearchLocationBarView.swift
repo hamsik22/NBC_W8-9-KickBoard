@@ -125,7 +125,26 @@ extension SearchLocationBarView: MKLocalSearchCompleterDelegate {
 }
 
 extension SearchLocationBarView: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let completion = searchResults[indexPath.row]
+        
+        let searchRequest = MKLocalSearch.Request(completion: completion)
+        let search = MKLocalSearch(request: searchRequest)
+        
+        search.start { [weak self] (response, error) in
+            guard let self = self,
+                  let coordinate = response?.mapItems.first?.placemark.coordinate else { return }
+            
+            let region = MKCoordinateRegion(
+                center: coordinate,
+                latitudinalMeters: 1000,
+                longitudinalMeters: 1000
+            )
+            self.mapView?.setRegion(region, animated: true)
+            self.searchBar.resignFirstResponder()
+        }
+    }
 }
 
 extension SearchLocationBarView: UITableViewDataSource {
@@ -144,6 +163,4 @@ extension SearchLocationBarView: UITableViewDataSource {
         
         return cell
     }
-    
-    
 }
