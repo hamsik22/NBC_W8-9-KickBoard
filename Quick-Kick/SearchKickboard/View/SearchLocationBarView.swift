@@ -5,6 +5,7 @@
 //  Created by 이명지 on 12/16/24.
 //
 import UIKit
+import MapKit
 
 final class SearchLocationBarView: UIView {
     private let containerView: UIView = {
@@ -36,4 +37,7 @@ final class SearchLocationBarView: UIView {
         tableView.isHidden = true
         return tableView
     }()
+    
+    private let searchCompleter = MKLocalSearchCompleter()
+    private var searchResults: [MKLocalSearchCompletion] = []
 }
