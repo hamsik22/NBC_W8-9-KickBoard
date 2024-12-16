@@ -16,27 +16,14 @@ final class SearchKickboardMapView: MKMapView {
         return manager
     }()
     
-    private let gangnamStation = CLLocation(
-        latitude: 37.498095,
-        longitude: 127.027610
-    )
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-#if DEBUG
-        setupDebugLocation()
-#else
         setupLocation()
-#endif
         setupMapView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupDebugLocation() {
-        setMapCenter(gangnamStation)
     }
     
     private func setupLocation() {
@@ -53,12 +40,8 @@ final class SearchKickboardMapView: MKMapView {
 
 extension SearchKickboardMapView: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-#if DEBUG
-        setMapCenter(gangnamStation)
-#else
         guard let location = locations.last else { return }
         setMapCenter(location)
-#endif
     }
     
     private func setMapCenter(_ location: CLLocation) {
