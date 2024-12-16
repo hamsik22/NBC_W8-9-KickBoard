@@ -100,14 +100,16 @@ extension SearchLocationBarView: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
             searchResults = []
+            searchResultsTableView.isHidden = true
             searchResultsTableView.reloadData()
         } else {
+            searchResultsTableView.isHidden = false
             searchCompleter.queryFragment = searchText
         }
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchResultsTableView.isHidden = false
+        searchResultsTableView.isHidden = searchBar.text?.isEmpty ?? true
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
