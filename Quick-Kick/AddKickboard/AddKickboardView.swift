@@ -25,6 +25,15 @@ class AddKickboardView: UIView {
         return button
     }()
     
+    private lazy var centerPinImage: UIImageView = {
+        let imageView = UIImageView()
+        
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = .mapPicker
+        
+        return imageView
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubviews()
@@ -41,7 +50,7 @@ class AddKickboardView: UIView {
     }
     
     private func addSubviews() {
-        [mapView, noticeView, addButton]
+        [mapView, noticeView, addButton, centerPinImage]
             .forEach { addSubview($0) }
     }
     
@@ -64,6 +73,12 @@ class AddKickboardView: UIView {
         addButton.snp.makeConstraints {
             $0.trailing.bottom.equalToSuperview().offset(-32)
             $0.height.width.equalTo(70)
+        }
+        
+        centerPinImage.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview().offset(-35)
+            $0.height.equalTo(70)
         }
     }
 }
