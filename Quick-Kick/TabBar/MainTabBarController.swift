@@ -34,6 +34,7 @@ final class MainTabBarController: UIViewController {
     }
     
     private func setupTabBar() {
+        self.tabBar.tabBarDelegate = self
         view.addSubview(self.tabBar)
         
         self.tabBar.snp.makeConstraints {
@@ -59,5 +60,13 @@ final class MainTabBarController: UIViewController {
         selectedVC.didMove(toParent: self)
         
         self.currentVC = selectedVC
+    }
+}
+
+extension MainTabBarController: TabBarDelegate {
+    func changeVC(_ index: Int) {
+        UIView.transition(with: view, duration: 0.3, options: .transitionCrossDissolve) {
+            self.displayViewController(index)
+        }
     }
 }
