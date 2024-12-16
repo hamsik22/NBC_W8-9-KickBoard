@@ -41,4 +41,17 @@ final class SearchLocationBarView: UIView {
     private let searchCompleter = MKLocalSearchCompleter()
     private var searchResults: [MKLocalSearchCompletion] = []
     weak var mapView: MKMapView?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupSearchBar()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupSearchBar() {
+        
+    }
 }
