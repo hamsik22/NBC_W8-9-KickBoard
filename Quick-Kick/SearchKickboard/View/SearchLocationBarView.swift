@@ -114,7 +114,10 @@ extension SearchLocationBarView: UISearchBarDelegate {
 }
 
 extension SearchLocationBarView: MKLocalSearchCompleterDelegate {
-    
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        searchResults = completer.results
+        searchResultsTableView.reloadData()
+    }
 }
 
 extension SearchLocationBarView: UITableViewDelegate {
