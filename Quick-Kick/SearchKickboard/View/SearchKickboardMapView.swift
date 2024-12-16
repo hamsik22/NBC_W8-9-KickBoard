@@ -6,16 +6,9 @@
 //
 import UIKit
 import MapKit
-import SnapKit
 import CoreLocation
 
 final class SearchKickboardMapView: MKMapView {
-    private let mapView: MKMapView = {
-        let map = MKMapView()
-        map.preferredConfiguration = MKHybridMapConfiguration()
-        return map
-    }()
-    
     private let locationManager: CLLocationManager = {
         let manager = CLLocationManager()
         manager.requestWhenInUseAuthorization()
@@ -25,7 +18,6 @@ final class SearchKickboardMapView: MKMapView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupLayout()
         setupLocation()
         setupMapView()
     }
@@ -34,24 +26,15 @@ final class SearchKickboardMapView: MKMapView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupLayout() {
-        addSubview(mapView)
-        
-        mapView.translatesAutoresizingMaskIntoConstraints = false
-        
-        mapView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-    }
-    
     private func setupLocation() {
         locationManager.delegate = self
         locationManager.startUpdatingLocation()
     }
     
     private func setupMapView() {
-        mapView.showsUserLocation = true
-        mapView.setUserTrackingMode(.follow, animated: true)
+        self.preferredConfiguration = MKHybridMapConfiguration()
+        self.showsUserLocation = true
+        self.setUserTrackingMode(.follow, animated: true)
     }
 }
 
