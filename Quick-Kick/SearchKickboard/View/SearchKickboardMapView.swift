@@ -39,5 +39,17 @@ final class SearchKickboardMapView: MKMapView {
 }
 
 extension SearchKickboardMapView: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        setMapCenter(location)
+    }
     
+    private func setMapCenter(_ location: CLLocation) {
+        let region = MKCoordinateRegion(
+            center: location.coordinate,
+            latitudinalMeters: 500,
+            longitudinalMeters: 500
+        )
+        setRegion(region, animated: true)
+    }
 }
