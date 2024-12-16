@@ -8,17 +8,19 @@
 import UIKit
 import SnapKit
 
+// 현재 페이지 상태를 나타내는 enum
+enum PageIndex {
+    case search
+    case registration
+    case myPage
+}
+
 // 탭바 UI를 구현하는 UIView
 final class MainTabBar: UIView {
-    fileprivate enum PageIndex {
-        case search
-        case registration
-        case myPage
-    }
     
     weak var tabBarDelegate: TabBarDelegate? // 탭바의 데이터 전송 델리게이트
     
-    private var pageIndex: PageIndex = .search
+    private var pageIndex: PageIndex = .search // 기본적으로 메인 페이지(킥보드 찾기 페이지)
     
     // 탭바
     private lazy var tabBar: UICollectionView = {
@@ -98,8 +100,6 @@ final class MainTabBar: UIView {
         self.indicator.frame = .init(x: constraintX, y: self.tabBar.frame.origin.y - 3, width: 50, height: 6)
         
         self.tabBar.addSubview(self.indicator)
-        
-        print(self.tabBar.frame.origin.x)
     }
     
     private func moveIndicator() {
@@ -136,6 +136,7 @@ extension MainTabBar: UICollectionViewDelegate, UICollectionViewDataSource {
         }
         
         cell.setupLabelConfig(indexPath.row)
+        cell.selectedTab(self.pageIndex)
         
         return cell
     }
@@ -153,6 +154,7 @@ extension MainTabBar: UICollectionViewDelegate, UICollectionViewDataSource {
         }
         
         moveIndicator()
+        collectionView.reloadData()
         self.tabBarDelegate?.changeVC(indexPath.row)
     }
 }

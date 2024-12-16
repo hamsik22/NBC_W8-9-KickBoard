@@ -13,6 +13,8 @@ final class TabBarItem: UICollectionViewCell {
     
     static let id: String = "TabBarItem" // 셀의 고유 이름
     
+    private var pageIndex: PageIndex = .search
+    
     private let tabTitle: [String] = ["킥보드 찾기", "킥보드 등록", "마이 페이지"] // 셀의 타이틀
     
     private let tabLabel =  UILabel() // 탭의 타이틀 UI
@@ -29,6 +31,16 @@ final class TabBarItem: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        
+        self.backgroundColor = .clear
+        self.addSubview(self.tabLabel)
+        
+        configUI()
+    }
+    
+    // 셀 UI 재사용 설정
+    override func prepareForReuse() {
+        super.prepareForReuse()
         
         self.backgroundColor = .clear
         self.addSubview(self.tabLabel)
@@ -63,14 +75,24 @@ final class TabBarItem: UICollectionViewCell {
     /// - Parameter row: 현재 셀의 indexPath row
     func setupLabelConfig(_ row: Int) {
         self.tabLabel.text = self.tabTitle[row]
+        
+        switch row {
+        case 0:
+            self.pageIndex = .search
+        case 1:
+            self.pageIndex = .registration
+        case 2:
+            self.pageIndex = .myPage
+        default: break
+        }
     }
     
     /// 셀이 선택되었을 때 강조를 해주는 메소드
     /// - Parameter isSelected: 셀이 선택되었는지 확인
-    func selectedTab(_ isSelected: Bool) {
-        guard isSelected else { return }
+    func selectedTab(_ pageIndex: PageIndex) {
+        guard pageIndex == self.pageIndex else { return }
         
-        self.tabLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        self.tabLabel.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         self.tabLabel.textColor = UIColor.PersonalNomal.nomal
         self.tabLabel.layoutIfNeeded()
     }
