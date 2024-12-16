@@ -13,6 +13,7 @@ final class SearchKickboardMapView: MKMapView {
         let map = MKMapView()
         map.preferredConfiguration = MKHybridMapConfiguration()
         map.showsUserLocation = true
+        map.setUserTrackingMode(.follow, animated: true)
         return map
     }()
     
