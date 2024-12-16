@@ -47,7 +47,12 @@ final class SearchLocationBarView: UIView {
         return stackView
     }()
     
-    private let searchCompleter = MKLocalSearchCompleter()
+    private let searchCompleter: MKLocalSearchCompleter = {
+        let completer = MKLocalSearchCompleter()
+        completer.resultTypes = .address
+        return completer
+    }()
+    
     private var searchResults: [MKLocalSearchCompletion] = []
     weak var mapView: MKMapView?
     
@@ -78,4 +83,35 @@ final class SearchLocationBarView: UIView {
             $0.height.equalTo(200)
         }
     }
+    
+    private func setupDelegate() {
+        searchBar.delegate = self
+        searchResultsTableView.delegate = self
+        searchResultsTableView.dataSource = self
+        searchCompleter.delegate = self
+    }
+}
+
+extension SearchLocationBarView: UISearchBarDelegate {
+    
+}
+
+extension SearchLocationBarView: MKLocalSearchCompleterDelegate {
+    
+}
+
+extension SearchLocationBarView: UITableViewDelegate {
+    
+}
+
+extension SearchLocationBarView: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        <#code#>
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        <#code#>
+    }
+    
+    
 }
