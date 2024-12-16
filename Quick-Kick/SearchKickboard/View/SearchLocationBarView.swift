@@ -28,4 +28,12 @@ final class SearchLocationBarView: UIView {
         button.backgroundColor = .clear
         return button
     }()
+    
+    private let searchResultsTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .white
+        tableView.layer.cornerRadius = 10
+        tableView.isHidden = true
+        return tableView
+    }()
 }
