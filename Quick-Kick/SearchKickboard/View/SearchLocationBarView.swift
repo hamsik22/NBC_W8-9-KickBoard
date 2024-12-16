@@ -56,5 +56,10 @@ final class SearchLocationBarView: UIView {
         containerView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        
+        containerView.addSubview(searchBar)
+        searchBar.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(10)
+        }
     }
 }
