@@ -32,7 +32,7 @@ final class SearchKickboardMapView: MKMapView {
     }
     
     private func setupMapView() {
-        self.preferredConfiguration = MKHybridMapConfiguration()
+        self.preferredConfiguration = MKStandardMapConfiguration()
         self.showsUserLocation = true
         self.setUserTrackingMode(.follow, animated: true)
     }
