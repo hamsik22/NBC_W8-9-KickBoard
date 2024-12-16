@@ -7,5 +7,16 @@
 import UIKit
 
 final class SearchKickboardView: UIView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupSubviews()
+    }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupSubviews() {
+        
+    }
 }
