@@ -103,6 +103,14 @@ extension SearchLocationBarView: UISearchBarDelegate {
             searchCompleter.queryFragment = searchText
         }
     }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchResultsTableView.isHidden = false
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchResultsTableView.isHidden = true
+    }
 }
 
 extension SearchLocationBarView: MKLocalSearchCompleterDelegate {
