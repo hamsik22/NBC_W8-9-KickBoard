@@ -130,11 +130,19 @@ extension SearchLocationBarView: UITableViewDelegate {
 
 extension SearchLocationBarView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        <#code#>
+        return searchResults.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let searchResult = searchResults[indexPath.row]
+        
+        var content = cell.defaultContentConfiguration()
+        content.text = searchResult.title
+        content.secondaryText = searchResult.subtitle
+        cell.contentConfiguration = content
+        
+        return cell
     }
     
     
