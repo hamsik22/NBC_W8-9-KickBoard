@@ -35,6 +35,7 @@ final class SearchLocationBarView: UIView {
         tableView.backgroundColor = .white
         tableView.layer.cornerRadius = 10
         tableView.isHidden = true
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         return tableView
     }()
     
