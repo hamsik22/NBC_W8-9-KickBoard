@@ -26,6 +26,7 @@ final class SearchKickboardMapView: MKMapView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayout()
+        setupLocation()
         setupMapView()
     }
     
@@ -43,9 +44,17 @@ final class SearchKickboardMapView: MKMapView {
         }
     }
     
-    private func setupMapView() {
+    private func setupLocation() {
+        locationManager.delegate = self
         locationManager.startUpdatingLocation()
+    }
+    
+    private func setupMapView() {
         mapView.showsUserLocation = true
         mapView.setUserTrackingMode(.follow, animated: true)
     }
+}
+
+extension SearchKickboardMapView: CLLocationManagerDelegate {
+    
 }
