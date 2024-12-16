@@ -19,6 +19,7 @@ final class SearchLocationBarView: UIView {
         let searchBar = UISearchBar()
         searchBar.placeholder = "주소 검색"
         searchBar.searchTextField.backgroundColor = .clear
+        searchBar.searchBarStyle = .minimal
         return searchBar
     }()
     
