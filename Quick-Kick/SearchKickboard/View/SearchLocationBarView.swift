@@ -52,6 +52,9 @@ final class SearchLocationBarView: UIView {
     }
     
     private func setupSearchBar() {
-        
+        self.addSubview(containerView)
+        containerView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
 }
