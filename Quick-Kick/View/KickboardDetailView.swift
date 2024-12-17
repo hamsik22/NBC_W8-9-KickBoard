@@ -14,7 +14,7 @@ class KickboardDetailView: UIView {
     private let titleContainerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.systemPurple
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 20
         return view
     }()
     
@@ -101,7 +101,7 @@ class KickboardDetailView: UIView {
         for item in items {
             let containerView = UIView()
             containerView.backgroundColor = .white
-            containerView.layer.cornerRadius = 10
+            containerView.layer.cornerRadius = 20
             containerView.layer.borderColor = UIColor.lightGray.cgColor
             containerView.layer.borderWidth = 1
             containerView.layer.shadowColor = UIColor.gray.cgColor
