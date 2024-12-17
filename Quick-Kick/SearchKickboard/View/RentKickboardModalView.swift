@@ -7,4 +7,10 @@
 import UIKit
 
 final class RentKickboardModalView: UIView {
+    private let kickboardImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
 }
