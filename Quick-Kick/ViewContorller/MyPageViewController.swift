@@ -78,12 +78,12 @@ class MyPageViewController: UIViewController {
             
             // ProfileView Constraints
             profileView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            profileView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            profileView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            profileView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30), // 좌우 너비 축소
+            profileView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30),
             profileView.heightAnchor.constraint(equalToConstant: 150),
             
             // KickboardSectionView Constraints
-            kickboardSectionView.topAnchor.constraint(equalTo: profileView.bottomAnchor, constant: 10), // 여백 줄임
+            kickboardSectionView.topAnchor.constraint(equalTo: profileView.bottomAnchor, constant: 10),
             kickboardSectionView.leadingAnchor.constraint(equalTo: profileView.leadingAnchor),
             kickboardSectionView.trailingAnchor.constraint(equalTo: profileView.trailingAnchor),
             kickboardSectionView.heightAnchor.constraint(equalToConstant: 120),
@@ -105,7 +105,11 @@ class MyPageViewController: UIViewController {
     
     // MARK: - Configure Sections
     private func configureSections() {
-        profileView.configure(name: "User ✏️", email: "user1234@gmail.com", imageName: "QuickBoard")
+        profileView.configure(name: "User", email: "user1234@gmail.com", imageName: "QuickBoard")
+        
+        profileView.onNameChange = { newName in
+            print("새로운 닉네임: \(newName)")
+        }
         
         // 내가 등록한 킥보드 섹션 설정
         kickboardSectionView.configure(with: kickboardData, imageSize: CGSize(width: 50, height: 50)) { [weak self] selectedKickboard in

@@ -11,7 +11,7 @@ class KickboardSectionView: UIView {
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(named: "personalLight/hover") // 색상 적용
-        view.layer.cornerRadius = 10
+        view.layer.cornerRadius = 20
         return view
     }()
     
