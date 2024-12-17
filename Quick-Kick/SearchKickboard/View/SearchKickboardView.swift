@@ -58,7 +58,7 @@ final class SearchKickboardView: UIView {
         }
         
         locationResetButton.snp.makeConstraints {
-            $0.top.equalTo(searchLocationBarView.snp.bottom).offset(10)
+            $0.top.equalTo(searchLocationBarView.snp.bottom).offset(15)
             $0.centerX.equalToSuperview()
             $0.height.equalTo(30)
         }
