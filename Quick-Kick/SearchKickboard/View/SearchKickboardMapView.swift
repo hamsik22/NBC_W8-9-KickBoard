@@ -69,4 +69,10 @@ extension SearchKickboardMapView: CLLocationManagerDelegate {
         )
         setRegion(region, animated: true)
     }
+    
+    func moveToUserLocation() {
+        if let location = userLocation.location {
+            setMapCenter(location)
+        }
+    }
 }
