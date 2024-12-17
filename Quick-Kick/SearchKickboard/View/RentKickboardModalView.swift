@@ -76,7 +76,7 @@ final class RentKickboardModalView: UIView {
     
     private func setupAutoLayout() {
         kickboardHorizontalStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(15)
+            make.edges.equalToSuperview().inset(25)
         }
     }
 }
