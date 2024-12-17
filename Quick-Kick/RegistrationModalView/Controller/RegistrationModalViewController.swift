@@ -57,3 +57,14 @@ final class RegistrationModalViewController: UIViewController {
         }
     }
 }
+
+extension RegistrationModalViewController: RegistrationViewDelegate {
+    func activateButton(type: Bool?, nickName: Bool?, location: Bool?) {
+        guard type == true, nickName == true, location == true else {
+            self.addButton.activateButton(false)
+            return
+        }
+        
+        self.addButton.activateButton(true)
+    }
+}
