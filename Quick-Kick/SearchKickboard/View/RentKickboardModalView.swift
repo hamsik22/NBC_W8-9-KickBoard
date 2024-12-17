@@ -62,19 +62,16 @@ final class RentKickboardModalView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupSubviews()
-        setupAutoLayout()
+        setupModalView()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupSubviews() {
+    private func setupModalView() {
+        self.backgroundColor = .white
         self.addSubview(kickboardHorizontalStackView)
-    }
-    
-    private func setupAutoLayout() {
         kickboardHorizontalStackView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(25)
         }
