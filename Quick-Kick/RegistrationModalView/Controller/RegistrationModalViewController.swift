@@ -10,6 +10,10 @@ import SnapKit
 
 final class RegistrationModalViewController: UIViewController {
     
+    private var _typeSeleted: Bool = false
+    private var _haveNickNameText: Bool = false
+    private var _haveLocationText: Bool = false
+    
     private let textField = RegistrationTextField()
     private let typeButton = KickboardTypeButton()
     private let addButton = RegistrationButton()
@@ -25,6 +29,7 @@ final class RegistrationModalViewController: UIViewController {
     }
     
     private func setupTextField() {
+        self.textField.registrationDelegate = self
         view.addSubview(self.textField)
         
         self.textField.snp.makeConstraints {
@@ -36,6 +41,7 @@ final class RegistrationModalViewController: UIViewController {
     }
     
     private func setupTypeButton() {
+        self.typeButton.registrationDelegate = self
         view.addSubview(self.typeButton)
         
         self.typeButton.snp.makeConstraints {
@@ -59,12 +65,30 @@ final class RegistrationModalViewController: UIViewController {
 }
 
 extension RegistrationModalViewController: RegistrationViewDelegate {
-    func activateButton(type: Bool?, nickName: Bool?, location: Bool?) {
-        guard type == true, nickName == true, location == true else {
+    var typeSeleted: Bool {
+        get { return self._typeSeleted }
+        set { self._typeSeleted = newValue }
+    }
+    
+    var haveNickNameText: Bool {
+        get { return self._haveNickNameText }
+        set { self._haveNickNameText = newValue }
+    }
+    
+    var haveLocationText: Bool {
+        get { return self._haveLocationText }
+        set { self._haveLocationText = newValue }
+    }
+    
+    
+    func activateButton() {
+        guard self.typeSeleted, self.haveLocationText, self.haveNickNameText else {
             self.addButton.activateButton(false)
             return
         }
         
         self.addButton.activateButton(true)
     }
+    
 }
+
