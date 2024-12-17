@@ -45,7 +45,7 @@ class KickboardEditView: UIView {
         button.setTitle("수정하기", for: .normal)
         button.backgroundColor = .systemPurple
         button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 20
         return button
     }()
     
