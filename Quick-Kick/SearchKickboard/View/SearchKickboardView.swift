@@ -50,12 +50,5 @@ final class SearchKickboardView: UIView {
             $0.trailing.leading.equalToSuperview().inset(20)
             $0.height.equalTo(60)
         }
-        
-        self.addSubview(locationResetButton)
-        locationResetButton.snp.makeConstraints {
-            $0.top.equalTo(searchLocationBarView.snp.bottom).offset(10)
-            $0.centerX.equalToSuperview()
-            $0.height.equalTo(30)
-        }
     }
 }

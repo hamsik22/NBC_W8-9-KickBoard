@@ -24,14 +24,6 @@ final class SearchLocationBarView: UIView {
         return searchBar
     }()
     
-//    private let searchButton: UIButton = {
-//        let button = UIButton()
-//        button.setImage(UIImage(named: "SearchIcon.png"), for: .normal)
-//        button.tintColor = .black
-//        button.backgroundColor = .clear
-//        return button
-//    }()
-    
     private let searchResultsTableView: UITableView = {
         let tableView = UITableView()
         tableView.backgroundColor = .white
@@ -40,15 +32,6 @@ final class SearchLocationBarView: UIView {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         return tableView
     }()
-    
-//    private lazy var searchStackView: UIStackView = {
-//        let stackView = UIStackView(arrangedSubviews: [searchBar, searchButton])
-//        stackView.axis = .horizontal
-//        stackView.distribution = .fill
-//        stackView.alignment = .fill
-//        stackView.spacing = 10
-//        return stackView
-//    }()
     
     private let searchCompleter: MKLocalSearchCompleter = {
         let completer = MKLocalSearchCompleter()
@@ -129,21 +112,33 @@ extension SearchLocationBarView: MKLocalSearchCompleterDelegate {
 }
 
 extension SearchLocationBarView: UITableViewDelegate {
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if !searchResultsTableView.isHidden {
+            let convertedPoint = convert(point, to: searchResultsTableView)
+
+            if searchResultsTableView.bounds.contains(convertedPoint) {
+                if let hitView = searchResultsTableView.hitTest(convertedPoint, with: event) {
+                    print("TableView cell hit at point: \(point)")
+                    return hitView
+                }
+            }
+        }
+
+        return super.hitTest(point, with: event)
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("셀 선택됨: \(indexPath.row)")
         tableView.deselectRow(at: indexPath, animated: true)
         let completion = searchResults[indexPath.row]
         
         let searchRequest = MKLocalSearch.Request(completion: completion)
         let search = MKLocalSearch(request: searchRequest)
         
-        print("검색 시작...")
         search.start { [weak self] (response, error) in
             if let error = error {
                 print("검색 에러: \(error.localizedDescription)")
                 return
             }
-            print("검색 응답: \(String(describing: response))")
             
             guard let self = self else {
                 print("self가 nil입니다.")
@@ -154,8 +149,6 @@ extension SearchLocationBarView: UITableViewDelegate {
                 print("좌표를 구할 수 없습니다.")
                 return
             }
-            print("좌표 찾음: \(coordinate)")
-            
             let region = MKCoordinateRegion(
                 center: coordinate,
                 latitudinalMeters: 1000,
