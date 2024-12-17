@@ -19,6 +19,7 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.hidesBackButton = true
     }
 }
 
@@ -43,6 +44,7 @@ extension LoginViewController: LoginViewDelegate {
     
     func didSignupButtonTapped() {
         print("회원가입 버튼")
+        navigationController?.pushViewController(SignUpViewController(), animated: true)
     }
 }
     
@@ -59,5 +61,6 @@ extension UITextField {
 
 @available(iOS 17.0, *)
 #Preview {
-    LoginViewController()
+    UINavigationController(rootViewController: LoginViewController())
+    
 }

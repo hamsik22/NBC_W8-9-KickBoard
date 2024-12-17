@@ -10,6 +10,8 @@ import SnapKit
 
 class SignUpView: UIView {
     
+    weak var delegate: SignUpViewDelegate?
+    
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "AppLogo_WhiteBG")
@@ -32,11 +34,16 @@ class SignUpView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubviews()
+        signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
         setupLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    @objc func signUpButtonTapped() {
+        delegate?.didSignupButtonTapped()
     }
     
     private func addSubviews() {
@@ -80,6 +87,10 @@ class SignUpView: UIView {
             make.height.equalTo(50)
         }
     }
+}
+
+protocol SignUpViewDelegate: AnyObject {
+    func didSignupButtonTapped()
 }
 
 @available(iOS 17.0, *)
