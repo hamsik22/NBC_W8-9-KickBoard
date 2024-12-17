@@ -25,10 +25,12 @@ class LoginViewController: UIViewController {
 extension LoginViewController: LoginViewDelegate {
     func didAutoLoginOptionTapped() {
         print("자동 로그인 버튼")
+        loginView.autoLoginCheckBoxIsChecked.toggle()
     }
     
     func didRememberIDOptionTapped() {
         print("아이디 저장 버튼")
+        loginView.rememberIDCheckBoxIsChecked.toggle()
     }
     
     func didFindPasswordButtonTapped() {

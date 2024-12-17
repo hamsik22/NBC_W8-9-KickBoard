@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import SwiftUI
 
 class LoginView: UIView {
     
@@ -19,11 +18,9 @@ class LoginView: UIView {
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-    
     private let emailField = UITextField().setCustomPlaceholder(placeholder: "이메일")
     private let passwordField = UITextField().setCustomPlaceholder(placeholder: "비밀번호")
     
-    // TODO: 커스텀 뷰로 수정 checkboxButton
     private let rememberIDOption: UIButton = {
         let button = UIButton()
         button.setTitle("아이디 저장", for: .normal)
@@ -32,14 +29,27 @@ class LoginView: UIView {
         button.setTitleColor(UIColor.PersonalNomal.nomal, for: .normal)
         return button
     }()
-    // TODO: 커스텀 뷰로 수정 checkboxButton
-    @objc private let autoLoginOption: UIButton = {
+    private let rememberIDCheckBox: UIImageView = {
+        let image = UIImage(systemName: "square")
+        let imageView = UIImageView(image: image)
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = UIColor.PersonalLight.active
+        return imageView
+    }()
+    private let autoLoginOption: UIButton = {
         let button = UIButton()
         button.setTitle("자동 로그인", for: .normal)
         button.setTitleColor(.systemGray, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 12)
         button.setTitleColor(UIColor.PersonalNomal.nomal, for: .normal)
         return button
+    }()
+    private lazy var autoLoginCheckBox: UIImageView = {
+        let image = UIImage(systemName: "square")
+        let imageView = UIImageView(image: image)
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = UIColor.PersonalLight.active
+        return imageView
     }()
     private let findPasswordButton: UIButton = {
         let button = UIButton()
@@ -67,6 +77,18 @@ class LoginView: UIView {
         button.layer.cornerRadius = 20
         return button
     }()
+    var autoLoginCheckBoxIsChecked: Bool = false {
+        didSet {
+            autoLoginCheckBox.image = UIImage(systemName: autoLoginCheckBoxIsChecked ? "checkmark.square" : "square")
+            print("자동 로그인 상태: \(autoLoginCheckBoxIsChecked)")
+        }
+    }
+    var rememberIDCheckBoxIsChecked: Bool = false {
+        didSet {
+            rememberIDCheckBox.image = UIImage(systemName: rememberIDCheckBoxIsChecked ? "checkmark.square" : "square")
+            print("아이디 저장 상태: \(rememberIDCheckBoxIsChecked)")
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -80,7 +102,7 @@ class LoginView: UIView {
     }
     
     private func setupSubviews() {
-        [logoImageView, emailField, passwordField, autoLoginOption, rememberIDOption, findPasswordButton, loginButton, signupButton]
+        [logoImageView, emailField, passwordField, rememberIDCheckBox, autoLoginOption, autoLoginCheckBox, rememberIDOption, findPasswordButton, loginButton, signupButton]
             .forEach{ addSubview($0) }
         layout()
     }
@@ -106,25 +128,37 @@ class LoginView: UIView {
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
         }
-        
+                
         autoLoginOption.snp.makeConstraints { make in
             make.top.equalTo(passwordField.snp.bottom).offset(10)
             make.left.equalTo(passwordField.snp.left)
-            make.width.equalTo(100)
+            make.width.equalTo(60)
             make.height.equalTo(20)
+        }
+        
+        autoLoginCheckBox.snp.makeConstraints { make in
+            make.top.equalTo(passwordField.snp.bottom).offset(10)
+            make.left.equalTo(autoLoginOption.snp.right)
+            make.size.equalTo(20)
+        }
+        
+        rememberIDCheckBox.snp.makeConstraints { make in
+            make.top.equalTo(passwordField.snp.bottom).offset(10)
+            make.left.equalTo(rememberIDOption.snp.right)
+            make.size.equalTo(20)
         }
         
         rememberIDOption.snp.makeConstraints { make in
             make.top.equalTo(passwordField.snp.bottom).offset(10)
-            make.left.equalTo(autoLoginOption.snp.right).offset(5)
-            make.width.equalTo(100)
+            make.left.equalTo(autoLoginCheckBox.snp.right)
+            make.width.equalTo(60)
             make.height.equalTo(20)
         }
         
         findPasswordButton.snp.makeConstraints { make in
             make.top.equalTo(autoLoginOption.snp.bottom).offset(10)
             make.left.equalTo(passwordField.snp.left)
-            make.width.equalTo(150)
+            make.width.equalTo(140)
             make.height.equalTo(20)
         }
         
@@ -189,4 +223,9 @@ extension LoginView {
     @objc func signupButtonTapped() {
         delegate?.didSignupButtonTapped()
     }
+}
+
+@available(iOS 17.0, *)
+#Preview {
+    LoginViewController()
 }
