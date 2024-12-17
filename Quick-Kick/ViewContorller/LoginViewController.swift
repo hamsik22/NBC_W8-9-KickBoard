@@ -6,28 +6,19 @@
 //
 
 import UIKit
-import SwiftUI
-import SnapKit
 
 class LoginViewController: UIViewController {
     
     private let loginView = LoginView()
     var delegate : LoginViewDelegate?
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setup()
+    override func loadView() {
+        view = loginView
         loginView.delegate = self
     }
     
-    private func setup() {
-        view.addSubview(loginView)
-        
-        loginView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.height.equalToSuperview()
-            make.width.equalToSuperview()
-        }
+    override func viewDidLoad() {
+        super.viewDidLoad()
     }
 }
 
@@ -64,28 +55,7 @@ extension UITextField {
     }
 }
 
-#if DEBUG
-extension UIViewController {
-    private struct Preview: UIViewControllerRepresentable {
-        let viewController: UIViewController
-        
-        func makeUIViewController(context: Context) -> UIViewController {
-            return viewController
-        }
-        
-        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        }
-    }
-    
-    func toPreview() -> some View {
-        Preview(viewController: self)
-    }
-}
-#endif
-
-// 프리뷰
-struct LoginViewControllerPreview: PreviewProvider {
-    static var previews: some View {
-        LoginViewController().toPreview()
-    }
+@available(iOS 17.0, *)
+#Preview {
+    LoginViewController()
 }

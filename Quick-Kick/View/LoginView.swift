@@ -20,10 +20,7 @@ class LoginView: UIView {
         return imageView
     }()
     
-    private let emailField : UITextField = {
-        let field = UITextField().setCustomPlaceholder(placeholder: "이메일")
-        return field
-    }()
+    private let emailField = UITextField().setCustomPlaceholder(placeholder: "이메일")
     private let passwordField = UITextField().setCustomPlaceholder(placeholder: "비밀번호")
     
     // TODO: 커스텀 뷰로 수정 checkboxButton
@@ -90,9 +87,8 @@ class LoginView: UIView {
     
     private func layout() {
         logoImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            // 사이즈가 조금 이상한가봐요
-            make.centerX.equalToSuperview().offset(-15)
+            make.top.equalToSuperview().offset(50)
+            make.centerX.equalToSuperview().offset(-15)// 중앙에 딱 안맞아서 offset으로 조절했어요!
             make.height.equalTo(300)
             make.width.equalTo(300)
         }
@@ -158,12 +154,6 @@ extension UITextField {
         tf.setPlaceholder(color: UIColor.PersonalLight.active)
         tf.layer.cornerRadius = 10
         return tf
-    }
-}
-
-struct LoginViewPreview: PreviewProvider {
-    static var previews: some View {
-        LoginViewController().toPreview()
     }
 }
 
