@@ -12,6 +12,7 @@ final class SearchKickboardView: UIView {
     private lazy var searchLocationBarView: SearchLocationBarView = {
         let view = SearchLocationBarView()
         view.mapView = searchKickboardMapView
+        view.layer.zPosition = 1
         return view
     }()
     
