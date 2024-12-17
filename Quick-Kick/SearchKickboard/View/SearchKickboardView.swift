@@ -35,6 +35,7 @@ final class SearchKickboardView: UIView {
         super.init(frame: frame)
         setupSubviews()
         setupAutoLayout()
+        setupAddTarget()
     }
     
     required init?(coder: NSCoder) {
@@ -63,5 +64,14 @@ final class SearchKickboardView: UIView {
             $0.centerX.equalToSuperview()
             $0.height.equalTo(30)
         }
+    }
+    
+    private func setupAddTarget() {
+        self.locationResetButton.addTarget(self, action: #selector(locationResetButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc
+    private func locationResetButtonTapped() {
+        searchKickboardMapView.moveToUserLocation()
     }
 }
