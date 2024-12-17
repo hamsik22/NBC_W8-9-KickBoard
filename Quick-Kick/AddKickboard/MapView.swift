@@ -8,7 +8,13 @@
 import MapKit
 import CoreLocation
 
+protocol MapViewDelegate: AnyObject {
+    func requestNaverAddress(lat: String, lon: String)
+}
+
 class MapView: MKMapView {
+    
+    weak var mapViewDelegate: MapViewDelegate?
     
     // temporary current location
     private let latitude: CLLocationDegrees = 37.497952
@@ -46,5 +52,7 @@ extension MapView: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         print(centerCoordinate)
         getPlacename(for: centerCoordinate)
+        
+        mapViewDelegate?.requestNaverAddress(lat: centerCoordinate.latitude.description, lon: centerCoordinate.longitude.description)
     }
 }
