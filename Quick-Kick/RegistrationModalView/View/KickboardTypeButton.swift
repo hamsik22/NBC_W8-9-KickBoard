@@ -18,6 +18,8 @@ final class KickboardTypeButton: UIView {
     
     private let seatLabel = UILabel()
     
+    weak var registrationDelegate: RegistrationViewDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -66,12 +68,15 @@ final class KickboardTypeButton: UIView {
     }
     
     @objc private func selectedNormalButton() {
+        print(#function)
         if self.quickboardNormalTypeButton.isSelected {
             self.quickboardNormalTypeButton.backgroundColor = .clear
             self.quickboardNormalTypeButton.isSelected = false
+            self.registrationDelegate?.typeSeleted = false
         } else {
             self.quickboardNormalTypeButton.backgroundColor = .PersonalLight.active
             self.quickboardNormalTypeButton.isSelected = true
+            self.registrationDelegate?.typeSeleted = true
         }
         
         self.quickboardSeatTypeButton.isSelected = false
@@ -79,16 +84,20 @@ final class KickboardTypeButton: UIView {
     }
     
     @objc private func selectedSeatButton() {
+        print(#function)
         if self.quickboardSeatTypeButton.isSelected {
             self.quickboardSeatTypeButton.backgroundColor = .clear
             self.quickboardSeatTypeButton.isSelected = false
+            self.registrationDelegate?.typeSeleted = false
         } else {
             self.quickboardSeatTypeButton.backgroundColor = .PersonalLight.active
             self.quickboardSeatTypeButton.isSelected = true
+            self.registrationDelegate?.typeSeleted = true
         }
         
         self.quickboardNormalTypeButton.isSelected = false
         self.quickboardNormalTypeButton.backgroundColor = .clear
+        self.registrationDelegate?.activateButton()
     }
     
     private func setupLabel() {

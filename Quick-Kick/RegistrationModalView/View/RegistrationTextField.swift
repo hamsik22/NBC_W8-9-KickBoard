@@ -14,6 +14,8 @@ final class RegistrationTextField: UIView {
     
     private let locationField = UITextField()
     
+    weak var registrationDelegate: RegistrationViewDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -50,6 +52,34 @@ final class RegistrationTextField: UIView {
         }
         
         setupPlaceHolder()
+        addActions()
+    }
+    
+    private func addActions() {
+        self.ninkNameField.addTarget(self, action: #selector(haveNickNameText), for: .editingChanged)
+        self.locationField.addTarget(self, action: #selector(haveLocationText), for: .editingChanged)
+    }
+    
+    @objc private func haveNickNameText() {
+        print(#function)
+        if self.ninkNameField.text == nil {
+            self.registrationDelegate?.haveNickNameText = false
+        } else {
+            self.registrationDelegate?.haveNickNameText = true
+        }
+        
+        self.registrationDelegate?.activateButton()
+    }
+    
+    @objc private func haveLocationText() {
+        print(#function)
+        if self.locationField.text == nil {
+            self.registrationDelegate?.haveLocationText = false
+        } else {
+            self.registrationDelegate?.haveLocationText = true
+        }
+        
+        self.registrationDelegate?.activateButton()
     }
     
     private func setupPlaceHolder() {
