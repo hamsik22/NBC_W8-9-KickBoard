@@ -62,10 +62,10 @@ final class RegistrationTextField: UIView {
     
     @objc private func haveNickNameText() {
         print(#function)
-        if self.ninkNameField.text == nil {
-            self.registrationDelegate?.haveNickNameText = false
-        } else {
+        if self.ninkNameField.text?.count ?? 0 > 0 {
             self.registrationDelegate?.haveNickNameText = true
+        } else {
+            self.registrationDelegate?.haveNickNameText = false
         }
         
         self.registrationDelegate?.activateButton()
@@ -73,10 +73,10 @@ final class RegistrationTextField: UIView {
     
     @objc private func haveLocationText() {
         print(#function)
-        if self.locationField.text == nil {
-            self.registrationDelegate?.haveLocationText = false
-        } else {
+        if self.locationField.text?.count ?? 0 > 0 {
             self.registrationDelegate?.haveLocationText = true
+        } else {
+            self.registrationDelegate?.haveLocationText = false
         }
         
         self.registrationDelegate?.activateButton()

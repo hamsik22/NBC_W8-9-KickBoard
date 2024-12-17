@@ -80,9 +80,8 @@ extension RegistrationModalViewController: RegistrationViewDelegate {
         set { self._haveLocationText = newValue }
     }
     
-    
     func activateButton() {
-        guard self.typeSeleted, self.haveLocationText, self.haveNickNameText else {
+        guard self.typeSeleted, self.haveNickNameText else {
             self.addButton.activateButton(false)
             return
         }

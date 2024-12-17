@@ -81,6 +81,7 @@ final class KickboardTypeButton: UIView {
         
         self.quickboardSeatTypeButton.isSelected = false
         self.quickboardSeatTypeButton.backgroundColor = .clear
+        self.registrationDelegate?.activateButton()
     }
     
     @objc private func selectedSeatButton() {
