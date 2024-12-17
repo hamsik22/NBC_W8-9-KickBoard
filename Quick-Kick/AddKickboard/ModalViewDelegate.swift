@@ -19,6 +19,7 @@ extension ModalViewDelegate {
         let modalVC = RegistrationModalViewController()
         modalVC.modalPresentationStyle = .formSheet
         modalVC.sheetPresentationController?.preferredCornerRadius = 50
+        modalVC.sheetPresentationController?.detents = [.medium()]
         
         self.present(modalVC, animated: true)
     }
