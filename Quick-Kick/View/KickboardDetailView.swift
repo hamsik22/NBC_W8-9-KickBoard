@@ -27,20 +27,18 @@ class KickboardDetailView: UIView {
         return label
     }()
     
-    let kickboardStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 20
-        stackView.alignment = .fill
-        return stackView
-    }()
-    
     let backButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("< Back", for: .normal)
         button.setTitleColor(.systemPurple, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         return button
+    }()
+    
+    private let contentContainerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     // MARK: - Initializer
@@ -63,13 +61,12 @@ class KickboardDetailView: UIView {
         addSubview(titleContainerView)
         titleContainerView.addSubview(titleLabel)
         addSubview(backButton)
-        addSubview(kickboardStackView)
+        addSubview(contentContainerView)
         
         // Auto Layout
         titleContainerView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         backButton.translatesAutoresizingMaskIntoConstraints = false
-        kickboardStackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             // Back Button
@@ -86,18 +83,20 @@ class KickboardDetailView: UIView {
             titleLabel.centerXAnchor.constraint(equalTo: titleContainerView.centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: titleContainerView.centerYAnchor),
             
-            // Kickboard Stack View
-            kickboardStackView.topAnchor.constraint(equalTo: titleContainerView.bottomAnchor, constant: 20),
-            kickboardStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            kickboardStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            kickboardStackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -20)
+            // Content Container
+            contentContainerView.topAnchor.constraint(equalTo: titleContainerView.bottomAnchor, constant: 20),
+            contentContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            contentContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            contentContainerView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -20)
         ])
     }
     
-    // MARK: - Public Methods
+    // MARK: - Configure Method
     
     func configure(with items: [String]) {
-        kickboardStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        contentContainerView.subviews.forEach { $0.removeFromSuperview() }
+        
+        var previousView: UIView? = nil
         
         for item in items {
             let containerView = UIView()
@@ -118,16 +117,28 @@ class KickboardDetailView: UIView {
             label.translatesAutoresizingMaskIntoConstraints = false
             
             containerView.addSubview(label)
+            contentContainerView.addSubview(containerView)
             
             NSLayoutConstraint.activate([
                 label.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
                 label.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
                 label.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-                label.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
+                label.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
+                
+                containerView.heightAnchor.constraint(equalToConstant: 70),
+                containerView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
+                containerView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor)
             ])
             
-            kickboardStackView.addArrangedSubview(containerView)
-            containerView.heightAnchor.constraint(equalToConstant: 70).isActive = true
+            if let previous = previousView {
+                containerView.topAnchor.constraint(equalTo: previous.bottomAnchor, constant: 10).isActive = true
+            } else {
+                containerView.topAnchor.constraint(equalTo: contentContainerView.topAnchor).isActive = true
+            }
+            
+            previousView = containerView
         }
+        
+        previousView?.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor, constant: -10).isActive = true
     }
 }

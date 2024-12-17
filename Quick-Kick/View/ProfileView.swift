@@ -23,7 +23,7 @@ class ProfileView: UIView {
     
     private func setupUI() {
         backgroundColor = UIColor(named: "personalLight/light")
-        layer.cornerRadius = 20
+        layer.cornerRadius = 10
         
         profileImageView.contentMode = .scaleAspectFit
         nameLabel.font = UIFont.boldSystemFont(ofSize: 24)

@@ -10,10 +10,9 @@ import UIKit
 class HistorySectionView: UIView {
     
     // MARK: - UI Components
-    
-    private let titleContainerView: UIView = {
+    private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.systemPurple
+        view.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.2)
         view.layer.cornerRadius = 10
         return view
     }()
@@ -22,101 +21,97 @@ class HistorySectionView: UIView {
         let label = UILabel()
         label.text = "킥보드 이용 내역"
         label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.textColor = .white
-        label.textAlignment = .center
+        label.textColor = .black
         return label
     }()
-    
-    private let historyStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 10
-        stackView.alignment = .fill
-        return stackView
-    }()
-    
+
+    private var historyViews: [UIView] = []
+
     // MARK: - Initialization
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Setup UI
-    
     private func setupUI() {
-        addSubview(titleContainerView)
-        titleContainerView.addSubview(titleLabel)
-        addSubview(historyStackView)
-        
-        titleContainerView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(containerView)
+        containerView.addSubview(titleLabel)
+
+        containerView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        historyStackView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            // Title Container
-            titleContainerView.topAnchor.constraint(equalTo: topAnchor),
-            titleContainerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            titleContainerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            titleContainerView.heightAnchor.constraint(equalToConstant: 50),
-            
-            // Title Label
-            titleLabel.centerXAnchor.constraint(equalTo: titleContainerView.centerXAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: titleContainerView.centerYAnchor),
-            
-            // History Stack View
-            historyStackView.topAnchor.constraint(equalTo: titleContainerView.bottomAnchor, constant: 10),
-            historyStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            historyStackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
-            historyStackView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15)
         ])
     }
-    
+
     // MARK: - Configure Method
-    
-    func configure(with history: [KickboardHistory], imageSize: CGSize) {
-        historyStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+    func configure(with histories: [KickboardHistory], imageSize: CGSize) {
+        historyViews.forEach { $0.removeFromSuperview() }
+        historyViews.removeAll()
         
-        for item in history {
-            let containerView = UIView()
-            containerView.backgroundColor = .white
-            containerView.layer.cornerRadius = 10
-            containerView.layer.shadowColor = UIColor.gray.cgColor
-            containerView.layer.shadowOffset = CGSize(width: 0, height: 2)
-            containerView.layer.shadowOpacity = 0.3
-            containerView.translatesAutoresizingMaskIntoConstraints = false
-            
-            let imageView = UIImageView(image: UIImage(named: item.isSeat ? "QuickBoard - Seat" : "QuickBoard"))
-            imageView.contentMode = .scaleAspectFit
+        var previousView: UIView?
+
+        for history in histories {
+            let container = UIView()
+            container.backgroundColor = .white
+            container.layer.cornerRadius = 10
+            container.translatesAutoresizingMaskIntoConstraints = false
+
+            let imageView = UIImageView(image: UIImage(named: history.isSeat ? "QuickBoard - Seat" : "QuickBoard"))
             imageView.translatesAutoresizingMaskIntoConstraints = false
             
             let infoLabel = UILabel()
-            infoLabel.text = "날짜: \(item.date)\n운행 시간: \(item.time)"
             infoLabel.numberOfLines = 2
-            infoLabel.font = UIFont.systemFont(ofSize: 14)
-            infoLabel.textColor = .darkGray
             infoLabel.translatesAutoresizingMaskIntoConstraints = false
             
-            containerView.addSubview(imageView)
-            containerView.addSubview(infoLabel)
-            
+            // 볼드체 적용
+            let boldText = NSMutableAttributedString()
+            let dateText = NSAttributedString(string: "날짜 ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
+            let dateValue = NSAttributedString(string: "\(history.date)\n", attributes: [.font: UIFont.systemFont(ofSize: 14)])
+            let timeText = NSAttributedString(string: "운행 시간 ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
+            let timeValue = NSAttributedString(string: "\(history.time)", attributes: [.font: UIFont.systemFont(ofSize: 14)])
+
+            boldText.append(dateText)
+            boldText.append(dateValue)
+            boldText.append(timeText)
+            boldText.append(timeValue)
+
+            infoLabel.attributedText = boldText
+
+            container.addSubview(imageView)
+            container.addSubview(infoLabel)
+            containerView.addSubview(container)
+
             NSLayoutConstraint.activate([
-                imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
-                imageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+                container.topAnchor.constraint(equalTo: previousView?.bottomAnchor ?? titleLabel.bottomAnchor, constant: 10),
+                container.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
+                container.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
+                container.heightAnchor.constraint(equalToConstant: 70),
+
+                imageView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
+                imageView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
                 imageView.widthAnchor.constraint(equalToConstant: imageSize.width),
                 imageView.heightAnchor.constraint(equalToConstant: imageSize.height),
                 
                 infoLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10),
-                infoLabel.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-                infoLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10)
+                infoLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
+                infoLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor)
             ])
-            
-            containerView.heightAnchor.constraint(equalToConstant: 70).isActive = true
-            historyStackView.addArrangedSubview(containerView)
+
+            previousView = container
+            historyViews.append(container)
         }
     }
 }

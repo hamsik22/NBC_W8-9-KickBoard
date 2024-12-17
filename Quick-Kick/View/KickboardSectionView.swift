@@ -12,7 +12,7 @@ class KickboardSectionView: UIView {
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.2)
-        view.layer.cornerRadius = 15
+        view.layer.cornerRadius = 10
         return view
     }()
     
@@ -23,17 +23,11 @@ class KickboardSectionView: UIView {
         label.textColor = .darkGray
         return label
     }()
-
-    private let stackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.spacing = 20
-        stack.alignment = .center
-        stack.distribution = .equalSpacing
-        return stack
-    }()
+    
+    private var kickboardViews: [UIView] = [] // 킥보드 뷰 리스트
 
     private var onTap: ((Kickboard) -> Void)?
+    private var kickboards: [Kickboard] = []
 
     // MARK: - Initialization
     override init(frame: CGRect) {
@@ -49,73 +43,75 @@ class KickboardSectionView: UIView {
     private func setupUI() {
         addSubview(containerView)
         containerView.addSubview(titleLabel)
-        containerView.addSubview(stackView)
-        
+
         containerView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         NSLayoutConstraint.activate([
-            // Container View Constraints
+            // Container View
             containerView.topAnchor.constraint(equalTo: topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            
-            // Title Label Constraints
+
+            // Title Label
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
-            
-            // StackView Constraints
-            stackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
-            stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15)
         ])
     }
 
     // MARK: - Configure Method
     func configure(with kickboards: [Kickboard], imageSize: CGSize, onTap: @escaping (Kickboard) -> Void) {
         self.onTap = onTap
-        stackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        self.kickboards = kickboards
 
-        for kickboard in kickboards {
-            // Create Image Container
+        // 기존 뷰 제거
+        kickboardViews.forEach { $0.removeFromSuperview() }
+        kickboardViews.removeAll()
+
+        var previousView: UIView?
+
+        for (index, kickboard) in kickboards.enumerated() {
             let imageContainer = UIView()
             imageContainer.backgroundColor = .white
             imageContainer.layer.cornerRadius = imageSize.width / 2
-            imageContainer.layer.shadowColor = UIColor.black.cgColor
             imageContainer.layer.shadowOpacity = 0.1
-            imageContainer.layer.shadowOffset = CGSize(width: 0, height: 2)
             imageContainer.translatesAutoresizingMaskIntoConstraints = false
+            imageContainer.tag = index
             
             let imageView = UIImageView(image: UIImage(named: kickboard.isSeat ? "QuickBoard - Seat" : "QuickBoard"))
             imageView.contentMode = .scaleAspectFit
             imageView.translatesAutoresizingMaskIntoConstraints = false
-            imageView.isUserInteractionEnabled = true
             
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(kickboardTapped(_:)))
-            imageView.addGestureRecognizer(tapGesture)
+            imageContainer.addGestureRecognizer(tapGesture)
+            imageContainer.isUserInteractionEnabled = true
             
-            // Add Image to Container
             imageContainer.addSubview(imageView)
+            containerView.addSubview(imageContainer)
+            
             NSLayoutConstraint.activate([
+                imageContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
                 imageContainer.widthAnchor.constraint(equalToConstant: imageSize.width),
                 imageContainer.heightAnchor.constraint(equalToConstant: imageSize.height),
-                
+
                 imageView.centerXAnchor.constraint(equalTo: imageContainer.centerXAnchor),
                 imageView.centerYAnchor.constraint(equalTo: imageContainer.centerYAnchor),
                 imageView.widthAnchor.constraint(equalToConstant: imageSize.width * 0.6),
-                imageView.heightAnchor.constraint(equalToConstant: imageSize.height * 0.6)
+                imageView.heightAnchor.constraint(equalToConstant: imageSize.height * 0.6),
+                
+                imageContainer.leadingAnchor.constraint(equalTo: previousView?.trailingAnchor ?? containerView.leadingAnchor, constant: 15)
             ])
-            
-            stackView.addArrangedSubview(imageContainer)
+
+            kickboardViews.append(imageContainer)
+            previousView = imageContainer
         }
     }
 
     @objc private func kickboardTapped(_ gesture: UITapGestureRecognizer) {
-        guard let index = stackView.arrangedSubviews.firstIndex(of: gesture.view?.superview ?? UIView()) else { return }
-        let tappedKickboard = Kickboard(name: "Tapped \(index)", isSeat: false, address: "")
-        onTap?(tappedKickboard)
+        guard let containerView = gesture.view else { return }
+        let index = containerView.tag
+        let selectedKickboard = kickboards[index]
+        onTap?(selectedKickboard)
     }
 }

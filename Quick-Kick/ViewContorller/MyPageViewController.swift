@@ -19,7 +19,7 @@ class MyPageViewController: UIViewController {
     private let logoutButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("로그아웃", for: .normal)
-        button.backgroundColor = UIColor(named: "personalDark/darker") ?? .purple
+        button.backgroundColor = UIColor.systemPurple
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
@@ -83,14 +83,14 @@ class MyPageViewController: UIViewController {
             
             // KickboardSectionView Constraints
             kickboardSectionView.topAnchor.constraint(equalTo: profileView.bottomAnchor, constant: 20),
-            kickboardSectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            kickboardSectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            kickboardSectionView.heightAnchor.constraint(equalToConstant: 200),
+            kickboardSectionView.leadingAnchor.constraint(equalTo: profileView.leadingAnchor), // 동일 너비 적용
+            kickboardSectionView.trailingAnchor.constraint(equalTo: profileView.trailingAnchor), // 동일 너비 적용
+            kickboardSectionView.heightAnchor.constraint(equalToConstant: 120),
             
             // HistorySectionView Constraints
-            historySectionView.topAnchor.constraint(equalTo: kickboardSectionView.bottomAnchor, constant: 20),
-            historySectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            historySectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            historySectionView.topAnchor.constraint(equalTo: kickboardSectionView.bottomAnchor, constant: 10),
+            historySectionView.leadingAnchor.constraint(equalTo: kickboardSectionView.leadingAnchor), // 동일 너비 적용
+            historySectionView.trailingAnchor.constraint(equalTo: kickboardSectionView.trailingAnchor), // 동일 너비 적용
             historySectionView.heightAnchor.constraint(equalToConstant: 350),
             
             // LogoutButton Constraints
