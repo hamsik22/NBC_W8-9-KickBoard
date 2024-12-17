@@ -29,4 +29,13 @@ final class RentKickboardModalView: UIView {
         label.textAlignment = .right
         return label
     }()
+    
+    private let rentButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("이용 시작", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = UIColor(named: "personalNomal/nomal")
+        button.layer.cornerRadius = 10
+        return button
+    }()
 }
