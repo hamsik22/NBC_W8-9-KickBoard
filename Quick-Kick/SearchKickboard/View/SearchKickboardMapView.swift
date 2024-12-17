@@ -48,6 +48,7 @@ final class SearchKickboardMapView: MKMapView {
         self.preferredConfiguration = MKStandardMapConfiguration()
         self.showsUserLocation = true
         self.setUserTrackingMode(.follow, animated: true)
+        self.setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 200, maxCenterCoordinateDistance: 2000), animated: true)
     }
 }
 
