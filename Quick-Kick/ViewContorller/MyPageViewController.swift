@@ -82,15 +82,15 @@ class MyPageViewController: UIViewController {
             profileView.heightAnchor.constraint(equalToConstant: 150),
             
             // KickboardSectionView Constraints
-            kickboardSectionView.topAnchor.constraint(equalTo: profileView.bottomAnchor, constant: 20),
-            kickboardSectionView.leadingAnchor.constraint(equalTo: profileView.leadingAnchor), // 동일 너비 적용
-            kickboardSectionView.trailingAnchor.constraint(equalTo: profileView.trailingAnchor), // 동일 너비 적용
+            kickboardSectionView.topAnchor.constraint(equalTo: profileView.bottomAnchor, constant: 10), // 여백 줄임
+            kickboardSectionView.leadingAnchor.constraint(equalTo: profileView.leadingAnchor),
+            kickboardSectionView.trailingAnchor.constraint(equalTo: profileView.trailingAnchor),
             kickboardSectionView.heightAnchor.constraint(equalToConstant: 120),
             
             // HistorySectionView Constraints
             historySectionView.topAnchor.constraint(equalTo: kickboardSectionView.bottomAnchor, constant: 10),
-            historySectionView.leadingAnchor.constraint(equalTo: kickboardSectionView.leadingAnchor), // 동일 너비 적용
-            historySectionView.trailingAnchor.constraint(equalTo: kickboardSectionView.trailingAnchor), // 동일 너비 적용
+            historySectionView.leadingAnchor.constraint(equalTo: kickboardSectionView.leadingAnchor),
+            historySectionView.trailingAnchor.constraint(equalTo: kickboardSectionView.trailingAnchor),
             historySectionView.heightAnchor.constraint(equalToConstant: 350),
             
             // LogoutButton Constraints
