@@ -18,7 +18,15 @@ final class RentKickboardModalView: UIView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textColor = .black
-        label.textAlignment = .center
+        label.textAlignment = .right
+        return label
+    }()
+    
+    private let kickboardLocationLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 11, weight: .regular)
+        label.textColor = .black
+        label.textAlignment = .right
         return label
     }()
 }
