@@ -18,7 +18,7 @@ class KickboardHistoryView: UIView {
         label.textColor = .white
         label.backgroundColor = UIColor.systemPurple
         label.textAlignment = .center
-        label.layer.cornerRadius = 10
+        label.layer.cornerRadius = 20
         label.clipsToBounds = true
         return label
     }()
@@ -73,7 +73,7 @@ class KickboardHistoryView: UIView {
         for history in histories {
             let containerView = UIView()
             containerView.backgroundColor = .white
-            containerView.layer.cornerRadius = 10
+            containerView.layer.cornerRadius = 20
             containerView.layer.borderColor = UIColor.lightGray.cgColor
             containerView.layer.borderWidth = 1
             containerView.translatesAutoresizingMaskIntoConstraints = false

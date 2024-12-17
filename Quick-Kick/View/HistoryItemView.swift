@@ -26,7 +26,7 @@ class HistoryItemView: UIView {
         
         let containerView = UIView()
         containerView.backgroundColor = .white
-        containerView.layer.cornerRadius = 10
+        containerView.layer.cornerRadius = 20
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(imageView)
         containerView.addSubview(infoLabel)
