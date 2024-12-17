@@ -20,7 +20,8 @@ final class SearchKickboardView: UIView {
         var config = UIButton.Configuration.filled()
         config.image = UIImage(named: "LocationResetButtonIcon.png")
         config.title = "현위치로 가기"
-        config.imagePadding = 8
+        config.imagePadding = 10
+        config.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
         config.imagePlacement = .leading
         config.background.backgroundColor = UIColor(named: "personalLight/light")
         config.baseForegroundColor = UIColor(named: "personalDark/darker")
