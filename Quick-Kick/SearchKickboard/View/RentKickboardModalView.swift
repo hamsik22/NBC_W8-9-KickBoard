@@ -13,4 +13,12 @@ final class RentKickboardModalView: UIView {
         imageView.clipsToBounds = true
         return imageView
     }()
+    
+    private let kickboardNicknameLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.textColor = .black
+        label.textAlignment = .center
+        return label
+    }()
 }
