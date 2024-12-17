@@ -47,4 +47,13 @@ final class RentKickboardModalView: UIView {
         stackView.spacing = 10
         return stackView
     }()
+    
+    private lazy var kickboardHorizontalStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [kickboardImageView, kickboardVerticalStackView])
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.alignment = .fill
+        stackView.spacing = 20
+        return stackView
+    }()
 }
