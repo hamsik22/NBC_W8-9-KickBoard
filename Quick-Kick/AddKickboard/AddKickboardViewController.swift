@@ -9,7 +9,7 @@ import UIKit
 
 class AddKickboardViewController: UIViewController {
     
-    private let apiRepository: APIRepository = .init()
+    private let addressRepository: AddressRepository = .init()
     
     private lazy var containerView: AddKickboardView = .init()
     
@@ -19,12 +19,12 @@ class AddKickboardViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        containerView.setDelegate(self, apiRepository)
+        containerView.setDelegate(self, addressRepository)
     }
 }
 
 extension AddKickboardViewController: MapViewDelegate {
     func requestNaverAddress(lat: String, lon: String) {
-        apiRepository.fetchAddress(lat: lat, lon: lon)
+        addressRepository.fetchAddress(lat: lat, lon: lon)
     }
 }

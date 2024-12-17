@@ -35,24 +35,11 @@ class MapView: MKMapView {
         centerCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 200, maxCenterCoordinateDistance: 2000), animated: true)
     }
-    
-    private func getPlacename(for coordindate: CLLocationCoordinate2D) {
-        let location = CLLocation(latitude: coordindate.latitude, longitude: coordindate.longitude)
-        let geocoder = CLGeocoder()
-        
-        geocoder.reverseGeocodeLocation(location) { placemarks, error in
-            placemarks?.forEach({
-                print($0.name)
-            })
-        }
-    }
 }
 
 extension MapView: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         print(centerCoordinate)
-        getPlacename(for: centerCoordinate)
-        
         mapViewDelegate?.requestNaverAddress(lat: centerCoordinate.latitude.description, lon: centerCoordinate.longitude.description)
     }
 }
