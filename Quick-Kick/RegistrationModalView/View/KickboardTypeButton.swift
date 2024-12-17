@@ -48,6 +48,8 @@ final class KickboardTypeButton: UIView {
             $0.contentEdgeInsets = .init(top: 10, left: 10, bottom: 10, right: 10)
             self.addSubview($0)
         }
+        self.quickboardNormalTypeButton.tag = 0
+        self.quickboardSeatTypeButton.tag = 1
         
         setupImage()
         setupAction()
@@ -64,16 +66,26 @@ final class KickboardTypeButton: UIView {
     }
     
     @objc private func selectedNormalButton() {
-        self.quickboardNormalTypeButton.backgroundColor = .PersonalLight.active
-        self.quickboardNormalTypeButton.isSelected = true
+        if self.quickboardNormalTypeButton.isSelected {
+            self.quickboardNormalTypeButton.backgroundColor = .clear
+            self.quickboardNormalTypeButton.isSelected = false
+        } else {
+            self.quickboardNormalTypeButton.backgroundColor = .PersonalLight.active
+            self.quickboardNormalTypeButton.isSelected = true
+        }
         
         self.quickboardSeatTypeButton.isSelected = false
         self.quickboardSeatTypeButton.backgroundColor = .clear
     }
     
     @objc private func selectedSeatButton() {
-        self.quickboardSeatTypeButton.backgroundColor = .PersonalLight.active
-        self.quickboardSeatTypeButton.isSelected = true
+        if self.quickboardSeatTypeButton.isSelected {
+            self.quickboardSeatTypeButton.backgroundColor = .clear
+            self.quickboardSeatTypeButton.isSelected = false
+        } else {
+            self.quickboardSeatTypeButton.backgroundColor = .PersonalLight.active
+            self.quickboardSeatTypeButton.isSelected = true
+        }
         
         self.quickboardNormalTypeButton.isSelected = false
         self.quickboardNormalTypeButton.backgroundColor = .clear
