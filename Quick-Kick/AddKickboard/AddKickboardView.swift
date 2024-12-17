@@ -81,4 +81,9 @@ class AddKickboardView: UIView {
             $0.height.equalTo(70)
         }
     }
+    
+    func setDelegate(_ mapViewDelegate: MapViewDelegate, _ repository: AddressRepository) {
+        mapView.mapViewDelegate = mapViewDelegate
+        repository.delegate = noticeView
+    }
 }
