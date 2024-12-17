@@ -14,8 +14,3 @@ final class SearchKickboardViewController: UIViewController {
         view = searchKickboardView
     }
 }
-
-//@available(iOS 17.0, *)
-//#Preview {
-//    SearchKickboardViewController()
-//}
