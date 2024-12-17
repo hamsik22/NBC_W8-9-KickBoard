@@ -57,7 +57,6 @@ final class RegistrationTextField: UIView {
     
     private func addActions() {
         self.ninkNameField.addTarget(self, action: #selector(haveNickNameText), for: .editingChanged)
-        self.locationField.addTarget(self, action: #selector(haveLocationText), for: .editingChanged)
     }
     
     @objc private func haveNickNameText() {
@@ -66,17 +65,6 @@ final class RegistrationTextField: UIView {
             self.registrationDelegate?.haveNickNameText = true
         } else {
             self.registrationDelegate?.haveNickNameText = false
-        }
-        
-        self.registrationDelegate?.activateButton()
-    }
-    
-    @objc private func haveLocationText() {
-        print(#function)
-        if self.locationField.text?.count ?? 0 > 0 {
-            self.registrationDelegate?.haveLocationText = true
-        } else {
-            self.registrationDelegate?.haveLocationText = false
         }
         
         self.registrationDelegate?.activateButton()

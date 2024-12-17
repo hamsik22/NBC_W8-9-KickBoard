@@ -12,9 +12,7 @@ protocol RegistrationViewDelegate: AnyObject {
     var typeSeleted: Bool { get set }
     
     var haveNickNameText: Bool { get set }
-    
-    var haveLocationText: Bool { get set }
-    
+        
     func activateButton()
     
 }

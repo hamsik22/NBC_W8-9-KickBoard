@@ -12,7 +12,6 @@ final class RegistrationModalViewController: UIViewController {
     
     private var _typeSeleted: Bool = false
     private var _haveNickNameText: Bool = false
-    private var _haveLocationText: Bool = false
     
     private let textField = RegistrationTextField()
     private let typeButton = KickboardTypeButton()
@@ -73,11 +72,6 @@ extension RegistrationModalViewController: RegistrationViewDelegate {
     var haveNickNameText: Bool {
         get { return self._haveNickNameText }
         set { self._haveNickNameText = newValue }
-    }
-    
-    var haveLocationText: Bool {
-        get { return self._haveLocationText }
-        set { self._haveLocationText = newValue }
     }
     
     func activateButton() {
