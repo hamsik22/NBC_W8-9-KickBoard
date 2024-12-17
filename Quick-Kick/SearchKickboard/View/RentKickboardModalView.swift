@@ -38,4 +38,13 @@ final class RentKickboardModalView: UIView {
         button.layer.cornerRadius = 10
         return button
     }()
+    
+    private lazy var kickboardVerticalStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [kickboardNicknameLabel, kickboardLocationLabel, rentButton])
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.alignment = .fill
+        stackView.spacing = 10
+        return stackView
+    }()
 }
