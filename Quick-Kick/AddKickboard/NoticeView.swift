@@ -68,3 +68,9 @@ class NoticeView: UIView {
         }
     }
 }
+
+extension NoticeView: AddressLabelDelegate {
+    func bind(_ address: String) {
+        addressLabel.text = address
+    }
+}

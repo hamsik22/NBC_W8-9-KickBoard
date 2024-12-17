@@ -9,7 +9,7 @@ import UIKit
 
 class AddKickboardViewController: UIViewController {
     
-    private let apiRepository: APIRepositoryProtocol = APIRepository()
+    private let apiRepository: APIRepository = .init()
     
     private lazy var containerView: AddKickboardView = .init()
     
@@ -19,7 +19,7 @@ class AddKickboardViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        containerView.setDelegate(self)
+        containerView.setDelegate(self, apiRepository)
     }
 }
 

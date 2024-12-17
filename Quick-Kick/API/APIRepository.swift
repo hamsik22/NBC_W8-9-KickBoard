@@ -9,55 +9,53 @@ import Foundation
 import CoreLocation
 import Alamofire
 
-protocol APIRepositoryProtocol {
-    func fetchAddress(lat: String, lon: String)
+protocol AddressLabelDelegate: AnyObject {
+    func bind(_ address: String)
 }
 
-class APIRepository: APIRepositoryProtocol {
-    private func requestData<T: Decodable>(url: URL, completion: @escaping (Result<T, AFError>) -> Void) {
-        AF.request(url).responseDecodable(of: T.self) { response in
+class APIRepository {
+    weak var delegate: AddressLabelDelegate?
+    
+    private func requestData<T: Decodable>(url: URLComponents, parameters: [String: String], headers: [String: String], completion: @escaping (Result<T, AFError>) -> Void) {
+        AF.request(url, method: .get, parameters: parameters, headers: HTTPHeaders(headers)).responseDecodable(of: T.self) { response in
             completion(response.result)
         }
     }
     
     func fetchAddress(lat: String, lon: String) {
-        guard let urlComponents = URLComponents(string: "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc") else {
-            return
-        }
+        guard let urlComponents = URLComponents(string: "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc") else { return }
         
         let parameters = [
-                    "coords": "\(lon),\(lat)",
-                    "orders": "roadaddr",
-                    "output": "json"
-                ]
+            "coords": "\(lon),\(lat)",
+            "orders": "roadaddr",
+            "output": "json"
+        ]
         
-        let headers: HTTPHeaders = HTTPHeaders([
+        let headers = [
             "x-ncp-apigw-api-key-id": APIKey.apiID,
             "x-ncp-apigw-api-key": APIKey.apiKey
-        ])
+        ]
         
-        
-        AF.request(urlComponents, method: .get, parameters: parameters, headers: headers)
-            .responseDecodable(of: NaverResponse.self) { response in
-                switch response.result {
-                case .success(let response):
-                    //print(response)
+        requestData(url: urlComponents, parameters: parameters, headers: headers) { [weak self] (result: Result<NaverResponse, AFError>) in
+            switch result {
+            case .success(let response):
+                if response.results.isEmpty {
+                    // TODO: geocoder name 값 활용
+                } else {
+                    guard let city = response.results[0].region.area1.alias else { return }
+                    let result = response.results[0]
                     
-                    if !response.results.isEmpty {
-                        print(response.results[0].region.area1.alias)
-                        print(response.results[0].region.area2.name)
-                        print(response.results[0].land.name)
-                        print(response.results[0].land.number1)
-                        print(response.results[0].land.addition0.value)
-                        if response.results[0].land.addition0.value == "" {
-                            print("empty")
-                        }
-                    }
+                    let region = result.region.area2.name
+                    let street = result.land.name
+                    let number = result.land.number1
+                    let building = result.land.addition0.value
                     
                     
-                case .failure(let error):
-                    print(error.localizedDescription)
+                    self?.delegate?.bind("\(city) \(region) \(street) \(number) \(building)")
                 }
+            case .failure(let error):
+                print(error.localizedDescription)
             }
+        }
     }
 }
