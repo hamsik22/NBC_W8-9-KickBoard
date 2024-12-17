@@ -32,6 +32,7 @@ final class SearchKickboardView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
+        setupAutoLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -40,11 +41,15 @@ final class SearchKickboardView: UIView {
     
     private func setupSubviews() {
         self.addSubview(searchKickboardMapView)
+        self.addSubview(searchLocationBarView)
+        self.addSubview(locationResetButton)
+    }
+    
+    private func setupAutoLayout() {
         self.searchKickboardMapView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         
-        self.addSubview(searchLocationBarView)
         searchLocationBarView.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).offset(20)
             $0.trailing.leading.equalToSuperview().inset(20)
