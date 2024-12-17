@@ -9,13 +9,15 @@ import UIKit
 final class RentKickboardModalView: UIView {
     private let kickboardImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.image = UIImage(named: "QuickBoard")
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         return imageView
     }()
     
     private let kickboardNicknameLabel: UILabel = {
         let label = UILabel()
+        label.text = "Sparta의 킥보드"
         label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textColor = .black
         label.textAlignment = .right
@@ -24,6 +26,7 @@ final class RentKickboardModalView: UIView {
     
     private let kickboardLocationLabel: UILabel = {
         let label = UILabel()
+        label.text = "서울 중구 세종대로 110 서울특별시청"
         label.font = .systemFont(ofSize: 11, weight: .regular)
         label.textColor = .black
         label.textAlignment = .right
@@ -42,9 +45,9 @@ final class RentKickboardModalView: UIView {
     private lazy var kickboardVerticalStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [kickboardNicknameLabel, kickboardLocationLabel, rentButton])
         stackView.axis = .vertical
-        stackView.distribution = .fillEqually
+        stackView.distribution = .fillProportionally
         stackView.alignment = .fill
-        stackView.spacing = 10
+        stackView.spacing = 15
         return stackView
     }()
     
@@ -76,4 +79,9 @@ final class RentKickboardModalView: UIView {
             make.edges.equalToSuperview().inset(15)
         }
     }
+}
+
+@available(iOS 17.0, *)
+#Preview {
+    RentKickboardModalView()
 }
