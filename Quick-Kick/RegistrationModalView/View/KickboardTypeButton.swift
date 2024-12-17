@@ -50,6 +50,7 @@ final class KickboardTypeButton: UIView {
         }
         
         setupImage()
+        setupAction()
     }
     
     private func setupImage() {
@@ -63,11 +64,19 @@ final class KickboardTypeButton: UIView {
     }
     
     @objc private func selectedNormalButton() {
+        self.quickboardNormalTypeButton.backgroundColor = .PersonalLight.active
+        self.quickboardNormalTypeButton.isSelected = true
         
+        self.quickboardSeatTypeButton.isSelected = false
+        self.quickboardSeatTypeButton.backgroundColor = .clear
     }
     
     @objc private func selectedSeatButton() {
+        self.quickboardSeatTypeButton.backgroundColor = .PersonalLight.active
+        self.quickboardSeatTypeButton.isSelected = true
         
+        self.quickboardNormalTypeButton.isSelected = false
+        self.quickboardNormalTypeButton.backgroundColor = .clear
     }
     
     private func setupLabel() {
