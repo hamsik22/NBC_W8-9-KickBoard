@@ -45,6 +45,7 @@ class AddressRepository {
                     self?.getAddress(lat: lat, lon: lon, completion: { address in
                         DispatchQueue.main.async {
                             self?.delegate?.bind(address)
+                            print("CLGeocoder address")
                         }
                     })
                     
@@ -60,6 +61,7 @@ class AddressRepository {
                     
                     DispatchQueue.main.async {
                         self?.delegate?.bind("\(city) \(region) \(street) \(number) \(building)")
+                        print("Naver address")
                     }
                 }
             case .failure(let error):
@@ -79,10 +81,18 @@ class AddressRepository {
             guard
                 let placemark = placemarks?[0],
                 let city = placemark.administrativeArea,
-                let region = placemark.subLocality,
-                let number = placemark.subThoroughfare
+                let detail = placemark.name
             else { return }
-            completion("\(city) \(region) \(number)")
+            
+            var split = detail.split(separator: " ")
+            var result = split[0]
+            
+            if split.count > 1 {
+                split[0] = split[0].dropLast()
+                result = "\(split[1]) \(split[0])"
+            }
+            
+            completion("\(city) \(result)")
         }
     }
 }
