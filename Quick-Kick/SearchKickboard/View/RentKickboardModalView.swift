@@ -56,4 +56,17 @@ final class RentKickboardModalView: UIView {
         stackView.spacing = 20
         return stackView
     }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupSubviews()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupSubviews() {
+        self.addSubview(kickboardHorizontalStackView)
+    }
 }
