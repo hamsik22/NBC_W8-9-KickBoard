@@ -9,6 +9,8 @@ import UIKit
 
 class AddKickboardViewController: UIViewController {
     
+    private let addressRepository: AddressRepository = .init()
+    
     private lazy var containerView: AddKickboardView = .init()
     
     override func loadView() {
@@ -17,6 +19,12 @@ class AddKickboardViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        containerView.setDelegate(self, addressRepository)
     }
-    
+}
+
+extension AddKickboardViewController: MapViewDelegate {
+    func requestNaverAddress(lat: String, lon: String) {
+        addressRepository.fetchAddress(lat: lat, lon: lon)
+    }
 }
