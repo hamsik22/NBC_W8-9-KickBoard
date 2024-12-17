@@ -60,6 +60,7 @@ final class RentKickboardModalView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
+        setupAutoLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -68,5 +69,11 @@ final class RentKickboardModalView: UIView {
     
     private func setupSubviews() {
         self.addSubview(kickboardHorizontalStackView)
+    }
+    
+    private func setupAutoLayout() {
+        kickboardHorizontalStackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(15)
+        }
     }
 }
