@@ -11,19 +11,19 @@ class HistorySectionView: UIView {
     
     // MARK: - UI Components
     private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.2)
-        view.layer.cornerRadius = 10
-        return view
-    }()
-    
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "킥보드 이용 내역"
-        label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.textColor = .black
-        return label
-    }()
+            let view = UIView()
+            view.backgroundColor = UIColor(named: "personalLight/hover") // 색상 적용
+            view.layer.cornerRadius = 10
+            return view
+        }()
+        
+        private let titleLabel: UILabel = {
+            let label = UILabel()
+            label.text = "킥보드 이용 내역"
+            label.font = UIFont.boldSystemFont(ofSize: 18)
+            label.textColor = .black
+            return label
+        }()
 
     private var historyViews: [UIView] = []
 
@@ -66,7 +66,7 @@ class HistorySectionView: UIView {
         for history in histories {
             let container = UIView()
             container.backgroundColor = .white
-            container.layer.cornerRadius = 10
+            container.layer.cornerRadius = 20
             container.translatesAutoresizingMaskIntoConstraints = false
 
             let imageView = UIImageView(image: UIImage(named: history.isSeat ? "QuickBoard - Seat" : "QuickBoard"))
