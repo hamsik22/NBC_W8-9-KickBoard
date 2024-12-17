@@ -42,6 +42,10 @@ final class RegistrationTextField: UIView {
             $0.autocapitalizationType = .none
             $0.backgroundColor = .PersonalLight.light
             $0.layer.cornerRadius = 10
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
+            $0.leftViewMode = .always
+            $0.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
+            $0.rightViewMode = .always
             self.addSubview($0)
         }
         
