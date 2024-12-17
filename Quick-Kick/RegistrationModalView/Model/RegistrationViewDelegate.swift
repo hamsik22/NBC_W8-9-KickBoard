@@ -9,6 +9,12 @@ import UIKit
 
 protocol RegistrationViewDelegate: AnyObject {
     
-    func activateButton(type: Bool?, nickName: Bool?, location: Bool?)
+    var typeSeleted: Bool { get set }
+    
+    var haveNickNameText: Bool { get set }
+    
+    var haveLocationText: Bool { get set }
+    
+    func activateButton()
     
 }
