@@ -64,8 +64,8 @@ extension SearchKickboardMapView: CLLocationManagerDelegate {
     private func setMapCenter(_ location: CLLocation) {
         let region = MKCoordinateRegion(
             center: location.coordinate,
-            latitudinalMeters: 1000,
-            longitudinalMeters: 1000
+            latitudinalMeters: 200,
+            longitudinalMeters: 200
         )
         setRegion(region, animated: true)
     }
