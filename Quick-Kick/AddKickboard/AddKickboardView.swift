@@ -86,7 +86,7 @@ class AddKickboardView: UIView {
     }
     
     @objc private func presentModal() {
-        self.modalViewDelegate?.requestPresentModalView = true
+        self.modalViewDelegate?.presentModalVIew()
     }
     
     private func setupButtonAction() {

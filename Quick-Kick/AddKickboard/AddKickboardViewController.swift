@@ -7,16 +7,18 @@
 
 import UIKit
 
-class AddKickboardViewController: UIViewController {
+class AddKickboardViewController: UIViewController, ModalViewDelegate {
     
     private lazy var containerView: AddKickboardView = .init()
-    
+        
     override func loadView() {
         view = containerView
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        containerView.modalViewDelegate = self
     }
     
 }

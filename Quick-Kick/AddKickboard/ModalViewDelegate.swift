@@ -7,8 +7,19 @@
 
 import UIKit
 
-protocol ModalViewDelegate: AnyObject {
-    
+protocol ModalViewDelegate: AnyObject, UIViewController {
+        
     func presentModalVIew()
     
+}
+
+extension ModalViewDelegate {
+    
+    func presentModalVIew() {
+        let modalVC = RegistrationModalViewController()
+        modalVC.modalPresentationStyle = .formSheet
+        modalVC.sheetPresentationController?.preferredCornerRadius = 50
+        
+        self.present(modalVC, animated: true)
+    }
 }
