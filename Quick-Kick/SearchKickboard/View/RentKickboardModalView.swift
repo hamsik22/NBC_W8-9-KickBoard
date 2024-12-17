@@ -38,7 +38,7 @@ final class RentKickboardModalView: UIView {
         button.setTitle("이용 시작", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(named: "personalNomal/nomal")
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 15
         return button
     }()
     
