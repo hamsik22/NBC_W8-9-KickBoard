@@ -15,7 +15,7 @@ class LoginView: UIView {
     
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "person.circle")
+        imageView.image = UIImage(named: "AppLogo_WhiteBG")
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -91,7 +91,8 @@ class LoginView: UIView {
     private func layout() {
         logoImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.centerX.equalToSuperview()
+            // 사이즈가 조금 이상한가봐요
+            make.centerX.equalToSuperview().offset(-15)
             make.height.equalTo(300)
             make.width.equalTo(300)
         }
