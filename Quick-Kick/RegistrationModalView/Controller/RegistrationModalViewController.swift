@@ -10,9 +10,9 @@ import SnapKit
 
 final class RegistrationModalViewController: UIViewController {
     
-    let textField = RegistrationTextField()
-    let typeButton = KickboardTypeButton()
-    let addButton = RegistrationButton()
+    private let textField = RegistrationTextField()
+    private let typeButton = KickboardTypeButton()
+    private let addButton = RegistrationButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
