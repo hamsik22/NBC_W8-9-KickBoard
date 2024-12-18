@@ -72,8 +72,13 @@ final class RentKickboardModalView: UIView {
     private func setupModalView() {
         self.backgroundColor = .white
         self.addSubview(kickboardHorizontalStackView)
-        kickboardHorizontalStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(25)
+        kickboardHorizontalStackView.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(25)
+        }
+        
+        self.layer.cornerRadius = 40
+        self.snp.makeConstraints {
+            $0.height.equalTo(180)
         }
     }
 }
