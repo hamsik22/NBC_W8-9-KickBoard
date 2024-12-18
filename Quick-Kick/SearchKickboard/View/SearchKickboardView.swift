@@ -7,6 +7,10 @@
 import UIKit
 import SnapKit
 
+protocol SearchKickboardViewDelegate: AnyObject {
+    func getKickboardsData() -> [Kickboard]
+}
+
 final class SearchKickboardView: UIView {
     private let searchKickboardMapView = SearchKickboardMapView()
     private lazy var searchLocationBarView: SearchLocationBarView = {
@@ -31,11 +35,14 @@ final class SearchKickboardView: UIView {
         return button
     }()
     
+    weak var delegate: SearchKickboardViewDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
         setupAutoLayout()
         setupAddTarget()
+        setupKickboardsData()
     }
     
     required init?(coder: NSCoder) {
@@ -73,5 +80,15 @@ final class SearchKickboardView: UIView {
     @objc
     private func locationResetButtonTapped() {
         searchKickboardMapView.moveToUserLocation()
+    }
+}
+
+extension SearchKickboardView {
+    private func setupKickboardsData() {
+        // 1. 델리게이트(뷰 컨트롤러)에서 킥보드 데이터 가져옴
+        if let kickboards = delegate?.getKickboardsData() {
+            // 2. 킥보드 데이터를 mapView로 전달
+            self.searchKickboardMapView.setupKickboardsData(kickboards: kickboards)
+        }
     }
 }
