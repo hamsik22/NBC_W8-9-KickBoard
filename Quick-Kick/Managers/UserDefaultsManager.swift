@@ -5,15 +5,27 @@
 //  Created by 반성준 on 12/18/24.
 //
 
+// UserDefaultsManager.swift
 import Foundation
 
+// MARK: - Protocol
+protocol UserDataManageable {
+    func saveUser(_ user: User)
+    func getUser() -> User?
+    var isLoggedIn: Bool { get set }
+    var autoLoginOption: Bool { get set }
+    var rememberIDOption: Bool { get set }
+}
+
+// MARK: - User Struct
 struct User: Codable {
     var email: String
     var password: String
     var nickName: String = "User1"
 }
 
-final class UserDefaultsManager {
+// MARK: - UserDefaultsManager
+final class UserDefaultsManager: UserDataManageable {
     static let shared = UserDefaultsManager()
     private init() {}
 
@@ -24,7 +36,7 @@ final class UserDefaultsManager {
         static let rememberID = "RememberIDOption"
     }
 
-    // User 저장 및 불러오기
+    // MARK: - UserDataManageable
     func saveUser(_ user: User) {
         if let encoded = try? JSONEncoder().encode(user) {
             UserDefaults.standard.set(encoded, forKey: Keys.user)
@@ -39,19 +51,16 @@ final class UserDefaultsManager {
         return nil
     }
 
-    // 로그인 상태
     var isLoggedIn: Bool {
         get { UserDefaults.standard.bool(forKey: Keys.loginStatus) }
         set { UserDefaults.standard.set(newValue, forKey: Keys.loginStatus) }
     }
 
-    // 자동 로그인 옵션
     var autoLoginOption: Bool {
         get { UserDefaults.standard.bool(forKey: Keys.autoLogin) }
         set { UserDefaults.standard.set(newValue, forKey: Keys.autoLogin) }
     }
 
-    // ID 기억 옵션
     var rememberIDOption: Bool {
         get { UserDefaults.standard.bool(forKey: Keys.rememberID) }
         set { UserDefaults.standard.set(newValue, forKey: Keys.rememberID) }

@@ -28,7 +28,7 @@ class ProfileView: UIView {
     }()
     
     private let kickboardImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "kickboard")) // Asset에 추가된 킥보드 이미지
+        let imageView = UIImageView(image: UIImage(named: "QuickBoard")) // QuickBoard 이미지로 교체
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -95,7 +95,7 @@ class ProfileView: UIView {
             
             // Purple Circle
             purpleCircleView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            purpleCircleView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            purpleCircleView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 6), // 더 왼쪽으로 조정
             purpleCircleView.widthAnchor.constraint(equalToConstant: 100),
             purpleCircleView.heightAnchor.constraint(equalToConstant: 100),
             
