@@ -12,8 +12,9 @@ class HistorySectionView: UIView {
     // MARK: - UI Components
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(named: "personalLight/hover")
+        view.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.1) // 연한 보라색 배경
         view.layer.cornerRadius = 20
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -22,11 +23,13 @@ class HistorySectionView: UIView {
         label.text = "킥보드 이용 내역"
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textColor = .black
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
-    private var historyLabels: [UILabel] = []
     
+    private var historyViews: [UIView] = []
+    private var histories: [Kickboard] = []
+
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,9 +45,6 @@ class HistorySectionView: UIView {
         addSubview(containerView)
         containerView.addSubview(titleLabel)
 
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: topAnchor),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
@@ -52,38 +52,89 @@ class HistorySectionView: UIView {
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15)
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15)
         ])
     }
-
+    
     // MARK: - Configure Method
-    func configure(with histories: [String], imageSize: CGSize) {
+    func configure(with histories: [Kickboard]) {
         // 기존 뷰 제거
-        historyLabels.forEach { $0.removeFromSuperview() }
-        historyLabels.removeAll()
-        
+        historyViews.forEach { $0.removeFromSuperview() }
+        historyViews.removeAll()
+
+        self.histories = histories
         var previousView: UIView?
 
-        for history in histories {
-            let label = UILabel()
-            label.text = history
-            label.font = UIFont.systemFont(ofSize: 14)
-            label.textColor = .darkGray
-            label.numberOfLines = 0
-            label.translatesAutoresizingMaskIntoConstraints = false
-            containerView.addSubview(label)
-
+        for kickboard in histories {
+            let historyView = createHistoryView(for: kickboard)
+            historyView.translatesAutoresizingMaskIntoConstraints = false
+            containerView.addSubview(historyView)
+            
             NSLayoutConstraint.activate([
-                label.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
-                label.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
-                label.heightAnchor.constraint(equalToConstant: imageSize.height),
-                label.topAnchor.constraint(equalTo: previousView?.bottomAnchor ?? titleLabel.bottomAnchor, constant: 10)
+                historyView.topAnchor.constraint(equalTo: previousView?.bottomAnchor ?? titleLabel.bottomAnchor, constant: 10),
+                historyView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
+                historyView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
+                historyView.heightAnchor.constraint(equalToConstant: 60)
             ])
             
-            previousView = label
-            historyLabels.append(label)
+            previousView = historyView
+            historyViews.append(historyView)
         }
         
         previousView?.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10).isActive = true
+    }
+    
+    // MARK: - Create Individual History View
+    private func createHistoryView(for kickboard: Kickboard) -> UIView {
+        let container = UIView()
+        container.backgroundColor = .white
+        container.layer.cornerRadius = 10
+        container.layer.shadowColor = UIColor.black.withAlphaComponent(0.1).cgColor
+        container.layer.shadowOpacity = 0.5
+        container.layer.shadowOffset = CGSize(width: 0, height: 2)
+        container.layer.shadowRadius = 4
+        
+        let dateLabel = UILabel()
+        dateLabel.text = formatDate(kickboard.startTime)
+        dateLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        dateLabel.textColor = .systemPurple
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        let timeLabel = UILabel()
+        timeLabel.text = "\(formatTime(kickboard.startTime)) - \(formatTime(kickboard.endTime))"
+        timeLabel.font = UIFont.systemFont(ofSize: 12)
+        timeLabel.textColor = .darkGray
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        container.addSubview(dateLabel)
+        container.addSubview(timeLabel)
+        
+        NSLayoutConstraint.activate([
+            dateLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 10),
+            dateLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
+            dateLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
+            
+            timeLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 5),
+            timeLabel.leadingAnchor.constraint(equalTo: dateLabel.leadingAnchor),
+            timeLabel.trailingAnchor.constraint(equalTo: dateLabel.trailingAnchor)
+        ])
+        
+        return container
+    }
+    
+    // MARK: - Helpers
+    private func formatDate(_ date: Date?) -> String {
+        guard let date = date else { return "날짜 없음" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yy.MM.dd"
+        return formatter.string(from: date)
+    }
+    
+    private func formatTime(_ date: Date?) -> String {
+        guard let date = date else { return "시간 없음" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: date)
     }
 }
