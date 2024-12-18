@@ -109,13 +109,11 @@ extension SearchKickboardMapView: MKMapViewDelegate {
             return
         }
         
-        let rentKitboardModalView = RentKickboardModalView()
-        self.addSubview(rentKitboardModalView)
-        rentKitboardModalView.snp.makeConstraints {
+        let rentKickboardModalView = RentKickboardModalView()
+        self.addSubview(rentKickboardModalView)
+        rentKickboardModalView.snp.makeConstraints {
             $0.bottom.equalToSuperview().offset(-10)
             $0.leading.trailing.equalToSuperview().inset(10)
-            $0.height.equalTo(180)
         }
-        rentKitboardModalView.layer.cornerRadius = 40
     }
 }
