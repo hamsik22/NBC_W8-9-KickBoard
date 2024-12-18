@@ -17,7 +17,6 @@ final class RentKickboardModalView: UIView {
     
     private let kickboardNicknameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Sparta의 킥보드"
         label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textColor = .black
         label.textAlignment = .right
@@ -26,7 +25,6 @@ final class RentKickboardModalView: UIView {
     
     private let kickboardLocationLabel: UILabel = {
         let label = UILabel()
-        label.text = "서울 중구 세종대로 110 서울특별시청"
         label.font = .systemFont(ofSize: 11, weight: .regular)
         label.textColor = .black
         label.textAlignment = .right
@@ -60,8 +58,10 @@ final class RentKickboardModalView: UIView {
         return stackView
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(nickname: String, location: String) {
+        super.init(frame: .zero)
+        self.kickboardNicknameLabel.text = nickname
+        self.kickboardLocationLabel.text = location
         setupModalView()
     }
     
@@ -81,9 +81,4 @@ final class RentKickboardModalView: UIView {
             $0.height.equalTo(180)
         }
     }
-}
-
-@available(iOS 17.0, *)
-#Preview {
-    RentKickboardModalView()
 }
