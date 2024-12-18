@@ -16,6 +16,8 @@ final class SearchKickboardMapView: MKMapView {
         return manager
     }()
     
+    private var kickboards: [Kickboard]?
+    
     private let gangnamStation = CLLocation(
         latitude: 37.498095,
         longitude: 127.027610
@@ -35,6 +37,11 @@ final class SearchKickboardMapView: MKMapView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        addMarkersOnMap()
+    }
+    
     private func setupDebugLocation() {
         setMapCenter(gangnamStation)
     }
@@ -50,8 +57,16 @@ final class SearchKickboardMapView: MKMapView {
         self.setUserTrackingMode(.follow, animated: true)
         self.setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 200, maxCenterCoordinateDistance: 2000), animated: true)
         self.delegate = self
-        
-        self.addMarker(at: CLLocationCoordinate2D(latitude: 37.49467056976841, longitude: 127.02821385513921))
+    }
+    
+    func setupKickboardsData(kickboards: [Kickboard]) {
+        self.kickboards = kickboards
+    }
+    
+    private func addMarkersOnMap() {
+        self.kickboards?.forEach({ kickboard in
+            self.addMarker(at: CLLocationCoordinate2D(latitude: kickboard.latitude, longitude: kickboard.longitude))
+        })
     }
 }
 
