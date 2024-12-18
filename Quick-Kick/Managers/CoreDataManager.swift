@@ -8,7 +8,7 @@
 import CoreData
 import UIKit
 
-final class CoreDataManager {
+final class CoreDataManager: KickboardDataManageable {
     static let shared = CoreDataManager()
     private init() {}
 
@@ -26,8 +26,15 @@ final class CoreDataManager {
         return persistentContainer.viewContext
     }
 
-    // CRUD Methods
-    func createKickboard(nickName: String, isSaddled: Bool, isOccupied: Bool, startTime: Date?, endTime: Date?, latitude: Double, longitude: Double, address: String) {
+    // MARK: - KickboardDataManageable
+    func createKickboard(nickName: String,
+                         isSaddled: Bool,
+                         isOccupied: Bool = false,
+                         startTime: Date? = nil,
+                         endTime: Date? = nil,
+                         latitude: Double,
+                         longitude: Double,
+                         address: String) {
         let newKickboard = Kickboard(context: context)
         newKickboard.nickName = nickName
         newKickboard.isSaddled = isSaddled
