@@ -34,10 +34,6 @@ extension LoginViewController: LoginViewDelegate {
         loginView.rememberIDCheckBoxIsChecked.toggle()
     }
     
-    func didFindPasswordButtonTapped() {
-        print("삭제 예정")
-    }
-    
     func didLoginButtonTapped() {
         print("정보 확인 후 로그인")
     }

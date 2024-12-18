@@ -51,14 +51,6 @@ class LoginView: UIView {
         imageView.tintColor = UIColor.PersonalLight.active
         return imageView
     }()
-    private let findPasswordButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("비밀번호를 잊어버렸습니까?", for: .normal)
-        button.setTitleColor(.systemGray, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 12)
-        button.setTitleColor(UIColor.PersonalNomal.nomal, for: .normal)
-        return button
-    }()
     private let loginButton: UIButton = {
         let button = UIButton()
         button.setTitle("로그인", for: .normal)
@@ -102,7 +94,7 @@ class LoginView: UIView {
     }
     
     private func setupSubviews() {
-        [logoImageView, emailField, passwordField, rememberIDCheckBox, autoLoginOption, autoLoginCheckBox, rememberIDOption, findPasswordButton, loginButton, signupButton]
+        [logoImageView, emailField, passwordField, rememberIDCheckBox, autoLoginOption, autoLoginCheckBox, rememberIDOption, loginButton, signupButton]
             .forEach{ addSubview($0) }
         layout()
     }
@@ -155,13 +147,6 @@ class LoginView: UIView {
             make.height.equalTo(20)
         }
         
-        findPasswordButton.snp.makeConstraints { make in
-            make.top.equalTo(autoLoginOption.snp.bottom).offset(10)
-            make.left.equalTo(passwordField.snp.left)
-            make.width.equalTo(140)
-            make.height.equalTo(20)
-        }
-        
         loginButton.snp.makeConstraints { make in
             make.top.equalTo(rememberIDOption.snp.bottom).offset(100)
             make.centerX.equalToSuperview()
@@ -194,7 +179,6 @@ extension UITextField {
 protocol LoginViewDelegate: AnyObject {
     func didAutoLoginOptionTapped()
     func didRememberIDOptionTapped()
-    func didFindPasswordButtonTapped()
     func didLoginButtonTapped()
     func didSignUpButtonTapped()
 }
@@ -203,7 +187,6 @@ extension LoginView {
     private func settingActions() {
         autoLoginOption.addTarget(self, action: #selector(autoLoginOptionTapped), for: .touchUpInside)
         rememberIDOption.addTarget(self, action: #selector(rememberIDOptionTapped), for: .touchUpInside)
-        findPasswordButton.addTarget(self, action: #selector(findPasswordButtonTapped), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         signupButton.addTarget(self, action: #selector(signupButtonTapped), for: .touchUpInside)
     }
@@ -213,9 +196,6 @@ extension LoginView {
     }
     @objc func rememberIDOptionTapped() {
         delegate?.didRememberIDOptionTapped()
-    }
-    @objc func findPasswordButtonTapped() {
-        delegate?.didFindPasswordButtonTapped()
     }
     @objc func loginButtonTapped() {
         delegate?.didLoginButtonTapped()
