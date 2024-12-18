@@ -41,11 +41,42 @@ class SignUpView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+// MARK: - Functions
+extension SignUpView {
     
+    // 회원가입 버튼이 눌렸을 때 동작
     @objc func signUpButtonTapped() {
-        delegate?.didSignupButtonTapped()
+        if isValidUser() {
+            if let email = emailField.text, let password = passwordField.text {
+                delegate?.didSignupButtonTapped(email, pass: password)
+            }
+        }
     }
     
+    // 입력값이 유효한지 검증하는 함수
+    private func isValidUser() -> Bool {
+        // case0. 비어있는 값이 있을 경우
+        guard ((emailField.text?.isEmpty) != nil) ||
+            ((passwordField.text?.isEmpty) != nil) ||
+            ((confermPasswordField.text?.isEmpty) != nil) else {
+            print("입력값을 확인해주세요")
+            return false
+        }
+    
+        if passwordField.text != confermPasswordField.text {
+            // case1. 2개의 비밀번호 입력값이 상이한 경우
+            print("비밀번호가 다릅니다")
+            return false
+        }
+        // TODO: case2. 이미 존재하는 이메일인 경우
+        else { return true }
+    }
+}
+
+// MARK: - UI Constraints
+extension SignUpView {
     private func addSubviews() {
         [logoImageView, emailField, passwordField, confermPasswordField, signUpButton]
             .forEach { addSubview($0) }
@@ -90,7 +121,7 @@ class SignUpView: UIView {
 }
 
 protocol SignUpViewDelegate: AnyObject {
-    func didSignupButtonTapped()
+    func didSignupButtonTapped(_ email: String, pass: String)
 }
 
 @available(iOS 17.0, *)

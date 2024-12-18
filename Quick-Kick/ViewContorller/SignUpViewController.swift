@@ -19,12 +19,20 @@ class SignUpViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
     }
 }
 
 extension SignUpViewController: SignUpViewDelegate {
-    func didSignupButtonTapped() {
-        print("회원가입 완료")
+    func didSignupButtonTapped(_ email: String, pass: String) {
+        if let targetVC = navigationController?.viewControllers.first(where: { $0 is LoginViewController }) {
+            navigationController?.popToViewController(targetVC, animated: true)
+        } else {
+            print("이동할 LoginViewController가 스택에 없음")
+        }
+        print("email : \(email), pass : \(pass)")
+        print("정보 저장하기")
+        print("로그인 화면으로 이동하기")
     }
 }
 

@@ -25,26 +25,28 @@ class LoginViewController: UIViewController {
 
 extension LoginViewController: LoginViewDelegate {
     func didAutoLoginOptionTapped() {
-        print("자동 로그인 버튼")
+        print("로그인 이력이 있으면 자동으로 최근 이메일 기준으로 로그인")
         loginView.autoLoginCheckBoxIsChecked.toggle()
     }
     
     func didRememberIDOptionTapped() {
-        print("아이디 저장 버튼")
+        print("로그인 성공 후 이메일 지속 표시")
         loginView.rememberIDCheckBoxIsChecked.toggle()
     }
     
     func didFindPasswordButtonTapped() {
-        print("비밀번호 찾기 버튼")
+        print("삭제 예정")
     }
     
     func didLoginButtonTapped() {
-        print("로그인 버튼")
+        print("정보 확인 후 로그인")
     }
     
-    func didSignupButtonTapped() {
-        print("회원가입 버튼")
-        navigationController?.pushViewController(SignUpViewController(), animated: true)
+    func didSignUpButtonTapped() {
+        print("회원가입 화면으로 이동")
+        let signUpVC = SignUpViewController()
+        signUpVC.navigationItem.hidesBackButton = true
+        navigationController?.pushViewController(signUpVC, animated: true)
     }
 }
     

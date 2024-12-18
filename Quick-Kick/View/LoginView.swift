@@ -163,7 +163,7 @@ class LoginView: UIView {
         }
         
         loginButton.snp.makeConstraints { make in
-            make.top.equalTo(findPasswordButton.snp.bottom).offset(100)
+            make.top.equalTo(rememberIDOption.snp.bottom).offset(100)
             make.centerX.equalToSuperview()
             make.width.equalTo(300)
             make.height.equalTo(50)
@@ -196,7 +196,7 @@ protocol LoginViewDelegate: AnyObject {
     func didRememberIDOptionTapped()
     func didFindPasswordButtonTapped()
     func didLoginButtonTapped()
-    func didSignupButtonTapped()
+    func didSignUpButtonTapped()
 }
 
 extension LoginView {
@@ -221,7 +221,7 @@ extension LoginView {
         delegate?.didLoginButtonTapped()
     }
     @objc func signupButtonTapped() {
-        delegate?.didSignupButtonTapped()
+        delegate?.didSignUpButtonTapped()
     }
 }
 
