@@ -7,6 +7,8 @@
 import UIKit
 
 final class RentKickboardModalView: UIView {
+    private var kickboard: Kickboard?
+    
     private let kickboardImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "QuickBoard")
@@ -60,9 +62,9 @@ final class RentKickboardModalView: UIView {
     
     init(kickboard: Kickboard) {
         super.init(frame: .zero)
-        self.kickboardNicknameLabel.text = kickboard.nickName
-        self.kickboardLocationLabel.text = kickboard.address
+        self.kickboard = kickboard
         setupModalView()
+        setupLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -71,6 +73,11 @@ final class RentKickboardModalView: UIView {
     
     private func setupModalView() {
         self.backgroundColor = .white
+        self.kickboardNicknameLabel.text = self.kickboard?.nickName
+        self.kickboardLocationLabel.text = self.kickboard?.address
+    }
+    
+    private func setupLayout() {
         self.addSubview(kickboardHorizontalStackView)
         kickboardHorizontalStackView.snp.makeConstraints {
             $0.edges.equalToSuperview().inset(25)
