@@ -69,6 +69,8 @@ class LoginView: UIView {
         button.layer.cornerRadius = 20
         return button
     }()
+    
+    // 체크박스 상태변수
     var autoLoginCheckBoxIsChecked: Bool = false {
         didSet {
             autoLoginCheckBox.image = UIImage(systemName: autoLoginCheckBoxIsChecked ? "checkmark.square" : "square")
@@ -88,11 +90,13 @@ class LoginView: UIView {
         settingActions()
         layout()
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+}
+
+// MARK: - Layout
+extension LoginView {
     private func setupSubviews() {
         [logoImageView, emailField, passwordField, rememberIDCheckBox, autoLoginOption, autoLoginCheckBox, rememberIDOption, loginButton, signupButton]
             .forEach{ addSubview($0) }
@@ -163,27 +167,7 @@ class LoginView: UIView {
         }
     }
 }
-
-extension UITextField {
-    func setCustomPlaceholder(placeholder: String) -> UITextField {
-        let tf = UITextField()
-        tf.font = .systemFont(ofSize: 14)
-        tf.placeholder = placeholder
-        tf.borderStyle = .roundedRect
-        tf.backgroundColor = UIColor.PersonalLight.light
-        tf.setPlaceholder(color: UIColor.PersonalLight.active)
-        tf.layer.cornerRadius = 10
-        return tf
-    }
-}
-
-protocol LoginViewDelegate: AnyObject {
-    func didAutoLoginOptionTapped()
-    func didRememberIDOptionTapped()
-    func didLoginButtonTapped(_ email: String, _ password: String)
-    func didSignUpButtonTapped()
-}
-
+// MARK: - Functions
 extension LoginView {
     private func settingActions() {
         autoLoginOption.addTarget(self, action: #selector(autoLoginOptionTapped), for: .touchUpInside)
@@ -228,7 +212,15 @@ extension LoginView {
         return true
     }
 }
+// MARK: - Protocol
+protocol LoginViewDelegate: AnyObject {
+    func didAutoLoginOptionTapped()
+    func didRememberIDOptionTapped()
+    func didLoginButtonTapped(_ email: String, _ password: String)
+    func didSignUpButtonTapped()
+}
 
+// Preview
 @available(iOS 17.0, *)
 #Preview {
     LoginViewController()

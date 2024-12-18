@@ -23,6 +23,7 @@ class SignUpViewController: UIViewController {
     }
 }
 
+// MARK: - Delegate
 extension SignUpViewController: SignUpViewDelegate {
     func didSignupButtonTapped(_ email: String, pass: String) {
         UserDefaultsManager.shared.saveUser(User(email: email, password: pass))
@@ -33,7 +34,6 @@ extension SignUpViewController: SignUpViewDelegate {
         }
     }
 }
-
 @available(iOS 17.0, *)
 #Preview {
     return SignUpViewController()
