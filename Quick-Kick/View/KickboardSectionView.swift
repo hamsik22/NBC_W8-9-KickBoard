@@ -8,10 +8,9 @@
 import UIKit
 
 class KickboardSectionView: UIView {
-    // MARK: - UI Components
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.2)
+        view.backgroundColor = UIColor(named: "personalLight/hover") // 색상 적용
         view.layer.cornerRadius = 10
         return view
     }()

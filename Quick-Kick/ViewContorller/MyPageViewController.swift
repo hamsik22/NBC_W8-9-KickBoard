@@ -21,7 +21,7 @@ class MyPageViewController: UIViewController {
         button.setTitle("로그아웃", for: .normal)
         button.backgroundColor = UIColor.systemPurple
         button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 10
+        button.layer.cornerRadius = 20
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         return button
     }()
@@ -44,6 +44,7 @@ class MyPageViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
         configureSections()
+        logoutButton.addTarget(self, action: #selector(handleLogout), for: .touchUpInside)
     }
     
     // MARK: - Setup UI
@@ -114,5 +115,11 @@ class MyPageViewController: UIViewController {
         
         // 킥보드 이용 내역 섹션 설정
         historySectionView.configure(with: historyData, imageSize: CGSize(width: 40, height: 40))
+    }
+    
+    // MARK: - Action Methods
+    @objc private func handleLogout() {
+        print("로그아웃 버튼이 눌렸습니다.")
+        // TODO: 로그아웃 로직 추가 (e.g., UserDefaults 삭제, 로그인 화면 전환 등)
     }
 }
