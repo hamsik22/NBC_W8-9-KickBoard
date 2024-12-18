@@ -65,7 +65,10 @@ final class SearchKickboardMapView: MKMapView {
     
     private func addMarkersOnMap() {
         self.kickboards?.forEach({ kickboard in
-            self.addMarker(at: CLLocationCoordinate2D(latitude: kickboard.latitude, longitude: kickboard.longitude))
+            if kickboard.startTime == nil {
+                let annotation = KickboardAnnotation(kickboard: kickboard)
+                self.addAnnotation(annotation)
+            }
         })
     }
 }
@@ -113,18 +116,17 @@ extension SearchKickboardMapView: MKMapViewDelegate {
         return annotationView
     }
     
-    func addMarker(at coordinate: CLLocationCoordinate2D) {
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = coordinate
-        self.addAnnotation(annotation)
-    }
-    
     func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
         if annotation is MKUserLocation {
             return
         }
+        guard let kickboardAnnotation = annotation as? KickboardAnnotation else { return }
+        let kickboard = kickboardAnnotation.kickboard
         
-        let rentKickboardModalView = RentKickboardModalView(nickname: "이명지의 킥보드", location: "서울 중구 소공로 106")
+        let rentKickboardModalView = RentKickboardModalView(
+            nickname: kickboard.nickName,
+            location: kickboard.address
+        )
         self.addSubview(rentKickboardModalView)
         rentKickboardModalView.snp.makeConstraints {
             $0.bottom.equalToSuperview().offset(-10)
