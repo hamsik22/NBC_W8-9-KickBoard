@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 
+// 킥보드 등록을 모달뷰 컨트롤러
 final class RegistrationModalViewController: UIViewController {
     
     private var _typeSeleted: Bool = false
@@ -17,6 +18,7 @@ final class RegistrationModalViewController: UIViewController {
     private let typeButton = KickboardTypeButton()
     private let addButton = RegistrationButton()
     
+    // MARK: - RegistrationModalViewController LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,6 +29,8 @@ final class RegistrationModalViewController: UIViewController {
         setupAddButton()
     }
     
+    // MARK: - RegistrationModalViewController UI Setting Method
+    /// 텍스트필드를 세팅하는 메소드
     private func setupTextField() {
         self.textField.registrationDelegate = self
         view.addSubview(self.textField)
@@ -39,6 +43,7 @@ final class RegistrationModalViewController: UIViewController {
         }
     }
     
+    /// 킥보드 타입 버튼을 세팅하는 메소드
     private func setupTypeButton() {
         self.typeButton.registrationDelegate = self
         view.addSubview(self.typeButton)
@@ -51,6 +56,7 @@ final class RegistrationModalViewController: UIViewController {
         }
     }
     
+    /// 등록하기 버튼을 세팅하는 메소드
     private func setupAddButton() {
         view.addSubview(self.addButton)
         
@@ -63,6 +69,7 @@ final class RegistrationModalViewController: UIViewController {
     }
 }
 
+// MARK: RegistrationViewDelegate Method
 extension RegistrationModalViewController: RegistrationViewDelegate {
     var typeSeleted: Bool {
         get { return self._typeSeleted }
@@ -74,6 +81,7 @@ extension RegistrationModalViewController: RegistrationViewDelegate {
         set { self._haveNickNameText = newValue }
     }
     
+    /// 등록하기 버튼을 활성화 하는 메소드
     func activateButton() {
         guard self.typeSeleted, self.haveNickNameText else {
             self.addButton.activateButton(false)
@@ -82,6 +90,5 @@ extension RegistrationModalViewController: RegistrationViewDelegate {
         
         self.addButton.activateButton(true)
     }
-    
 }
 

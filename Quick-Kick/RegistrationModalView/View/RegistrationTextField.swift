@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 
+// 모달뷰의 텍스트필드 뷰
 final class RegistrationTextField: UIView {
     
     private let ninkNameField = UITextField()
@@ -16,6 +17,7 @@ final class RegistrationTextField: UIView {
     
     weak var registrationDelegate: RegistrationViewDelegate?
     
+    // MARK: - RegistrationTextField Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -33,8 +35,12 @@ final class RegistrationTextField: UIView {
         setupTextField()
         setupLayout()
     }
-    
-    private func setupTextField() {
+}
+
+// MARK: - RegistrationTextField UI Setting Method
+private extension RegistrationTextField {
+    /// 텍스트필드를 세팅하는 메소드
+    func setupTextField() {
         [self.ninkNameField, self.locationField].forEach {
             $0.textColor = .PersonalLight.active
             $0.textAlignment = .left
@@ -55,22 +61,13 @@ final class RegistrationTextField: UIView {
         addActions()
     }
     
-    private func addActions() {
+    /// 텍스트필드 액션을 세팅하는 메소드
+    func addActions() {
         self.ninkNameField.addTarget(self, action: #selector(haveNickNameText), for: .editingChanged)
     }
     
-    @objc private func haveNickNameText() {
-        print(#function)
-        if self.ninkNameField.text?.count ?? 0 > 0 {
-            self.registrationDelegate?.haveNickNameText = true
-        } else {
-            self.registrationDelegate?.haveNickNameText = false
-        }
-        
-        self.registrationDelegate?.activateButton()
-    }
-    
-    private func setupPlaceHolder() {
+    /// 텍스트필드 플레이스홀더를 세팅하는 메소드
+    func setupPlaceHolder() {
         let placeholderNickNameText = "별명을 입력해 주세요."
         self.ninkNameField.attributedPlaceholder = NSAttributedString(
             string: placeholderNickNameText,
@@ -84,7 +81,8 @@ final class RegistrationTextField: UIView {
         )
     }
     
-    private func setupLayout() {
+    /// 텍스트필드의 레이아웃을 세팅하는 메소드
+    func setupLayout() {
         self.ninkNameField.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
             $0.height.equalTo(50)
@@ -94,5 +92,21 @@ final class RegistrationTextField: UIView {
             $0.bottom.leading.trailing.equalToSuperview()
             $0.height.equalTo(50)
         }
+    }
+}
+
+// MARK: - RegistrationTextField Objective-C Method
+@objc private extension RegistrationTextField {
+    
+    /// 닉네임 텍스트 필드에 변경이 있을 경우 실행될 액션 메소드
+    func haveNickNameText() {
+        print(#function)
+        if self.ninkNameField.text?.count ?? 0 > 0 {
+            self.registrationDelegate?.haveNickNameText = true
+        } else {
+            self.registrationDelegate?.haveNickNameText = false
+        }
+        
+        self.registrationDelegate?.activateButton()
     }
 }
