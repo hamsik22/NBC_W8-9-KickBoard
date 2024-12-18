@@ -132,10 +132,7 @@ extension SearchKickboardMapView: MKMapViewDelegate {
         guard let kickboardAnnotation = annotation as? KickboardAnnotation else { return }
         let kickboard = kickboardAnnotation.kickboard
         
-        let rentKickboardModalView = RentKickboardModalView(
-            nickname: kickboard.nickName,
-            location: kickboard.address
-        )
+        let rentKickboardModalView = RentKickboardModalView(kickboard: kickboard)
         self.addSubview(rentKickboardModalView)
         rentKickboardModalView.snp.makeConstraints {
             $0.bottom.equalToSuperview().offset(-10)
