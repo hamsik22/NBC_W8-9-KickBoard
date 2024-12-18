@@ -10,16 +10,95 @@ import SnapKit
 
 final class MyKickboardDetailViewItem: UICollectionViewCell {
     
+    static let id: String = "MyKickboardDetailViewItem"
+    
     private let kickboardImage = UIImageView()
     private let kickboardNickNameView = UILabel()
     private let kickboardLocationView = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        configUI()
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        
+        configUI()
     }
     
+    private func configUI() {
+        setupImageView()
+        setupLabel()
+        setupLayout()
+    }
+    
+    private func setupImageView() {
+        self.kickboardImage.image = UIImage(named: "QuickBoard") // 추후 제거
+        self.kickboardImage.contentMode = .scaleAspectFit
+        self.kickboardImage.backgroundColor = .clear
+        self.addSubview(self.kickboardImage)
+    }
+    
+    private func setupLabel() {
+        [self.kickboardNickNameView,
+         self.kickboardLocationView].forEach {
+            $0.textColor = .black
+            $0.textAlignment = .right
+            $0.numberOfLines = 1
+            $0.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+            self.addSubview($0)
+        }
+        
+        self.kickboardNickNameView.text = "Sparta의 킥보드"
+        self.kickboardLocationView.text = "서울 중구 세종대로 110 서울특별시청"
+        
+        setupLocationLabel()
+    }
+    
+    private func setupLocationLabel() {
+        self.kickboardLocationView.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        self.kickboardLocationView.numberOfLines = 2
+        self.kickboardLocationView.minimumScaleFactor = 0.8
+    }
+    
+    private func setupLayout() {
+        self.kickboardImage.snp.makeConstraints {
+            $0.top.leading.bottom.equalToSuperview().inset(20)
+            $0.height.width.equalTo(100)
+        }
+        
+        self.kickboardNickNameView.snp.makeConstraints {
+            $0.top.trailing.equalToSuperview().inset(20)
+            $0.width.equalTo(200)
+            $0.height.equalTo(30)
+        }
+        
+        self.kickboardLocationView.snp.makeConstraints {
+            $0.trailing.equalToSuperview()
+            $0.top.equalTo(self.kickboardNickNameView.snp.bottom).offset(5)
+            $0.width.equalTo(200)
+        }
+    }
+    
+    func insertKickboardImage(type isSaddle: Bool) {
+        // 코어데이터에서 안장타입인지 값을 받고 이에 따라 이미지 변경
+        switch isSaddle {
+        case true:
+            self.kickboardImage.image = UIImage(named: "QuickBoard - Seat")
+        case false:
+            self.kickboardImage.image = UIImage(named: "QuickBoard")
+        }
+    }
+    
+    /// 코어데이터에서 현재 사용중인지 여부를 받아서 색 변경
+    func useKickboard(_ isOccupied: Bool) {
+        switch isOccupied {
+        case true:
+            self.backgroundColor = .PersonalLight.active
+        case false:
+            self.backgroundColor = .white
+        }
+    }
 }
