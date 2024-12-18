@@ -23,7 +23,7 @@ class KickboardEditView: UIView {
         let textField = UITextField()
         textField.borderStyle = .roundedRect
         textField.font = UIFont.systemFont(ofSize: 16)
-        textField.placeholder = "킥보드 이름"
+        textField.placeholder = "닉네임"
         return textField
     }()
     
@@ -35,9 +35,10 @@ class KickboardEditView: UIView {
         return textField
     }()
     
-    let typeSegmentedControl: UISegmentedControl = {
-        let segmentedControl = UISegmentedControl(items: ["일반형", "안장형"])
-        return segmentedControl
+    let saddledSwitch: UISwitch = {
+        let uiSwitch = UISwitch()
+        uiSwitch.isOn = false
+        return uiSwitch
     }()
     
     let saveButton: UIButton = {
@@ -70,7 +71,7 @@ class KickboardEditView: UIView {
     private func setupUI() {
         backgroundColor = .white
         
-        let components = [titleLabel, nameField, addressField, typeSegmentedControl, saveButton, deleteButton]
+        let components = [titleLabel, nameField, addressField, saddledSwitch, saveButton, deleteButton]
         components.forEach { component in
             addSubview(component)
             component.translatesAutoresizingMaskIntoConstraints = false
@@ -80,7 +81,7 @@ class KickboardEditView: UIView {
             titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20),
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             
-            nameField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            nameField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             nameField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             nameField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             
@@ -88,10 +89,10 @@ class KickboardEditView: UIView {
             addressField.leadingAnchor.constraint(equalTo: nameField.leadingAnchor),
             addressField.trailingAnchor.constraint(equalTo: nameField.trailingAnchor),
             
-            typeSegmentedControl.topAnchor.constraint(equalTo: addressField.bottomAnchor, constant: 20),
-            typeSegmentedControl.centerXAnchor.constraint(equalTo: centerXAnchor),
+            saddledSwitch.topAnchor.constraint(equalTo: addressField.bottomAnchor, constant: 15),
+            saddledSwitch.centerXAnchor.constraint(equalTo: centerXAnchor),
             
-            saveButton.topAnchor.constraint(equalTo: typeSegmentedControl.bottomAnchor, constant: 30),
+            saveButton.topAnchor.constraint(equalTo: saddledSwitch.bottomAnchor, constant: 30),
             saveButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             saveButton.widthAnchor.constraint(equalToConstant: 200),
             saveButton.heightAnchor.constraint(equalToConstant: 50),
