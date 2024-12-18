@@ -43,6 +43,7 @@ final class SearchKickboardView: UIView {
         setupAutoLayout()
         setupAddTarget()
         setupKickboardsData()
+        searchLocationBarView.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -91,4 +92,16 @@ extension SearchKickboardView {
             self.searchKickboardMapView.setupKickboardsData(kickboards: kickboards)
         }
     }
+}
+
+extension SearchKickboardView: SearchLocationBarViewDelegate {
+    func searchResultsTableViewWillShow() {
+        locationResetButton.isEnabled = false
+    }
+    
+    func searchResultsTableViewWillHide() {
+        locationResetButton.isEnabled = true
+    }
+    
+    
 }
