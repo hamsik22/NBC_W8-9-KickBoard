@@ -12,6 +12,7 @@ final class SearchKickboardView: UIView {
     private lazy var searchLocationBarView: SearchLocationBarView = {
         let view = SearchLocationBarView()
         view.mapView = searchKickboardMapView
+        view.layer.zPosition = 1
         return view
     }()
     
@@ -20,7 +21,8 @@ final class SearchKickboardView: UIView {
         var config = UIButton.Configuration.filled()
         config.image = UIImage(named: "LocationResetButtonIcon.png")
         config.title = "현위치로 가기"
-        config.imagePadding = 8
+        config.imagePadding = 10
+        config.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
         config.imagePlacement = .leading
         config.background.backgroundColor = UIColor(named: "personalLight/light")
         config.baseForegroundColor = UIColor(named: "personalDark/darker")
@@ -32,6 +34,8 @@ final class SearchKickboardView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
+        setupAutoLayout()
+        setupAddTarget()
     }
     
     required init?(coder: NSCoder) {
@@ -40,15 +44,34 @@ final class SearchKickboardView: UIView {
     
     private func setupSubviews() {
         self.addSubview(searchKickboardMapView)
+        self.addSubview(searchLocationBarView)
+        self.addSubview(locationResetButton)
+    }
+    
+    private func setupAutoLayout() {
         self.searchKickboardMapView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         
-        self.addSubview(searchLocationBarView)
         searchLocationBarView.snp.makeConstraints {
-            $0.top.equalTo(safeAreaLayoutGuide).offset(20)
+            $0.top.equalTo(safeAreaLayoutGuide).offset(-15)
             $0.trailing.leading.equalToSuperview().inset(20)
             $0.height.equalTo(60)
         }
+        
+        locationResetButton.snp.makeConstraints {
+            $0.top.equalTo(searchLocationBarView.snp.bottom).offset(15)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(30)
+        }
+    }
+    
+    private func setupAddTarget() {
+        self.locationResetButton.addTarget(self, action: #selector(locationResetButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc
+    private func locationResetButtonTapped() {
+        searchKickboardMapView.moveToUserLocation()
     }
 }

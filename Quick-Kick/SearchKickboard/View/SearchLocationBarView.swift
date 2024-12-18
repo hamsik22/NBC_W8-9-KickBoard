@@ -151,8 +151,8 @@ extension SearchLocationBarView: UITableViewDelegate {
             }
             let region = MKCoordinateRegion(
                 center: coordinate,
-                latitudinalMeters: 1000,
-                longitudinalMeters: 1000
+                latitudinalMeters: 200,
+                longitudinalMeters: 200
             )
             self.mapView?.setRegion(region, animated: true)
             self.searchBar.resignFirstResponder()
