@@ -109,7 +109,7 @@ extension SearchKickboardMapView: MKMapViewDelegate {
             return
         }
         
-        let rentKickboardModalView = RentKickboardModalView()
+        let rentKickboardModalView = RentKickboardModalView(nickname: "이명지의 킥보드", location: "서울 중구 소공로 106")
         self.addSubview(rentKickboardModalView)
         rentKickboardModalView.snp.makeConstraints {
             $0.bottom.equalToSuperview().offset(-10)
