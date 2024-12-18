@@ -103,6 +103,7 @@ extension SignUpView {
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
         }
+        passwordField.isSecureTextEntry = true
         
         confermPasswordField.snp.makeConstraints { make in
             make.top.equalTo(passwordField.snp.bottom).offset(25)
@@ -110,6 +111,7 @@ extension SignUpView {
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
         }
+        confermPasswordField.isSecureTextEntry = true
         
         signUpButton.snp.makeConstraints { make in
             make.top.equalTo(confermPasswordField.snp.bottom).offset(100)

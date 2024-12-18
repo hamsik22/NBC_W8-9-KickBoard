@@ -25,14 +25,12 @@ class SignUpViewController: UIViewController {
 
 extension SignUpViewController: SignUpViewDelegate {
     func didSignupButtonTapped(_ email: String, pass: String) {
+        UserDefaultsManager.shared.saveUser(User(email: email, password: pass))
         if let targetVC = navigationController?.viewControllers.first(where: { $0 is LoginViewController }) {
             navigationController?.popToViewController(targetVC, animated: true)
         } else {
             print("이동할 LoginViewController가 스택에 없음")
         }
-        print("email : \(email), pass : \(pass)")
-        print("정보 저장하기")
-        print("로그인 화면으로 이동하기")
     }
 }
 

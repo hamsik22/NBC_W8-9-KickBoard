@@ -28,6 +28,11 @@ final class UserDefaultsManager {
     func saveUser(_ user: User) {
         if let encoded = try? JSONEncoder().encode(user) {
             UserDefaults.standard.set(encoded, forKey: Keys.user)
+            if let user = getUser() {
+                print("저장완료-> 이메일:\(user.email), 비밀번호:\(user.password), 닉네임:\(user.nickName)")
+            } else {
+                print("저장 실패")
+            }
         }
     }
 
