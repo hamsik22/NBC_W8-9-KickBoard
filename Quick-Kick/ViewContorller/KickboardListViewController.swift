@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import CoreData
 
 class KickboardListViewController: UIViewController {
-    private let kickboards: [Kickboard]
+    private let kickboards: [Kickboard] // Core Data Kickboard 사용
     
     private let tableView = UITableView()
     
@@ -44,8 +45,11 @@ extension KickboardListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        let kickboard = kickboards[indexPath.row]
-        cell.textLabel?.text = "\(kickboard.name) - \(kickboard.type)"
+        let kickboard: Kickboard = kickboards[indexPath.row] // 명확하게 CoreData.Kickboard 사용
+        
+        let typeText = kickboard.isSaddled ? "안장형" : "일반형"
+        cell.textLabel?.text = "\(kickboard.nickName ?? "이름 없음") - \(typeText)"
+        
         return cell
     }
 }
