@@ -72,6 +72,7 @@ extension SignUpView {
             make.centerX.equalToSuperview()
         }
         passwordField.isSecureTextEntry = true
+        passwordField.textContentType = .none
         
         confermPasswordField.snp.makeConstraints { make in
             make.top.equalTo(passwordField.snp.bottom).offset(25)
@@ -80,6 +81,7 @@ extension SignUpView {
             make.centerX.equalToSuperview()
         }
         confermPasswordField.isSecureTextEntry = true
+        confermPasswordField.textContentType = .none
         
         signUpButton.snp.makeConstraints { make in
             make.top.equalTo(confermPasswordField.snp.bottom).offset(100)
@@ -115,9 +117,7 @@ extension SignUpView {
             // case1. 2개의 비밀번호 입력값이 상이한 경우
             print("비밀번호가 다릅니다")
             return false
-        }
-        // TODO: case2. 이미 존재하는 이메일인 경우
-        else { return true }
+        } else { return true }
     }
 }
 // MARK: - Protocol
