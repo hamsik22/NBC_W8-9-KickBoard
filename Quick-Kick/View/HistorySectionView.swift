@@ -12,7 +12,7 @@ class HistorySectionView: UIView {
     // MARK: - UI Components
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.1) // 연한 보라색 배경
+        view.backgroundColor = UIColor.PersonalLight.light
         view.layer.cornerRadius = 20
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -47,8 +47,8 @@ class HistorySectionView: UIView {
 
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
