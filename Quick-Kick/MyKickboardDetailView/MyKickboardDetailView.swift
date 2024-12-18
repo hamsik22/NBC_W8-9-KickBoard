@@ -21,6 +21,7 @@ final class MyKickboardDetailView: UIView {
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .white
+        collectionView.contentInset = .init(top: 20, left: 0, bottom: 20, right: 0)
         collectionView.register(MyKickboardDetailViewItem.self, forCellWithReuseIdentifier: MyKickboardDetailViewItem.id)
         
         return collectionView

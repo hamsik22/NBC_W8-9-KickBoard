@@ -157,5 +157,6 @@ class MyPageViewController: UIViewController {
     
     @objc private func pushDetailView() {
         self.navigationController?.pushViewController(MyKickboardDetailViewController(), animated: true)
+        self.navigationController?.navigationBar.isHidden = false
     }
 }

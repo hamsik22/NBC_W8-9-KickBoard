@@ -6,24 +6,35 @@
 //
 
 import UIKit
+import SnapKit
 
 final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate {
     
     private let kickboardDetailView = MyKickboardDetailView()
     
-    override func loadView() {
-        view = self.kickboardDetailView
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupViewConfiguration()
+        setupDetailView()
+    }
+    
+    private func setupViewConfiguration() {
+        view.backgroundColor = .white
         
         let naviTitle = UILabel()
         naviTitle.text = "내 킥보드 관리"
         naviTitle.textColor = .black
         naviTitle.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         self.navigationItem.titleView = naviTitle
-        self.kickboardDetailView.modalViewDelegate = self
     }
     
+    private func setupDetailView() {
+        self.kickboardDetailView.modalViewDelegate = self
+        view.addSubview(self.kickboardDetailView)
+        
+        self.kickboardDetailView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+    }
 }
