@@ -23,8 +23,7 @@ class KickboardSectionView: UIView {
         return label
     }()
     
-    private var kickboardViews: [UIView] = [] // 킥보드 뷰 리스트
-
+    private var kickboardViews: [UIView] = []
     private var onTap: ((Kickboard) -> Void)?
     private var kickboards: [Kickboard] = []
 
@@ -47,13 +46,11 @@ class KickboardSectionView: UIView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            // Container View
             containerView.topAnchor.constraint(equalTo: topAnchor),
             containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            // Title Label
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15)
         ])
@@ -64,46 +61,53 @@ class KickboardSectionView: UIView {
         self.onTap = onTap
         self.kickboards = kickboards
 
-        // 기존 뷰 제거
         kickboardViews.forEach { $0.removeFromSuperview() }
         kickboardViews.removeAll()
 
         var previousView: UIView?
 
         for (index, kickboard) in kickboards.enumerated() {
-            let imageContainer = UIView()
-            imageContainer.backgroundColor = .white
-            imageContainer.layer.cornerRadius = imageSize.width / 2
-            imageContainer.layer.shadowOpacity = 0.1
-            imageContainer.translatesAutoresizingMaskIntoConstraints = false
-            imageContainer.tag = index
+            let container = UIView()
+            container.backgroundColor = .white
+            container.layer.cornerRadius = 20
+            container.translatesAutoresizingMaskIntoConstraints = false
+            container.tag = index
             
-            let imageView = UIImageView(image: UIImage(named: kickboard.isSeat ? "QuickBoard - Seat" : "QuickBoard"))
+            let imageView = UIImageView(image: UIImage(named: kickboard.isSaddled ? "QuickBoard - Seat" : "QuickBoard"))
             imageView.contentMode = .scaleAspectFit
             imageView.translatesAutoresizingMaskIntoConstraints = false
             
+            let nicknameLabel = UILabel()
+            nicknameLabel.text = kickboard.nickName
+            nicknameLabel.font = UIFont.systemFont(ofSize: 14)
+            nicknameLabel.textColor = .darkGray
+            nicknameLabel.translatesAutoresizingMaskIntoConstraints = false
+            
             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(kickboardTapped(_:)))
-            imageContainer.addGestureRecognizer(tapGesture)
-            imageContainer.isUserInteractionEnabled = true
+            container.addGestureRecognizer(tapGesture)
+            container.isUserInteractionEnabled = true
             
-            imageContainer.addSubview(imageView)
-            containerView.addSubview(imageContainer)
-            
-            NSLayoutConstraint.activate([
-                imageContainer.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
-                imageContainer.widthAnchor.constraint(equalToConstant: imageSize.width),
-                imageContainer.heightAnchor.constraint(equalToConstant: imageSize.height),
+            container.addSubview(imageView)
+            container.addSubview(nicknameLabel)
+            containerView.addSubview(container)
 
-                imageView.centerXAnchor.constraint(equalTo: imageContainer.centerXAnchor),
-                imageView.centerYAnchor.constraint(equalTo: imageContainer.centerYAnchor),
-                imageView.widthAnchor.constraint(equalToConstant: imageSize.width * 0.6),
-                imageView.heightAnchor.constraint(equalToConstant: imageSize.height * 0.6),
-                
-                imageContainer.leadingAnchor.constraint(equalTo: previousView?.trailingAnchor ?? containerView.leadingAnchor, constant: 15)
+            NSLayoutConstraint.activate([
+                container.topAnchor.constraint(equalTo: previousView?.bottomAnchor ?? titleLabel.bottomAnchor, constant: 10),
+                container.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
+                container.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
+                container.heightAnchor.constraint(equalToConstant: 80),
+
+                imageView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+                imageView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
+                imageView.widthAnchor.constraint(equalToConstant: imageSize.width),
+                imageView.heightAnchor.constraint(equalToConstant: imageSize.height),
+
+                nicknameLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10),
+                nicknameLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor)
             ])
 
-            kickboardViews.append(imageContainer)
-            previousView = imageContainer
+            previousView = container
+            kickboardViews.append(container)
         }
     }
 

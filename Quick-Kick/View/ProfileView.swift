@@ -10,16 +10,25 @@ import UIKit
 class ProfileView: UIView {
     
     // MARK: - UI Components
-    private let backgroundCircleView: UIView = {
+    
+    private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.6)
+        view.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.1) // 연한 보라색 네모
+        view.layer.cornerRadius = 20
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 40 // 원의 반지름
         return view
     }()
     
-    private let profileImageView: UIImageView = {
-        let imageView = UIImageView()
+    private let purpleCircleView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.systemPurple // 진한 보라색 원
+        view.layer.cornerRadius = 50
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let kickboardImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "kickboard")) // Asset에 추가된 킥보드 이미지
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -28,8 +37,8 @@ class ProfileView: UIView {
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 24)
-        label.textColor = UIColor.systemPurple
-        label.textAlignment = .right // 우측 정렬
+        label.textColor = .systemPurple
+        label.text = "User1" // 기본 닉네임
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -37,8 +46,8 @@ class ProfileView: UIView {
     private let emailLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = UIColor.systemPurple
-        label.textAlignment = .right // 우측 정렬
+        label.textColor = .darkGray
+        label.text = "user1234@gmail.com"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -51,10 +60,10 @@ class ProfileView: UIView {
         return imageView
     }()
     
-    // MARK: - Callback
     var onNameChange: ((String) -> Void)?
     
     // MARK: - Initialization
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
@@ -66,84 +75,85 @@ class ProfileView: UIView {
     }
     
     // MARK: - Setup UI
+    
     private func setupUI() {
-        backgroundColor = UIColor.systemPurple.withAlphaComponent(0.1)
-        layer.cornerRadius = 20
+        addSubview(containerView)
+        containerView.addSubview(purpleCircleView)
+        containerView.addSubview(kickboardImageView)
+        containerView.addSubview(nameLabel)
+        containerView.addSubview(emailLabel)
+        containerView.addSubview(editIconImageView)
         
-        addSubview(backgroundCircleView)
-        addSubview(profileImageView)
-        addSubview(nameLabel)
-        addSubview(emailLabel)
-        addSubview(editIconImageView)
-        
+        // MARK: Constraints
         NSLayoutConstraint.activate([
-            // 보라색 원 (킥보드 중앙 기준 좌측으로 이동)
-            backgroundCircleView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            backgroundCircleView.centerXAnchor.constraint(equalTo: profileImageView.centerXAnchor, constant: -15), // 좌측 치우침
-            backgroundCircleView.widthAnchor.constraint(equalToConstant: 80),
-            backgroundCircleView.heightAnchor.constraint(equalToConstant: 80),
+            // Container View
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            containerView.heightAnchor.constraint(equalToConstant: 120),
             
-            // 프로필 이미지 (킥보드 위치 조금 우측으로 조정)
-            profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 30),
-            profileImageView.widthAnchor.constraint(equalToConstant: 70),
-            profileImageView.heightAnchor.constraint(equalToConstant: 70),
+            // Purple Circle
+            purpleCircleView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            purpleCircleView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            purpleCircleView.widthAnchor.constraint(equalToConstant: 100),
+            purpleCircleView.heightAnchor.constraint(equalToConstant: 100),
             
-            // 이름 레이블 (오른쪽으로 살짝 조정)
-            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 30),
-            nameLabel.leadingAnchor.constraint(equalTo: profileImageView.trailingAnchor, constant: 30), // 오른쪽 여백 추가
-            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -30),
+            // Kickboard Image
+            kickboardImageView.centerYAnchor.constraint(equalTo: purpleCircleView.centerYAnchor),
+            kickboardImageView.centerXAnchor.constraint(equalTo: purpleCircleView.centerXAnchor),
+            kickboardImageView.widthAnchor.constraint(equalToConstant: 80),
+            kickboardImageView.heightAnchor.constraint(equalToConstant: 80),
             
-            // 수정 아이콘
-            editIconImageView.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor),
-            editIconImageView.leadingAnchor.constraint(equalTo: nameLabel.trailingAnchor, constant: 5),
-            editIconImageView.widthAnchor.constraint(equalToConstant: 20),
-            editIconImageView.heightAnchor.constraint(equalToConstant: 20),
+            // Name Label
+            nameLabel.topAnchor.constraint(equalTo: purpleCircleView.topAnchor, constant: 10),
+            nameLabel.leadingAnchor.constraint(equalTo: purpleCircleView.trailingAnchor, constant: 20),
+            nameLabel.trailingAnchor.constraint(equalTo: editIconImageView.leadingAnchor, constant: -10),
             
-            // 이메일 레이블
+            // Email Label
             emailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5),
             emailLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            emailLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor)
+            emailLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            
+            // Edit Icon
+            editIconImageView.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor),
+            editIconImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            editIconImageView.widthAnchor.constraint(equalToConstant: 20),
+            editIconImageView.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
     
     // MARK: - Configure Method
-    func configure(name: String, email: String, imageName: String) {
+    
+    func configure(name: String = "User1", email: String = "user1234@gmail.com") {
         nameLabel.text = name
         emailLabel.text = email
-        profileImageView.image = UIImage(named: imageName)
     }
     
-    // MARK: - Setup Gesture
+    // MARK: - Edit Name Gesture
+    
     private func setupGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(editNameTapped))
         editIconImageView.addGestureRecognizer(tapGesture)
     }
     
     @objc private func editNameTapped() {
-        showEditNameAlert()
-    }
-    
-    // MARK: - Edit Name Alert
-    private func showEditNameAlert() {
         guard let viewController = findViewController() else { return }
         
         let alert = UIAlertController(title: "닉네임 수정", message: "새로운 닉네임을 입력하세요.", preferredStyle: .alert)
         alert.addTextField { textField in
-            textField.placeholder = "닉네임"
             textField.text = self.nameLabel.text
         }
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
-        alert.addAction(UIAlertAction(title: "저장", style: .default, handler: { [weak self] _ in
+        alert.addAction(UIAlertAction(title: "저장", style: .default) { [weak self] _ in
             if let newName = alert.textFields?.first?.text, !newName.isEmpty {
                 self?.nameLabel.text = newName
                 self?.onNameChange?(newName)
             }
-        }))
+        })
         viewController.present(alert, animated: true)
     }
     
-    // MARK: - Helper
     private func findViewController() -> UIViewController? {
         var responder: UIResponder? = self
         while let next = responder?.next {

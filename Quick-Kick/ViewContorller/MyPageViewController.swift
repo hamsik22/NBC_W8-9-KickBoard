@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class MyPageViewController: UIViewController {
     
@@ -26,25 +27,25 @@ class MyPageViewController: UIViewController {
         return button
     }()
     
-    // MARK: - Data
-    private let kickboardData = [
-        Kickboard(name: "Sparta", isSeat: false, address: "서울 중구 세종대로 110"),
-        Kickboard(name: "Quick", isSeat: true, address: "서울 중구 세종대로 110"),
-        Kickboard(name: "Kick", isSeat: false, address: "서울 중구 세종대로 110")
-    ]
-    
-    private let historyData = [
-        KickboardHistory(date: "24.12.01", time: "15:00 - 15:30", isSeat: false),
-        KickboardHistory(date: "24.12.02", time: "14:00 - 14:40", isSeat: true),
-        KickboardHistory(date: "24.12.03", time: "15:00 - 15:30", isSeat: false)
-    ]
+    // MARK: - Core Data
+    private var kickboardData: [Kickboard] = []
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        loadKickboards()
         configureSections()
         logoutButton.addTarget(self, action: #selector(handleLogout), for: .touchUpInside)
+    }
+    
+    // MARK: - Core Data: Load Kickboards
+    private func loadKickboards() {
+        do {
+            kickboardData = try CoreDataManager.shared.context.fetch(Kickboard.fetchRequest())
+        } catch {
+            print("킥보드 데이터를 불러오는 데 실패했습니다: \(error)")
+        }
     }
     
     // MARK: - Setup UI
@@ -63,38 +64,32 @@ class MyPageViewController: UIViewController {
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            // ScrollView Constraints
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            // ContentView Constraints
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             
-            // ProfileView Constraints
             profileView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            profileView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30), // 좌우 너비 축소
+            profileView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30),
             profileView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30),
             profileView.heightAnchor.constraint(equalToConstant: 150),
             
-            // KickboardSectionView Constraints
             kickboardSectionView.topAnchor.constraint(equalTo: profileView.bottomAnchor, constant: 10),
             kickboardSectionView.leadingAnchor.constraint(equalTo: profileView.leadingAnchor),
             kickboardSectionView.trailingAnchor.constraint(equalTo: profileView.trailingAnchor),
             kickboardSectionView.heightAnchor.constraint(equalToConstant: 120),
             
-            // HistorySectionView Constraints
             historySectionView.topAnchor.constraint(equalTo: kickboardSectionView.bottomAnchor, constant: 10),
             historySectionView.leadingAnchor.constraint(equalTo: kickboardSectionView.leadingAnchor),
             historySectionView.trailingAnchor.constraint(equalTo: kickboardSectionView.trailingAnchor),
             historySectionView.heightAnchor.constraint(equalToConstant: 350),
             
-            // LogoutButton Constraints
             logoutButton.topAnchor.constraint(equalTo: historySectionView.bottomAnchor, constant: 30),
             logoutButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             logoutButton.widthAnchor.constraint(equalToConstant: 200),
@@ -105,25 +100,52 @@ class MyPageViewController: UIViewController {
     
     // MARK: - Configure Sections
     private func configureSections() {
-        profileView.configure(name: "User", email: "user1234@gmail.com", imageName: "QuickBoard")
-        
-        profileView.onNameChange = { newName in
-            print("새로운 닉네임: \(newName)")
+        // 프로필 설정
+        if let user = UserDefaultsManager.shared.getUser() {
+            profileView.configure(name: user.nickName, email: user.email)
+        } else {
+            profileView.configure(name: "User1", email: "user1234@gmail.com") // 기본값 설정
         }
         
-        // 내가 등록한 킥보드 섹션 설정
+        profileView.onNameChange = { newName in
+            var user = UserDefaultsManager.shared.getUser() ?? User(email: "user1234@gmail.com", password: "")
+            user.nickName = newName
+            UserDefaultsManager.shared.saveUser(user)
+        }
+        
+        // 내가 등록한 킥보드 섹션
         kickboardSectionView.configure(with: kickboardData, imageSize: CGSize(width: 50, height: 50)) { [weak self] selectedKickboard in
             let detailVC = KickboardDetailViewController(kickboard: selectedKickboard)
             self?.navigationController?.pushViewController(detailVC, animated: true)
         }
+
+        // 히스토리 섹션 설정
+        let historyList = kickboardData.filter { $0.startTime != nil && $0.endTime != nil }.map { entity in
+            "\(formatDate(entity.startTime)) | \(formatTime(entity.startTime)) - \(formatTime(entity.endTime))"
+        }
         
-        // 킥보드 이용 내역 섹션 설정
-        historySectionView.configure(with: historyData, imageSize: CGSize(width: 40, height: 40))
+        historySectionView.configure(with: historyList, imageSize: CGSize(width: 40, height: 40))
     }
     
-    // MARK: - Action Methods
+    // MARK: - Helpers
+    private func formatDate(_ date: Date?) -> String {
+        guard let date = date else { return "Unknown Date" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yy.MM.dd"
+        return formatter.string(from: date)
+    }
+    
+    private func formatTime(_ date: Date?) -> String {
+        guard let date = date else { return "Unknown Time" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: date)
+    }
+    
+    // MARK: - Logout Action
     @objc private func handleLogout() {
-        print("로그아웃 버튼이 눌렸습니다.")
-        // TODO: 로그아웃 로직 추가 (e.g., UserDefaults 삭제, 로그인 화면 전환 등)
+        UserDefaultsManager.shared.isLoggedIn = false
+        print("로그아웃 성공")
+        // 로그아웃 후 화면 전환 로직 추가
     }
 }
