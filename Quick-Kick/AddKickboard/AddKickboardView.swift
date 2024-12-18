@@ -34,10 +34,13 @@ class AddKickboardView: UIView {
         return imageView
     }()
     
+    weak var modalViewDelegate: ModalViewDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubviews()
         layout()
+        setAction()
     }
     
     required init?(coder: NSCoder) {
@@ -85,5 +88,13 @@ class AddKickboardView: UIView {
     func setDelegate(_ mapViewDelegate: MapViewDelegate, _ repository: AddressRepository) {
         mapView.mapViewDelegate = mapViewDelegate
         repository.delegate = noticeView
+    }
+    
+    private func setAction() {
+        self.addButton.addTarget(self, action: #selector(presentModal), for: .touchUpInside)
+    }
+    
+    @objc private func presentModal() {
+        self.modalViewDelegate?.presentModalVIew()
     }
 }
