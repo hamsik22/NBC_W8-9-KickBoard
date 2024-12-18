@@ -51,8 +51,8 @@ final class SearchKickboardView: UIView {
     
     private func setupSubviews() {
         self.addSubview(searchKickboardMapView)
-        self.addSubview(searchLocationBarView)
         self.addSubview(locationResetButton)
+        self.addSubview(searchLocationBarView)
     }
     
     private func setupAutoLayout() {
@@ -60,16 +60,16 @@ final class SearchKickboardView: UIView {
             $0.edges.equalToSuperview()
         }
         
-        searchLocationBarView.snp.makeConstraints {
-            $0.top.equalTo(safeAreaLayoutGuide).offset(-15)
-            $0.trailing.leading.equalToSuperview().inset(20)
-            $0.height.equalTo(60)
-        }
-        
         locationResetButton.snp.makeConstraints {
             $0.top.equalTo(searchLocationBarView.snp.bottom).offset(15)
             $0.centerX.equalToSuperview()
             $0.height.equalTo(30)
+        }
+        
+        searchLocationBarView.snp.makeConstraints {
+            $0.top.equalTo(safeAreaLayoutGuide).offset(-15)
+            $0.trailing.leading.equalToSuperview().inset(20)
+            $0.height.equalTo(60)
         }
     }
     
