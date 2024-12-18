@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol ModalViewDelegate: AnyObject, UIViewController {
+protocol ModalViewDelegate: AnyObject where Self: UIViewController {
         
     func presentModalVIew()
     
