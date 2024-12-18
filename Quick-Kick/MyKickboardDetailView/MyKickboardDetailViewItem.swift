@@ -29,13 +29,28 @@ final class MyKickboardDetailViewItem: UICollectionViewCell {
     }
     
     private func configUI() {
+        self.layer.cornerRadius = 30
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.2
+        self.layer.shadowOffset = CGSize(width: 0, height: 2)
+        self.layer.shadowRadius = 4
+        self.layer.masksToBounds = false
+        
         setupImageView()
         setupLabel()
         setupLayout()
+        addAction()
+    }
+    
+    private func addAction() {
+        self.addGestureRecognizer(.init(target: self, action: #selector(presentModal)))
+    }
+    
+    @objc func presentModal() {
+        // 모달 오픈 기능 추가
     }
     
     private func setupImageView() {
-        self.kickboardImage.image = UIImage(named: "QuickBoard") // 추후 제거
         self.kickboardImage.contentMode = .scaleAspectFit
         self.kickboardImage.backgroundColor = .clear
         self.addSubview(self.kickboardImage)
@@ -50,10 +65,7 @@ final class MyKickboardDetailViewItem: UICollectionViewCell {
             $0.font = UIFont.systemFont(ofSize: 20, weight: .bold)
             self.addSubview($0)
         }
-        
-        self.kickboardNickNameView.text = "Sparta의 킥보드"
-        self.kickboardLocationView.text = "서울 중구 세종대로 110 서울특별시청"
-        
+
         setupLocationLabel()
     }
     
@@ -65,7 +77,8 @@ final class MyKickboardDetailViewItem: UICollectionViewCell {
     
     private func setupLayout() {
         self.kickboardImage.snp.makeConstraints {
-            $0.top.leading.bottom.equalToSuperview().inset(20)
+            $0.leading.equalToSuperview().inset(20)
+            $0.centerY.equalToSuperview()
             $0.height.width.equalTo(100)
         }
         
@@ -76,7 +89,7 @@ final class MyKickboardDetailViewItem: UICollectionViewCell {
         }
         
         self.kickboardLocationView.snp.makeConstraints {
-            $0.trailing.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(20)
             $0.top.equalTo(self.kickboardNickNameView.snp.bottom).offset(5)
             $0.width.equalTo(200)
         }
@@ -100,5 +113,11 @@ final class MyKickboardDetailViewItem: UICollectionViewCell {
         case false:
             self.backgroundColor = .white
         }
+    }
+    
+    func updateKickboardInfo(nickName: String, location: String) {
+        self.kickboardNickNameView.text = nickName
+        self.kickboardLocationView.text = location
+        self.layoutIfNeeded()
     }
 }

@@ -13,9 +13,9 @@ final class MyKickboardDetailView: UIView {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 10
-        layout.itemSize = .init(width: self.bounds.width - 30, height: 120)
+        layout.minimumLineSpacing = 15
+        layout.minimumInteritemSpacing = 15
+        layout.itemSize = .init(width: 350, height: 120)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .white
@@ -66,6 +66,7 @@ extension MyKickboardDetailView: UICollectionViewDelegate, UICollectionViewDataS
         
         cell.insertKickboardImage(type: false)
         cell.useKickboard(false)
+        cell.updateKickboardInfo(nickName: "Sparta의 킥보드", location: "서울 중구 세종대로 110 서울특별시청")
         
         return cell
     }

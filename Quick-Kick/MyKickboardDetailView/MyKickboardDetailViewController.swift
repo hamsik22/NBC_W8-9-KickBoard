@@ -15,4 +15,10 @@ final class MyKickboardDetailViewController: UIViewController {
         view = self.kickboardDetailView
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.navigationController?.title = "내 킥보드 관리"
+    }
+    
 }
