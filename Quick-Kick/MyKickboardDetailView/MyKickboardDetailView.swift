@@ -74,6 +74,6 @@ extension MyKickboardDetailView: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.modalViewDelegate?.presentModalVIew()
+        self.modalViewDelegate?.editKickboardModalView()
     }
 }
