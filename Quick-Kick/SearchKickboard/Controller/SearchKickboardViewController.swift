@@ -7,10 +7,8 @@
 import UIKit
 
 final class SearchKickboardViewController: UIViewController {
-    private let searchKickboardView = SearchKickboardView()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view = searchKickboardView
+    override func loadView() {
+        super.loadView()
+        view = SearchKickboardView()
     }
 }
