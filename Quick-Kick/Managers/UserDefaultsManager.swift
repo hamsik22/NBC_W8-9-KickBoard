@@ -47,18 +47,27 @@ final class UserDefaultsManager {
     // 로그인 상태
     var isLoggedIn: Bool {
         get { UserDefaults.standard.bool(forKey: Keys.loginStatus) }
-        set { UserDefaults.standard.set(newValue, forKey: Keys.loginStatus) }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Keys.loginStatus)
+            print("로그인 상태 : \(isLoggedIn) -> \(newValue)")
+        }
     }
 
     // 자동 로그인 옵션
     var autoLoginOption: Bool {
         get { UserDefaults.standard.bool(forKey: Keys.autoLogin) }
-        set { UserDefaults.standard.set(newValue, forKey: Keys.autoLogin) }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Keys.autoLogin)
+            print("자동 로그인 : \(autoLoginOption) -> \(newValue)")
+        }
     }
 
     // ID 기억 옵션
     var rememberIDOption: Bool {
         get { UserDefaults.standard.bool(forKey: Keys.rememberID) }
-        set { UserDefaults.standard.set(newValue, forKey: Keys.rememberID) }
+        set {
+            UserDefaults.standard.set(newValue, forKey: Keys.rememberID)
+            print("아이디 저장 : \(autoLoginOption) -> \(newValue)")
+        }
     }
 }
