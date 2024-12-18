@@ -12,6 +12,12 @@ class LoginViewController: UIViewController {
     private let loginView = LoginView()
     var delegate : LoginViewDelegate?
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        initTextFields()
+        processAuthOption()
+    }
+    
     override func loadView() {
         view = loginView
         loginView.delegate = self
@@ -20,15 +26,21 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
-        if let user = UserDefaultsManager.shared.getUser() {
-            print("현재 유저정보")
-            print("EMail: \(user.email)\nPassWord: \(user.password)\nNickName: \(user.nickName)")
-        }
+        view.backgroundColor = .systemBackground
+        printUserInfoStatus()
+        processAuthOption()
     }
+    
 }
 
 // MARK: - Delegates
 extension LoginViewController: LoginViewDelegate {
+    // 회원가입 화면에서 돌아왔을 때, 텍스트필드 초기화
+    func initTextFields() {
+        loginView.initTextFields()
+    }
+    
+    // 로그인 버튼 터치 시
     func didLoginButtonTapped(_ email: String, _ password: String) {
         if isCorrectInfo(email: email, password: password) {
             login()
@@ -37,16 +49,33 @@ extension LoginViewController: LoginViewDelegate {
         }
     }
     
+    // 자동 로그인 옵션 터치 시
     func didAutoLoginOptionTapped() {
-        print("로그인 이력이 있으면 자동으로 최근 이메일 기준으로 로그인")
         loginView.autoLoginCheckBoxIsChecked.toggle()
+        if loginView.autoLoginCheckBoxIsChecked {
+            UserDefaultsManager.shared.autoLoginOption = true
+        } else {
+            UserDefaultsManager.shared.autoLoginOption = false
+        }
     }
     
-    func didRememberIDOptionTapped() {
-        print("로그인 성공 후 이메일 지속 표시")
+    // 아이디 저장 옵션 터치 시
+    func didRememberIDOptionTapped(_ textField: UITextField) {
         loginView.rememberIDCheckBoxIsChecked.toggle()
+        if loginView.rememberIDCheckBoxIsChecked {
+            UserDefaultsManager.shared.rememberIDOption = true
+        } else {
+            UserDefaultsManager.shared.rememberIDOption = false
+        }
     }
     
+    // 아이디 저장 옵션 시, 동작할 함수
+    func getEmailTextField() {
+        guard let user = UserDefaultsManager.shared.getUser() else { return }
+        loginView.setEmailFieldText(email: user.email)
+    }
+    
+    // 회원가입 버튼 터치 시
     func didSignUpButtonTapped() {
         print("회원가입 화면으로 이동")
         let signUpVC = SignUpViewController()
@@ -56,22 +85,46 @@ extension LoginViewController: LoginViewDelegate {
 }
 // MARK: - Functions
 extension LoginViewController {
-    private func isCorrectInfo(email: String, password: String) -> Bool {
+    // 저장되어 있는 데이터들을 출력하는 함수
+    private func printUserInfoStatus() {
         if let user = UserDefaultsManager.shared.getUser() {
-            if email == user.email && password == user.password {
-                return true
-            } else {
-                print("유저 정보가 일치하지 않아요! 다시 입력하세요!")
-                return false
-            }
+            print("현재 유저정보")
+            print("EMail: \(user.email)\nPassWord: \(user.password)\nNickName: \(user.nickName)")
+        }
+        print("로그인상태 : \(UserDefaultsManager.shared.isLoggedIn)")
+        print("아이디저장 : \(UserDefaultsManager.shared.rememberIDOption)")
+        print("자동로그인 : \(UserDefaultsManager.shared.autoLoginOption)")
+    }
+    
+    // 로그인 정보를 확인하는 함수
+    private func isCorrectInfo(email: String?, password: String?) -> Bool {
+        guard let email, let password else {
+            print("정보를 입력해주세요")
+            return false }
+        guard let user = UserDefaultsManager.shared.getUser() else { return false }
+        if email == user.email && password == user.password {
+            return true
         } else {
-            print("가입된 유저가 없습니다.")
             return false
         }
     }
-    
+    // 로그인 시 동작할 함수
     private func login() {
-        print("로그인 성공 : 행동을 추가해주세요")
+        // TODO: 로그인 후 화면으로 가야해요
+        UserDefaultsManager.shared.isLoggedIn = true
+        print("로그인 성공 : 다음 동작을 정의해야해요!")
+    }
+    // 로그인 옵션에 따라 동작하는 함수
+    private func processAuthOption() {
+        guard let _ = UserDefaultsManager.shared.getUser() else { return }
+            if UserDefaultsManager.shared.isLoggedIn {
+                login()
+            } else if UserDefaultsManager.shared.autoLoginOption {
+                login()
+            }
+            if UserDefaultsManager.shared.rememberIDOption && !UserDefaultsManager.shared.isLoggedIn {
+                getEmailTextField()
+            }
     }
 }
 // MARK: - Extension
