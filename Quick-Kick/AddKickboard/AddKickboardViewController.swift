@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AddKickboardViewController: UIViewController {
+class AddKickboardViewController: UIViewController, ModalViewDelegate {
     
     private let addressRepository: AddressRepository = .init()
     
@@ -20,6 +20,7 @@ class AddKickboardViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         containerView.setDelegate(self, addressRepository)
+        containerView.modalViewDelegate = self
     }
 }
 
