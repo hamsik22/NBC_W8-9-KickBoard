@@ -8,7 +8,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-    private let mainTabBarController = MainTabBarController(viewControllers: [FirstVC(), AddKickboardViewController(), MyPageViewController()])
+    private let mainTabBarController = MainTabBarController(viewControllers: [SearchKickboardViewController(), AddKickboardViewController(), MyPageViewController()])
 
         override func viewDidLoad() {
             super.viewDidLoad()
