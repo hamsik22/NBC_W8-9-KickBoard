@@ -111,7 +111,16 @@ extension SearchKickboardMapView: MKMapViewDelegate {
         } else {
             annotationView?.annotation = annotation
         }
-        annotationView?.image = UIImage(named: "mapPicker")
+        
+        if let kickboardAnnotation = annotation as? KickboardAnnotation {
+            // isOccupied 상태에 따라 다른 이미지 설정
+            if kickboardAnnotation.kickboard.isOccupied {
+                annotationView?.image = UIImage(named: "myMapPicker")  // 내 킥보드
+            } else {
+                annotationView?.image = UIImage(named: "mapPicker")  // 남의 킥보드
+            }
+        }
+        
         annotationView?.frame.size = CGSize(width: 55, height: 91)
         return annotationView
     }
