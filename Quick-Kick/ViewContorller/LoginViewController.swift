@@ -24,6 +24,10 @@ class LoginViewController: UIViewController {
 }
 
 extension LoginViewController: LoginViewDelegate {
+    func didLoginButtonTapped(_ email: String, _ password: String) {
+        print("email : \(email), pass : \(password)\n로그인 성공")
+    }
+    
     func didAutoLoginOptionTapped() {
         print("로그인 이력이 있으면 자동으로 최근 이메일 기준으로 로그인")
         loginView.autoLoginCheckBoxIsChecked.toggle()
@@ -32,10 +36,6 @@ extension LoginViewController: LoginViewDelegate {
     func didRememberIDOptionTapped() {
         print("로그인 성공 후 이메일 지속 표시")
         loginView.rememberIDCheckBoxIsChecked.toggle()
-    }
-    
-    func didLoginButtonTapped() {
-        print("정보 확인 후 로그인")
     }
     
     func didSignUpButtonTapped() {

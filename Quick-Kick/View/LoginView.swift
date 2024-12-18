@@ -120,6 +120,7 @@ class LoginView: UIView {
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
         }
+        passwordField.isSecureTextEntry = true
                 
         autoLoginOption.snp.makeConstraints { make in
             make.top.equalTo(passwordField.snp.bottom).offset(10)
@@ -179,7 +180,7 @@ extension UITextField {
 protocol LoginViewDelegate: AnyObject {
     func didAutoLoginOptionTapped()
     func didRememberIDOptionTapped()
-    func didLoginButtonTapped()
+    func didLoginButtonTapped(_ email: String, _ password: String)
     func didSignUpButtonTapped()
 }
 
@@ -198,10 +199,33 @@ extension LoginView {
         delegate?.didRememberIDOptionTapped()
     }
     @objc func loginButtonTapped() {
-        delegate?.didLoginButtonTapped()
+        if isValidUser() {
+            if let email = emailField.text, let password = passwordField.text {
+                delegate?.didLoginButtonTapped(email, password)
+            }
+        }
     }
     @objc func signupButtonTapped() {
         delegate?.didSignUpButtonTapped()
+    }
+    
+    private func isValidUser() -> Bool {
+        // case0. 비어있는 값이 있을 경우
+        guard ((emailField.text?.isEmpty) != nil) ||
+            ((passwordField.text?.isEmpty) != nil)else {
+            print("정보를 입력해주세요")
+            return false
+        }
+    
+        
+//        if 정보 유효 { // case1. 입력값이 올바른 경우
+//            print("로그인 정보 유효")
+//            return true
+//        } else { // case2. 입력값이 올바르지 않을 경우
+//            print("입력값을 확인해주세요")
+//            return false
+//        }
+        return true
     }
 }
 
