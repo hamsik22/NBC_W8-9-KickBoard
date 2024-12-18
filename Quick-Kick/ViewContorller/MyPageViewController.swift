@@ -33,6 +33,7 @@ class MyPageViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewTapAction()
         setupUI()
         loadKickboards()
         configureSections()
@@ -147,5 +148,14 @@ class MyPageViewController: UIViewController {
         UserDefaultsManager.shared.isLoggedIn = false
         print("로그아웃 성공")
         // 로그아웃 후 화면 전환 로직 추가
+    }
+    
+    private func viewTapAction() {
+        let touchEvent = UITapGestureRecognizer(target: self, action: #selector(pushDetailView))
+        self.kickboardSectionView.addGestureRecognizer(touchEvent)
+    }
+    
+    @objc private func pushDetailView() {
+        self.navigationController?.pushViewController(MyKickboardDetailViewController(), animated: true)
     }
 }

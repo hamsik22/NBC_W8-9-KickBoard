@@ -18,7 +18,11 @@ final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.title = "내 킥보드 관리"
+        let naviTitle = UILabel()
+        naviTitle.text = "내 킥보드 관리"
+        naviTitle.textColor = .black
+        naviTitle.font = UIFont.systemFont(ofSize: 25, weight: .bold)
+        self.navigationItem.titleView = naviTitle
         self.kickboardDetailView.modalViewDelegate = self
     }
     

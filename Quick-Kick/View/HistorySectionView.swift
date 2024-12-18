@@ -26,7 +26,7 @@ class HistorySectionView: UIView {
     }()
 
     private var historyLabels: [UILabel] = []
-
+    
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
