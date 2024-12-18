@@ -46,6 +46,7 @@ final class SearchLocationBarView: UIView {
     
     private var searchResults: [MKLocalSearchCompletion] = []
     weak var mapView: MKMapView?
+    weak var delegate: SearchLocationBarViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -90,9 +91,11 @@ extension SearchLocationBarView: UISearchBarDelegate {
             searchResults = []
             searchResultsTableView.isHidden = true
             searchResultsTableView.reloadData()
+            delegate?.searchResultsTableViewWillHide()
         } else {
             searchResultsTableView.isHidden = false
             searchCompleter.queryFragment = searchText
+            delegate?.searchResultsTableViewWillShow()
         }
     }
     
