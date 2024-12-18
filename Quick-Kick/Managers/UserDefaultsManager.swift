@@ -49,7 +49,7 @@ final class UserDefaultsManager {
         get { UserDefaults.standard.bool(forKey: Keys.loginStatus) }
         set {
             UserDefaults.standard.set(newValue, forKey: Keys.loginStatus)
-            print("로그인 상태 : \(isLoggedIn) -> \(newValue)")
+            print("로그인 상태 : \(newValue)")
         }
     }
 
@@ -58,7 +58,7 @@ final class UserDefaultsManager {
         get { UserDefaults.standard.bool(forKey: Keys.autoLogin) }
         set {
             UserDefaults.standard.set(newValue, forKey: Keys.autoLogin)
-            print("자동 로그인 : \(autoLoginOption) -> \(newValue)")
+            print("자동 로그인 옵션 : \(newValue)")
         }
     }
 
@@ -67,7 +67,7 @@ final class UserDefaultsManager {
         get { UserDefaults.standard.bool(forKey: Keys.rememberID) }
         set {
             UserDefaults.standard.set(newValue, forKey: Keys.rememberID)
-            print("아이디 저장 : \(autoLoginOption) -> \(newValue)")
+            print("아이디 저장 옵션 : \(newValue)")
         }
     }
 }
