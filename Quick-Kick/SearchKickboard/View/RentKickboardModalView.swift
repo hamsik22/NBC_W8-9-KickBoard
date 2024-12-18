@@ -75,6 +75,7 @@ final class RentKickboardModalView: UIView {
         self.backgroundColor = .white
         self.kickboardNicknameLabel.text = self.kickboard?.nickName
         self.kickboardLocationLabel.text = self.kickboard?.address
+        self.rentButton.addTarget(self, action: #selector(rentButtonTapped), for: .touchUpInside)
     }
     
     private func setupLayout() {
@@ -86,6 +87,17 @@ final class RentKickboardModalView: UIView {
         self.layer.cornerRadius = 40
         self.snp.makeConstraints {
             $0.height.equalTo(180)
+        }
+    }
+    
+    @objc
+    private func rentButtonTapped() {
+        if self.kickboard?.startTime == nil {
+            self.kickboard?.startTime = Date()
+            self.rentButton.titleLabel?.text = "이용 종료"
+        } else {
+            self.kickboard?.endTime = Date()
+            self.rentButton.titleLabel?.text = "이용 시작"
         }
     }
 }
