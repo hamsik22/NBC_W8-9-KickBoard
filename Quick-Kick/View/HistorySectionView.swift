@@ -11,21 +11,21 @@ class HistorySectionView: UIView {
     
     // MARK: - UI Components
     private let containerView: UIView = {
-            let view = UIView()
-            view.backgroundColor = UIColor(named: "personalLight/hover") // 색상 적용
-            view.layer.cornerRadius = 10
-            return view
-        }()
-        
-        private let titleLabel: UILabel = {
-            let label = UILabel()
-            label.text = "킥보드 이용 내역"
-            label.font = UIFont.boldSystemFont(ofSize: 18)
-            label.textColor = .black
-            return label
-        }()
+        let view = UIView()
+        view.backgroundColor = UIColor(named: "personalLight/hover")
+        view.layer.cornerRadius = 20
+        return view
+    }()
+    
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "킥보드 이용 내역"
+        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.textColor = .black
+        return label
+    }()
 
-    private var historyViews: [UIView] = []
+    private var historyLabels: [UILabel] = []
 
     // MARK: - Initialization
     override init(frame: CGRect) {
@@ -57,61 +57,33 @@ class HistorySectionView: UIView {
     }
 
     // MARK: - Configure Method
-    func configure(with histories: [KickboardHistory], imageSize: CGSize) {
-        historyViews.forEach { $0.removeFromSuperview() }
-        historyViews.removeAll()
+    func configure(with histories: [String], imageSize: CGSize) {
+        // 기존 뷰 제거
+        historyLabels.forEach { $0.removeFromSuperview() }
+        historyLabels.removeAll()
         
         var previousView: UIView?
 
         for history in histories {
-            let container = UIView()
-            container.backgroundColor = .white
-            container.layer.cornerRadius = 20
-            container.translatesAutoresizingMaskIntoConstraints = false
-
-            let imageView = UIImageView(image: UIImage(named: history.isSeat ? "QuickBoard - Seat" : "QuickBoard"))
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            
-            let infoLabel = UILabel()
-            infoLabel.numberOfLines = 2
-            infoLabel.translatesAutoresizingMaskIntoConstraints = false
-            
-            // 볼드체 적용
-            let boldText = NSMutableAttributedString()
-            let dateText = NSAttributedString(string: "날짜 ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
-            let dateValue = NSAttributedString(string: "\(history.date)\n", attributes: [.font: UIFont.systemFont(ofSize: 14)])
-            let timeText = NSAttributedString(string: "운행 시간 ", attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
-            let timeValue = NSAttributedString(string: "\(history.time)", attributes: [.font: UIFont.systemFont(ofSize: 14)])
-
-            boldText.append(dateText)
-            boldText.append(dateValue)
-            boldText.append(timeText)
-            boldText.append(timeValue)
-
-            infoLabel.attributedText = boldText
-
-            container.addSubview(imageView)
-            container.addSubview(infoLabel)
-            containerView.addSubview(container)
+            let label = UILabel()
+            label.text = history
+            label.font = UIFont.systemFont(ofSize: 14)
+            label.textColor = .darkGray
+            label.numberOfLines = 0
+            label.translatesAutoresizingMaskIntoConstraints = false
+            containerView.addSubview(label)
 
             NSLayoutConstraint.activate([
-                container.topAnchor.constraint(equalTo: previousView?.bottomAnchor ?? titleLabel.bottomAnchor, constant: 10),
-                container.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
-                container.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-                container.heightAnchor.constraint(equalToConstant: 70),
-
-                imageView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
-                imageView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-                imageView.widthAnchor.constraint(equalToConstant: imageSize.width),
-                imageView.heightAnchor.constraint(equalToConstant: imageSize.height),
-                
-                infoLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10),
-                infoLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
-                infoLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor)
+                label.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 15),
+                label.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
+                label.heightAnchor.constraint(equalToConstant: imageSize.height),
+                label.topAnchor.constraint(equalTo: previousView?.bottomAnchor ?? titleLabel.bottomAnchor, constant: 10)
             ])
-
-            previousView = container
-            historyViews.append(container)
+            
+            previousView = label
+            historyLabels.append(label)
         }
+        
+        previousView?.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10).isActive = true
     }
 }

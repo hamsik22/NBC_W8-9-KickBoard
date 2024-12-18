@@ -11,17 +11,24 @@ class ProfileView: UIView {
     
     // MARK: - UI Components
     
-    private let backgroundCircleView: UIView = { // 보라색 원
+    private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.6)
+        view.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.1) // 연한 보라색 네모
+        view.layer.cornerRadius = 20
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 40 // 원의 크기
         return view
     }()
     
-    private let profileImageView: UIImageView = { // 킥보드 이미지
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "QuickBoard")
+    private let purpleCircleView: UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.systemPurple // 진한 보라색 원
+        view.layer.cornerRadius = 50
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let kickboardImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(named: "kickboard")) // Asset에 추가된 킥보드 이미지
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -29,29 +36,38 @@ class ProfileView: UIView {
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.text = "User"
         label.font = UIFont.boldSystemFont(ofSize: 24)
-        label.textColor = UIColor.systemPurple
-        label.textAlignment = .right
+        label.textColor = .systemPurple
+        label.text = "User1" // 기본 닉네임
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let emailLabel: UILabel = {
         let label = UILabel()
-        label.text = "user1234@gmail.com"
         label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = UIColor.systemPurple
-        label.textAlignment = .right
+        label.textColor = .darkGray
+        label.text = "user1234@gmail.com"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
+    private let editIconImageView: UIImageView = {
+        let imageView = UIImageView(image: UIImage(systemName: "pencil"))
+        imageView.tintColor = .systemPurple
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = true
+        return imageView
+    }()
+    
+    var onNameChange: ((String) -> Void)?
     
     // MARK: - Initialization
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
+        setupGesture()
     }
     
     required init?(coder: NSCoder) {
@@ -61,51 +77,91 @@ class ProfileView: UIView {
     // MARK: - Setup UI
     
     private func setupUI() {
-        backgroundColor = UIColor.systemPurple.withAlphaComponent(0.1)
-        layer.cornerRadius = 20
+        addSubview(containerView)
+        containerView.addSubview(purpleCircleView)
+        containerView.addSubview(kickboardImageView)
+        containerView.addSubview(nameLabel)
+        containerView.addSubview(emailLabel)
+        containerView.addSubview(editIconImageView)
         
-        addSubview(backgroundCircleView)
-        addSubview(profileImageView)
-        addSubview(nameLabel)
-        addSubview(emailLabel)
-        
-        // MARK: - Constraints
-        
+        // MARK: Constraints
         NSLayoutConstraint.activate([
-            // 보라색 원 (킥보드 이미지 중앙에서 약간 좌측으로 조정)
-            backgroundCircleView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            backgroundCircleView.centerXAnchor.constraint(equalTo: profileImageView.centerXAnchor, constant: -15), // 약간 좌측
-            backgroundCircleView.widthAnchor.constraint(equalToConstant: 80),
-            backgroundCircleView.heightAnchor.constraint(equalToConstant: 80),
+            // Container View
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            containerView.heightAnchor.constraint(equalToConstant: 120),
             
-            // 킥보드 이미지 (오른쪽으로 이동)
-            profileImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40), // 오른쪽으로 이동
-            profileImageView.widthAnchor.constraint(equalToConstant: 70),
-            profileImageView.heightAnchor.constraint(equalToConstant: 70),
+            // Purple Circle
+            purpleCircleView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            purpleCircleView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+            purpleCircleView.widthAnchor.constraint(equalToConstant: 100),
+            purpleCircleView.heightAnchor.constraint(equalToConstant: 100),
             
-            // 이름 Label
-            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 30),
-            nameLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            nameLabel.leadingAnchor.constraint(greaterThanOrEqualTo: profileImageView.trailingAnchor, constant: 10),
+            // Kickboard Image
+            kickboardImageView.centerYAnchor.constraint(equalTo: purpleCircleView.centerYAnchor),
+            kickboardImageView.centerXAnchor.constraint(equalTo: purpleCircleView.centerXAnchor),
+            kickboardImageView.widthAnchor.constraint(equalToConstant: 80),
+            kickboardImageView.heightAnchor.constraint(equalToConstant: 80),
             
-            // 이메일 Label
+            // Name Label
+            nameLabel.topAnchor.constraint(equalTo: purpleCircleView.topAnchor, constant: 10),
+            nameLabel.leadingAnchor.constraint(equalTo: purpleCircleView.trailingAnchor, constant: 20),
+            nameLabel.trailingAnchor.constraint(equalTo: editIconImageView.leadingAnchor, constant: -10),
+            
+            // Email Label
             emailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5),
-            emailLabel.trailingAnchor.constraint(equalTo: nameLabel.trailingAnchor),
-            emailLabel.leadingAnchor.constraint(greaterThanOrEqualTo: profileImageView.trailingAnchor, constant: 10),
+            emailLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            emailLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
             
-            // Profile View 크기 조정
-            self.heightAnchor.constraint(equalToConstant: 120),
-            self.leadingAnchor.constraint(equalTo: superview?.leadingAnchor ?? self.leadingAnchor, constant: 20),
-            self.trailingAnchor.constraint(equalTo: superview?.trailingAnchor ?? self.trailingAnchor, constant: -20)
+            // Edit Icon
+            editIconImageView.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor),
+            editIconImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            editIconImageView.widthAnchor.constraint(equalToConstant: 20),
+            editIconImageView.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
     
-    // MARK: - Configure
+    // MARK: - Configure Method
     
-    func configure(name: String, email: String, imageName: String) {
+    func configure(name: String = "User1", email: String = "user1234@gmail.com") {
         nameLabel.text = name
         emailLabel.text = email
-        profileImageView.image = UIImage(named: imageName)
+    }
+    
+    // MARK: - Edit Name Gesture
+    
+    private func setupGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(editNameTapped))
+        editIconImageView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func editNameTapped() {
+        guard let viewController = findViewController() else { return }
+        
+        let alert = UIAlertController(title: "닉네임 수정", message: "새로운 닉네임을 입력하세요.", preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.text = self.nameLabel.text
+        }
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "저장", style: .default) { [weak self] _ in
+            if let newName = alert.textFields?.first?.text, !newName.isEmpty {
+                self?.nameLabel.text = newName
+                self?.onNameChange?(newName)
+            }
+        })
+        viewController.present(alert, animated: true)
+    }
+    
+    private func findViewController() -> UIViewController? {
+        var responder: UIResponder? = self
+        while let next = responder?.next {
+            responder = next
+            if let vc = responder as? UIViewController {
+                return vc
+            }
+        }
+        return nil
     }
 }

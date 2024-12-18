@@ -35,10 +35,14 @@ class KickboardDetailView: UIView {
         return button
     }()
     
-    private let contentContainerView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    private let contentContainerView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 10
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
     }()
     
     // MARK: - Initializer
@@ -69,21 +73,17 @@ class KickboardDetailView: UIView {
         backButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            // Back Button
             backButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
             backButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             
-            // Title Container
             titleContainerView.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 10),
             titleContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             titleContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             titleContainerView.heightAnchor.constraint(equalToConstant: 50),
             
-            // Title Label
             titleLabel.centerXAnchor.constraint(equalTo: titleContainerView.centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: titleContainerView.centerYAnchor),
             
-            // Content Container
             contentContainerView.topAnchor.constraint(equalTo: titleContainerView.bottomAnchor, constant: 20),
             contentContainerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
             contentContainerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
@@ -93,52 +93,34 @@ class KickboardDetailView: UIView {
     
     // MARK: - Configure Method
     
-    func configure(with items: [String]) {
-        contentContainerView.subviews.forEach { $0.removeFromSuperview() }
+    func configure(with kickboard: Kickboard) {
+        contentContainerView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
-        var previousView: UIView? = nil
+        let details = [
+            "닉네임: \(kickboard.nickName ?? "Unknown")",
+            "안장형: \(kickboard.isSaddled ? "Yes" : "No")",
+            "점유 상태: \(kickboard.isOccupied ? "사용 중" : "미사용")",
+            "시작 시간: \(formattedDate(kickboard.startTime))",
+            "종료 시간: \(formattedDate(kickboard.endTime))",
+            "위도: \(kickboard.latitude)",
+            "경도: \(kickboard.longitude)",
+            "주소: \(kickboard.address ?? "No Address")"
+        ]
         
-        for item in items {
-            let containerView = UIView()
-            containerView.backgroundColor = .white
-            containerView.layer.cornerRadius = 20
-            containerView.layer.borderColor = UIColor.lightGray.cgColor
-            containerView.layer.borderWidth = 1
-            containerView.layer.shadowColor = UIColor.gray.cgColor
-            containerView.layer.shadowOpacity = 0.2
-            containerView.layer.shadowOffset = CGSize(width: 0, height: 1)
-            containerView.translatesAutoresizingMaskIntoConstraints = false
-            
+        for detail in details {
             let label = UILabel()
-            label.text = item
+            label.text = detail
             label.font = UIFont.systemFont(ofSize: 16)
             label.textColor = .darkGray
             label.numberOfLines = 0
-            label.translatesAutoresizingMaskIntoConstraints = false
-            
-            containerView.addSubview(label)
-            contentContainerView.addSubview(containerView)
-            
-            NSLayoutConstraint.activate([
-                label.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-                label.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
-                label.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-                label.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
-                
-                containerView.heightAnchor.constraint(equalToConstant: 70),
-                containerView.leadingAnchor.constraint(equalTo: contentContainerView.leadingAnchor),
-                containerView.trailingAnchor.constraint(equalTo: contentContainerView.trailingAnchor)
-            ])
-            
-            if let previous = previousView {
-                containerView.topAnchor.constraint(equalTo: previous.bottomAnchor, constant: 10).isActive = true
-            } else {
-                containerView.topAnchor.constraint(equalTo: contentContainerView.topAnchor).isActive = true
-            }
-            
-            previousView = containerView
+            contentContainerView.addArrangedSubview(label)
         }
-        
-        previousView?.bottomAnchor.constraint(equalTo: contentContainerView.bottomAnchor, constant: -10).isActive = true
+    }
+    
+    private func formattedDate(_ date: Date?) -> String {
+        guard let date = date else { return "N/A" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM.dd HH:mm"
+        return formatter.string(from: date)
     }
 }
