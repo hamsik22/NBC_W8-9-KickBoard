@@ -10,6 +10,8 @@ import SnapKit
 
 final class MyKickboardDetailView: UIView {
     
+    weak var modalViewDelegate: ModalViewDelegate?
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -71,5 +73,7 @@ extension MyKickboardDetailView: UICollectionViewDelegate, UICollectionViewDataS
         return cell
     }
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        self.modalViewDelegate?.presentModalVIew()
+    }
 }

@@ -39,15 +39,6 @@ final class MyKickboardDetailViewItem: UICollectionViewCell {
         setupImageView()
         setupLabel()
         setupLayout()
-        addAction()
-    }
-    
-    private func addAction() {
-        self.addGestureRecognizer(.init(target: self, action: #selector(presentModal)))
-    }
-    
-    @objc func presentModal() {
-        // 모달 오픈 기능 추가
     }
     
     private func setupImageView() {

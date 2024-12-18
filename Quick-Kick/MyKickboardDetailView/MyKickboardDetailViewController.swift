@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class MyKickboardDetailViewController: UIViewController {
+final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate {
     
     private let kickboardDetailView = MyKickboardDetailView()
     
@@ -19,6 +19,7 @@ final class MyKickboardDetailViewController: UIViewController {
         super.viewDidLoad()
         
         self.navigationController?.title = "내 킥보드 관리"
+        self.kickboardDetailView.modalViewDelegate = self
     }
     
 }
