@@ -58,10 +58,10 @@ final class RentKickboardModalView: UIView {
         return stackView
     }()
     
-    init(nickname: String, location: String) {
+    init(kickboard: Kickboard) {
         super.init(frame: .zero)
-        self.kickboardNicknameLabel.text = nickname
-        self.kickboardLocationLabel.text = location
+        self.kickboardNicknameLabel.text = kickboard.nickName
+        self.kickboardLocationLabel.text = kickboard.address
         setupModalView()
     }
     
