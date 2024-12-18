@@ -109,6 +109,7 @@ extension SearchLocationBarView: UISearchBarDelegate {
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchResultsTableView.isHidden = true
+        delegate?.searchResultsTableViewWillHide()
     }
 }
 
