@@ -125,8 +125,9 @@ class MyPageViewController: UIViewController {
     }
     
     // MARK: - Logout Action
+    // 로그아웃 액션
     @objc private func handleLogout() {
-        UserDefaultsManager.shared.isLoggedIn = false
+        UserDefaultsManager.shared.setLoggedOut()
         print("로그아웃 성공")
         // 로그아웃 후 화면 전환 로직 추가
     }

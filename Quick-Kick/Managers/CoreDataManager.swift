@@ -5,26 +5,9 @@
 //  Created by 반성준 on 12/18/24.
 //
 
-// CoreDataManager.swift
 import CoreData
 import UIKit
 
-// MARK: - Protocol
-protocol KickboardDataManageable {
-    func createKickboard(nickName: String,
-                         isSaddled: Bool,
-                         isOccupied: Bool,
-                         startTime: Date?,
-                         endTime: Date?,
-                         latitude: Double,
-                         longitude: Double,
-                         address: String)
-    func fetchKickboards() -> [Kickboard]
-    func deleteKickboard(_ kickboard: Kickboard)
-    func saveContext()
-}
-
-// MARK: - CoreDataManager
 final class CoreDataManager: KickboardDataManageable {
     static let shared = CoreDataManager()
     private init() {}
