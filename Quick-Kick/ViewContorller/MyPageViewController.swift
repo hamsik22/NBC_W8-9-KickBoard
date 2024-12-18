@@ -104,7 +104,7 @@ class MyPageViewController: UIViewController {
         if let user = UserDefaultsManager.shared.getUser() {
             profileView.configure(name: user.nickName, email: user.email)
         } else {
-            profileView.configure(name: "User1", email: "user1234@gmail.com") // 기본값 설정
+            profileView.configure(name: "User1", email: "user1234@gmail.com")
         }
         
         profileView.onNameChange = { newName in
@@ -118,33 +118,16 @@ class MyPageViewController: UIViewController {
             let detailVC = KickboardDetailViewController(kickboard: selectedKickboard)
             self?.navigationController?.pushViewController(detailVC, animated: true)
         }
-
-        // 히스토리 섹션 설정
-        let historyList = kickboardData.filter { $0.startTime != nil && $0.endTime != nil }.map { entity in
-            "\(formatDate(entity.startTime)) | \(formatTime(entity.startTime)) - \(formatTime(entity.endTime))"
-        }
         
-        historySectionView.configure(with: historyList, imageSize: CGSize(width: 40, height: 40))
-    }
-    
-    // MARK: - Helpers
-    private func formatDate(_ date: Date?) -> String {
-        guard let date = date else { return "Unknown Date" }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yy.MM.dd"
-        return formatter.string(from: date)
-    }
-    
-    private func formatTime(_ date: Date?) -> String {
-        guard let date = date else { return "Unknown Time" }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: date)
+        // 히스토리 섹션 설정
+        let historyList = kickboardData.filter { $0.startTime != nil && $0.endTime != nil }
+        historySectionView.configure(with: historyList)
     }
     
     // MARK: - Logout Action
+    // 로그아웃 액션
     @objc private func handleLogout() {
-        UserDefaultsManager.shared.isLoggedIn = false
+        UserDefaultsManager.shared.setLoggedOut()
         print("로그아웃 성공")
         // 로그아웃 후 화면 전환 로직 추가
     }

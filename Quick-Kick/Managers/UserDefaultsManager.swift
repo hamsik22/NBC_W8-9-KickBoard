@@ -7,53 +7,61 @@
 
 import Foundation
 
-struct User: Codable {
-    var email: String
-    var password: String
-    var nickName: String = "User1"
+// MARK: - Protocol
+protocol UserDataManageable {
+    func saveUser(_ user: User)
+    func getUser() -> User?
+    var isLoggedIn: Bool { get set }
+    var autoLoginOption: Bool { get set }
+    var rememberIDOption: Bool { get set }
+    func setLoggedOut()
 }
 
-final class UserDefaultsManager {
-    static let shared = UserDefaultsManager()
-    private init() {}
-
-    private enum Keys {
-        static let user = "user"
-        static let loginStatus = "LoginStatus"
-        static let autoLogin = "AutoLoginOption"
-        static let rememberID = "RememberIDOption"
-    }
-
-    // User 저장 및 불러오기
+// MARK: - Protocol Extension
+extension UserDataManageable {
     func saveUser(_ user: User) {
         if let encoded = try? JSONEncoder().encode(user) {
-            UserDefaults.standard.set(encoded, forKey: Keys.user)
+            UserDefaults.standard.set(encoded, forKey: "user")
         }
     }
 
     func getUser() -> User? {
-        if let data = UserDefaults.standard.data(forKey: Keys.user),
+        if let data = UserDefaults.standard.data(forKey: "user"),
            let user = try? JSONDecoder().decode(User.self, from: data) {
             return user
         }
         return nil
     }
 
-    // 로그인 상태
+    func setLoggedOut() {
+        UserDefaults.standard.set(false, forKey: "LoginStatus")
+    }
+
     var isLoggedIn: Bool {
-        get { UserDefaults.standard.bool(forKey: Keys.loginStatus) }
-        set { UserDefaults.standard.set(newValue, forKey: Keys.loginStatus) }
+        get { UserDefaults.standard.bool(forKey: "LoginStatus") }
+        set { UserDefaults.standard.set(newValue, forKey: "LoginStatus") }
     }
 
-    // 자동 로그인 옵션
     var autoLoginOption: Bool {
-        get { UserDefaults.standard.bool(forKey: Keys.autoLogin) }
-        set { UserDefaults.standard.set(newValue, forKey: Keys.autoLogin) }
+        get { UserDefaults.standard.bool(forKey: "AutoLoginOption") }
+        set { UserDefaults.standard.set(newValue, forKey: "AutoLoginOption") }
     }
 
-    // ID 기억 옵션
     var rememberIDOption: Bool {
-        get { UserDefaults.standard.bool(forKey: Keys.rememberID) }
-        set { UserDefaults.standard.set(newValue, forKey: Keys.rememberID) }
+        get { UserDefaults.standard.bool(forKey: "RememberIDOption") }
+        set { UserDefaults.standard.set(newValue, forKey: "RememberIDOption") }
     }
+}
+
+// MARK: - User Struct
+struct User: Codable {
+    var email: String
+    var password: String
+    var nickName: String = "User1"
+}
+
+// MARK: - UserDefaultsManager
+final class UserDefaultsManager: UserDataManageable {
+    static let shared = UserDefaultsManager()
+    private init() {}
 }
