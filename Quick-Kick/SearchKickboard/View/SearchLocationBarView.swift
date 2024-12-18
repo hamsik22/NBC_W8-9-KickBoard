@@ -7,6 +7,11 @@
 import UIKit
 import MapKit
 
+protocol SearchLocationBarViewDelegate: AnyObject {
+    func searchResultsTableViewWillShow()
+    func searchResultsTableViewWillHide()
+}
+
 final class SearchLocationBarView: UIView {
     private let containerView: UIView = {
         let view = UIView()
