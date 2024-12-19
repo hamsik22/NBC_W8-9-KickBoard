@@ -36,7 +36,7 @@ extension SignUpViewController: SignUpViewDelegate {
         }
     }
 }
-
+// MARK: - Function
 extension SignUpViewController {
     // 키보드 내리기
     @objc private func dismissKeyboard() {

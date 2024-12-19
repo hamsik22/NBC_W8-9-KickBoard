@@ -117,7 +117,6 @@ extension LoginViewController {
     // 로그인 시 동작할 함수
     private func login() {
         UserDefaults.standard.set(true, forKey: UserDefaultsKeys.loginStatus)
-        print("로그인 성공")
     }
     // 로그인 옵션에 따라 동작하는 함수
     private func processAuthOption() {
