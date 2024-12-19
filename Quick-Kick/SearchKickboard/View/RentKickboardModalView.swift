@@ -6,6 +6,10 @@
 //
 import UIKit
 
+protocol RentKickboardModalViewDelegate: AnyObject {
+    func didUpdateKickboardStatus(_ kickboard: Kickboard)
+}
+
 final class RentKickboardModalView: UIView {
     private(set) var kickboard: Kickboard?
     
@@ -60,6 +64,8 @@ final class RentKickboardModalView: UIView {
         return stackView
     }()
     
+    weak var delegate: RentKickboardModalViewDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupModalView()
@@ -103,7 +109,11 @@ final class RentKickboardModalView: UIView {
             self.rentButton.setTitle("이용 종료", for: .normal)
         } else {
             self.kickboard?.endTime = Date()
+            self.kickboard?.startTime = nil
             self.rentButton.setTitle("이용 시작", for: .normal)
+        }
+        if let kickboard = self.kickboard {
+            delegate?.didUpdateKickboardStatus(kickboard)
         }
     }
 }
