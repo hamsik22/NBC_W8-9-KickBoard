@@ -12,12 +12,30 @@ final class SearchKickboardViewController: UIViewController {
     override func loadView() {
         super.loadView()
         
+        searchKickboardView.searchKickboardMapView.rentKickboardModalView.alertDelegate = self
         fetchKickboards()
         view = searchKickboardView
+        
     }
     
     private func fetchKickboards() {
         let kickboards = CoreDataManager.shared.fetch()
         searchKickboardView.deliverKickboardsData(kickboards)
+    }
+}
+
+extension SearchKickboardViewController: RentKickboardModalViewAlertDelegate {
+    func showAlert(title: String, completion: @escaping () -> Void) {
+        let alert = UIAlertController(title: title, message: nil, preferredStyle: .alert)
+
+        let success = UIAlertAction(title: "확인", style: .default) { _ in
+            completion()
+        }
+        let cancel = UIAlertAction(title: "취소", style: .default)
+
+        alert.addAction(success)
+        alert.addAction(cancel)
+
+        present(alert, animated: true, completion: nil)
     }
 }

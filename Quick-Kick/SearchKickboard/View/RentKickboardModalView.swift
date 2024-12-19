@@ -6,6 +6,14 @@
 //
 import UIKit
 
+protocol RentKickboardModalViewDelegate: AnyObject {
+    func didUpdateKickboardStatus(_ kickboard: Kickboard)
+}
+
+protocol RentKickboardModalViewAlertDelegate: AnyObject {
+    func showAlert(title: String, completion: @escaping () -> Void)
+}
+
 final class RentKickboardModalView: UIView {
     private(set) var kickboard: Kickboard?
     
@@ -60,6 +68,9 @@ final class RentKickboardModalView: UIView {
         return stackView
     }()
     
+    weak var delegate: RentKickboardModalViewDelegate?
+    weak var alertDelegate: RentKickboardModalViewAlertDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupModalView()
@@ -99,11 +110,22 @@ final class RentKickboardModalView: UIView {
     @objc
     private func rentButtonTapped() {
         if self.kickboard?.startTime == nil {
-            self.kickboard?.startTime = Date()
-            self.rentButton.setTitle("이용 종료", for: .normal)
+            alertDelegate?.showAlert(title: "킥보드를 이용하시겠습니까?", completion: {
+                self.kickboard?.startTime = Date()
+                self.rentButton.setTitle("이용 종료", for: .normal)
+                if let kickboard = self.kickboard {
+                    self.delegate?.didUpdateKickboardStatus(kickboard)
+                }
+            })
         } else {
-            self.kickboard?.endTime = Date()
-            self.rentButton.setTitle("이용 시작", for: .normal)
+            alertDelegate?.showAlert(title: "이용을 종료하시겠습니까?", completion: {
+                self.kickboard?.endTime = Date()
+                self.kickboard?.startTime = nil
+                self.rentButton.setTitle("이용 시작", for: .normal)
+                if let kickboard = self.kickboard {
+                    self.delegate?.didUpdateKickboardStatus(kickboard)
+                }
+            })
         }
     }
 }

@@ -14,16 +14,11 @@ protocol SearchKickboardMapViewDelegate: AnyObject {
 }
 
 final class SearchKickboardMapView: MKMapView {
-    private let locationManager: CLLocationManager = {
-        let manager = CLLocationManager()
-        manager.requestWhenInUseAuthorization()
-        manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-        return manager
-    }()
+    private let locationManager = LocationManager()
     
     private var kickboards: [Kickboard]?
     weak var mapViewDelegate: SearchKickboardMapViewDelegate?
-    private var rentKickboardModalView = RentKickboardModalView()
+    private(set) var rentKickboardModalView = RentKickboardModalView()
     
     private let gangnamStation = CLLocation(
         latitude: 37.498095,
@@ -32,11 +27,6 @@ final class SearchKickboardMapView: MKMapView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-#if DEBUG
-        setupDebugLocation()
-#else
-        setupLocation()
-#endif
         setupMapView()
     }
     
@@ -44,16 +34,8 @@ final class SearchKickboardMapView: MKMapView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupDebugLocation() {
-        setMapCenter(gangnamStation)
-    }
-    
-    private func setupLocation() {
-        locationManager.delegate = self
-        locationManager.startUpdatingLocation()
-    }
-    
     private func setupMapView() {
+        locationManager.delegate = self
         self.preferredConfiguration = MKStandardMapConfiguration()
         self.showsUserLocation = true
         self.setUserTrackingMode(.follow, animated: true)
@@ -78,29 +60,21 @@ final class SearchKickboardMapView: MKMapView {
     }
 }
 
-extension SearchKickboardMapView: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-#if DEBUG
-        setMapCenter(gangnamStation)
-#else
-        guard let location = locations.last else { return }
-        setMapCenter(location)
-#endif
+extension SearchKickboardMapView: LocationManagerDelegate {
+    func didUpdateLocation() {
+        setMapCenter()
     }
     
-    private func setMapCenter(_ location: CLLocation) {
-        let region = MKCoordinateRegion(
-            center: location.coordinate,
-            latitudinalMeters: 200,
-            longitudinalMeters: 200
-        )
+    private func setMapCenter() {
+        guard let location = locationManager.currentLocation else {
+            return
+        }
+        let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 200, longitudinalMeters: 200)
         setRegion(region, animated: true)
     }
     
     func moveToUserLocation() {
-        if let location = userLocation.location {
-            setMapCenter(location)
-        }
+        setMapCenter()
     }
 }
 
@@ -168,10 +142,17 @@ extension SearchKickboardMapView {
     
     private func showModal(for kickboard: Kickboard) {
         rentKickboardModalView.setupKickboardData(kickboard)
+        rentKickboardModalView.delegate = self
         self.addSubview(rentKickboardModalView)
+        
         rentKickboardModalView.snp.makeConstraints {
             $0.bottom.equalToSuperview().offset(-10)
             $0.leading.trailing.equalToSuperview().inset(10)
+        }
+        
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
+            self.rentKickboardModalView.alpha = 1
+            self.rentKickboardModalView.transform = .identity
         }
     }
     
@@ -205,5 +186,29 @@ extension SearchKickboardMapView {
             }
         }
         return hitView
+    }
+}
+
+extension SearchKickboardMapView: RentKickboardModalViewDelegate {
+    func didUpdateKickboardStatus(_ kickboard: Kickboard) {
+        // 킥보드 이용중인 경우
+        if kickboard.startTime != nil {
+            // 마커 찾기
+            for annotation in annotations {
+                guard let kickboardAnnotation = annotation as? KickboardAnnotation,
+                      kickboardAnnotation.kickboard.nickName == kickboard.nickName else {
+                    continue
+                }
+                removeAnnotation(annotation)
+                break
+            }
+        }
+        // 킥보드 이용 종료
+        else if kickboard.endTime != nil {
+            // 모달 제거
+            rentKickboardModalView.removeFromSuperview()
+            let annotation = KickboardAnnotation(kickboard: kickboard)
+            addAnnotation(annotation)
+        }
     }
 }
