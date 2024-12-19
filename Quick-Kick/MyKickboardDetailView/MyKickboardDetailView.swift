@@ -86,6 +86,10 @@ extension MyKickboardDetailView: UICollectionViewDelegate, UICollectionViewDataS
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.modalViewDelegate?.editKickboardModalView()
+        guard
+            let kickboard = delegate?.getKickboards()[indexPath.item],
+            let nickName = kickboard.nickName
+        else { return }
+        self.modalViewDelegate?.editKickboardModalView(kickboard.isSaddled, nickName)
     }
 }

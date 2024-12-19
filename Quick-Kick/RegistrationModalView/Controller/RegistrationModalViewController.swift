@@ -84,16 +84,17 @@ final class RegistrationModalViewController: UIViewController {
         self.present(alert, animated: true)
     }
     
-    func editKickboardData(_ type: Bool, _ text: String) {
-        self.typeButton.updateData(type)
-        self.textField.updateData(text)
-    }
-    
     /// 킥보드 등록 탭에서 + 버튼 눌렀을 때 주소 정보 전달 받는 메소드
     func setAddressInfo(_ latitude: Double, _ longitude: Double, _ address: String) {
         self.latitude = latitude
         self.longitude = longitude
         self.address = address
+    }
+    
+    /// 내 킥보드 관리에서 cell을 탭했을 때 킥보드 유형과 별명을 전달 받는 메소드
+    func editKickboardData(_ type: Bool, _ text: String) {
+        self.typeButton.updateData(type)
+        self.textField.updateData(text)
     }
 }
 

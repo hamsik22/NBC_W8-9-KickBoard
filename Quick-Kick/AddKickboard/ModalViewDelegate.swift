@@ -11,7 +11,7 @@ protocol ModalViewDelegate: AnyObject where Self: UIViewController {
         
     func presentModalView(_ latitude: Double, _ longitude: Double, address: String)
     
-    func editKickboardModalView()
+    func editKickboardModalView(_ isSaddled: Bool, _ nickName: String)
         
 }
 
@@ -27,9 +27,9 @@ extension ModalViewDelegate {
         self.present(modalVC, animated: true)
     }
     
-    func editKickboardModalView() {
+    func editKickboardModalView(_ isSaddled: Bool, _ nickName: String) {
         let modalVC = RegistrationModalViewController()
-        modalVC.editKickboardData(false, "Sparta의 킥보드") // 추후 코어데이터에서 데이터를 받아와서 입력
+        modalVC.editKickboardData(isSaddled, nickName)
         
         modalVC.modalPresentationStyle = .formSheet
         modalVC.sheetPresentationController?.preferredCornerRadius = 50
