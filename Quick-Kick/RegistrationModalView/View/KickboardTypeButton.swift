@@ -130,7 +130,6 @@ private extension KickboardTypeButton {
     
     /// 노말 타입의 버튼을 선택했을 때 작동할 메소드
     func selectedNormalButton() {
-        print(#function)
         if self.quickboardNormalTypeButton.isSelected {
             self.quickboardNormalTypeButton.backgroundColor = .clear
             self.quickboardNormalTypeButton.isSelected = false
@@ -139,6 +138,7 @@ private extension KickboardTypeButton {
             self.quickboardNormalTypeButton.backgroundColor = .PersonalLight.active
             self.quickboardNormalTypeButton.isSelected = true
             self.registrationDelegate?.typeSeleted = true
+            self.registrationDelegate?.kickboardType = false
         }
         
         self.quickboardSeatTypeButton.backgroundColor = .clear
@@ -148,7 +148,6 @@ private extension KickboardTypeButton {
     
     /// 안장 타입의 버튼을 선택했을 때 작동할 메소드
     func selectedSeatButton() {
-        print(#function)
         if self.quickboardSeatTypeButton.isSelected {
             self.quickboardSeatTypeButton.backgroundColor = .clear
             self.quickboardSeatTypeButton.isSelected = false
@@ -157,6 +156,7 @@ private extension KickboardTypeButton {
             self.quickboardSeatTypeButton.backgroundColor = .PersonalLight.active
             self.quickboardSeatTypeButton.isSelected = true
             self.registrationDelegate?.typeSeleted = true
+            self.registrationDelegate?.kickboardType = true
         }
         
         self.quickboardNormalTypeButton.backgroundColor = .clear
