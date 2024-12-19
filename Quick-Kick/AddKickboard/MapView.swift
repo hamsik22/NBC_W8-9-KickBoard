@@ -14,16 +14,16 @@ protocol MapViewDelegate: AnyObject {
 
 class MapView: MKMapView {
     
-    weak var mapViewDelegate: MapViewDelegate?
+    private let locationManager = LocationManager()
     
-    // temporary current location
-    private let latitude: CLLocationDegrees = 37.497952
-    private let longitude: CLLocationDegrees = 127.027619
+    weak var mapViewDelegate: MapViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         delegate = self
+        locationManager.delegate = self
         setup()
+        setMapCenter()
     }
     
     required init?(coder: NSCoder) {
@@ -34,12 +34,23 @@ class MapView: MKMapView {
         isPitchEnabled = false
         showsUserLocation = true
         
-        centerCoordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 200, maxCenterCoordinateDistance: 2000), animated: true)
+    }
+    
+    private func setMapCenter() {
+        guard let location = locationManager.currentLocation else {
+            return
+        }
+        let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 200, longitudinalMeters: 200)
+        setRegion(region, animated: true)
     }
 }
 
-extension MapView: MKMapViewDelegate {
+extension MapView: MKMapViewDelegate, LocationManagerDelegate {
+    func didUpdateLocation() {
+        setMapCenter()
+    }
+    
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         print(centerCoordinate)
         mapViewDelegate?.requestNaverAddress(lat: centerCoordinate.latitude.description, lon: centerCoordinate.longitude.description)
