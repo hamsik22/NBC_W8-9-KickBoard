@@ -48,6 +48,12 @@ extension LoginViewController: LoginViewDelegate {
     
     // 로그인 버튼 터치 시
     func didLoginButtonTapped(_ email: String, _ password: String) {
+        if isValidEmail(email: email) {
+            UserDefaultsManager.shared.recentEmail = email
+        } else {
+            showAlert(message: "이메일을 확인해주세요!")
+        }
+        
         if isCorrectInfo(email: email, password: password) {
             login()
             loginView.showOnboardingPage()
@@ -121,6 +127,11 @@ extension LoginViewController {
         } else {
             return false
         }
+    }
+    // 이메일 형태 확인
+    private func isValidEmail(email: String) -> Bool {
+        let emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+        return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email)
     }
     // 로그인 시 동작할 함수
     private func login() {

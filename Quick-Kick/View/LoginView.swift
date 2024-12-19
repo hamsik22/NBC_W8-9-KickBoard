@@ -217,8 +217,12 @@ extension LoginView {
     }
     // 화면 이동 시, 텍스트필드 초기화
     func initTextFields() {
-        emailField.text = ""
-        passwordField.text = ""
+        if UserDefaultsManager.shared.rememberIDOption {
+            passwordField.text = ""
+        } else {
+            emailField.text = ""
+            passwordField.text = ""
+        }
     }
     
     // 자동 로그인 터치
