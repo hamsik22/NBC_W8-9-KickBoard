@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AddKickboardViewController: UIViewController, ModalViewDelegate {
+class AddKickboardViewController: UIViewController {
     
     private let addressRepository: AddressRepository = .init()
     
@@ -24,7 +24,7 @@ class AddKickboardViewController: UIViewController, ModalViewDelegate {
     }
 }
 
-extension AddKickboardViewController: MapViewDelegate {
+extension AddKickboardViewController: MapViewDelegate, ModalViewDelegate {
     func requestNaverAddress(lat: String, lon: String) {
         addressRepository.fetchAddress(lat: lat, lon: lon)
     }
