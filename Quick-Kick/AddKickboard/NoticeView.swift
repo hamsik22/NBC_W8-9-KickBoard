@@ -33,6 +33,7 @@ class NoticeView: UIView {
         label.text = "서울 강남구 강남대로 지하 396 강남역"
         label.font = .boldSystemFont(ofSize: 20)
         label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
         
         return label
     }()
@@ -70,6 +71,12 @@ class NoticeView: UIView {
         
         labelStackView.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        addressLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(8)
+            $0.trailing.equalToSuperview().offset(-8)
         }
     }
 }
