@@ -168,7 +168,9 @@ extension SearchKickboardMapView {
     
     private func showModal(for kickboard: Kickboard) {
         rentKickboardModalView.setupKickboardData(kickboard)
+        rentKickboardModalView.delegate = self
         self.addSubview(rentKickboardModalView)
+        
         rentKickboardModalView.snp.makeConstraints {
             $0.bottom.equalToSuperview().offset(-10)
             $0.leading.trailing.equalToSuperview().inset(10)
@@ -205,5 +207,29 @@ extension SearchKickboardMapView {
             }
         }
         return hitView
+    }
+}
+
+extension SearchKickboardMapView: RentKickboardModalViewDelegate {
+    func didUpdateKickboardStatus(_ kickboard: Kickboard) {
+        // 킥보드 이용중인 경우
+        if kickboard.startTime != nil {
+            // 마커 찾기
+            for annotation in annotations {
+                guard let kickboardAnnotation = annotation as? KickboardAnnotation,
+                      kickboardAnnotation.kickboard.nickName == kickboard.nickName else {
+                    continue
+                }
+                removeAnnotation(annotation)
+                break
+            }
+        }
+        // 킥보드 이용 종료
+        else if kickboard.endTime != nil {
+            // 모달 제거
+            rentKickboardModalView.removeFromSuperview()
+            let annotation = KickboardAnnotation(kickboard: kickboard)
+            addAnnotation(annotation)
+        }
     }
 }
