@@ -76,7 +76,7 @@ class MyPageViewController: UIViewController {
             kickboardSectionView.topAnchor.constraint(equalTo: profileView.bottomAnchor, constant: 10),
             kickboardSectionView.leadingAnchor.constraint(equalTo: profileView.leadingAnchor),
             kickboardSectionView.trailingAnchor.constraint(equalTo: profileView.trailingAnchor),
-            kickboardSectionView.heightAnchor.constraint(equalToConstant: 120),
+            kickboardSectionView.heightAnchor.constraint(equalToConstant: 100),
             
             historySectionView.topAnchor.constraint(equalTo: kickboardSectionView.bottomAnchor, constant: 10),
             historySectionView.leadingAnchor.constraint(equalTo: kickboardSectionView.leadingAnchor),
@@ -108,15 +108,17 @@ class MyPageViewController: UIViewController {
         }
         
         // 내가 등록한 킥보드 섹션
-        kickboardSectionView.configure(with: kickboardData, imageSize: CGSize(width: 50, height: 50)) { [weak self] selectedKickboard in
-            let detailVC = KickboardDetailViewController(kickboard: selectedKickboard)
-            self?.navigationController?.pushViewController(detailVC, animated: true)
+        kickboardSectionView.configure {
+            // "내가 등록한 킥보드 >"를 클릭했을 때 상세 화면으로 이동
+            let detailVC = MyKickboardDetailViewController()
+            self.navigationController?.pushViewController(detailVC, animated: true)
         }
         
         // 히스토리 섹션 설정
         let historyList = kickboardData.filter { $0.startTime != nil && $0.endTime != nil }
         historySectionView.configure(with: historyList)
     }
+
     
     // MARK: - Logout Action
     // 로그아웃 액션
