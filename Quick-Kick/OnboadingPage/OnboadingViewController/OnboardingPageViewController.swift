@@ -8,8 +8,10 @@
 import UIKit
 import SnapKit
 
+// 온보딩 화면을 관리하는 VC
 final class OnboardingPageViewController: UIViewController {
     
+    // 온보딩화면의 데이터 모델 배열
     private let models: [OnboardingDataModel] = {
         
         let firstOnboardingView = OnboardingDataModel(title: "환영합니다!!",
@@ -30,12 +32,13 @@ final class OnboardingPageViewController: UIViewController {
         return [firstOnboardingView, secondOnboardingView, thirdOnboardingView]
     }()
     
-    private lazy var onboardingView: OnboardingPageView = .init(data: self.models[self.currentIndex])
+    private lazy var onboardingView: OnboardingPageView = .init(self.models[self.currentIndex])
     
     private var pageControl = UIPageControl()
-        
-    private var currentIndex: Int = 0
     
+    private var currentIndex: Int = 0 // 현재 페이지 인덱스
+    
+    // MARK: - OnboardingPageViewController LifeCycle
     override func loadView() {
         view = self.onboardingView
     }
@@ -47,8 +50,13 @@ final class OnboardingPageViewController: UIViewController {
         setupPageControl()
         setupLayout()
     }
+}
 
-    private func setupPageControl() {
+// MARK: - OnboardingPageViewController UI Setting Method
+private extension OnboardingPageViewController {
+    
+    /// 페이지 컨트롤러를 세팅하는 메소드
+    func setupPageControl() {
         pageControl.currentPageIndicatorTintColor = .white
         pageControl.pageIndicatorTintColor = .white.withAlphaComponent(0.5)
         pageControl.backgroundColor = .PersonalNomal.nomal
@@ -57,22 +65,28 @@ final class OnboardingPageViewController: UIViewController {
         self.view.addSubview(pageControl)
     }
     
-    private func setupLayout() {
+    /// 레이아웃을 설정하는 메소드
+    func setupLayout() {
         self.pageControl.snp.makeConstraints {
             $0.trailing.leading.equalToSuperview()
             $0.bottom.equalToSuperview().inset(20)
         }
     }
     
-    private func swipePage() {
+    /// 페이지 스와이프 애니메이션 메소드
+    func swipePage() {
         UIView.transition(with: self.onboardingView, duration: 0.5, options: .transitionCrossDissolve) {
             self.setupPageControl()
-            self.onboardingView.changedData(data: self.models[self.currentIndex])
+            self.onboardingView.changedData(self.models[self.currentIndex])
         }
     }
 }
 
+// MARK: - OndoardingDelegate Method
 extension OnboardingPageViewController: OndoardingDelegate {
+    
+    /// 온보딩 화면을 바꿔주는 메소드
+    /// - Parameter direction: 스와이프 방향
     func changedView(_ direction: UISwipeGestureRecognizer.Direction) {
         switch direction {
         case .right:

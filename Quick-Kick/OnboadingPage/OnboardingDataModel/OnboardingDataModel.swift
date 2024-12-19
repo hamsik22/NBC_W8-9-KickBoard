@@ -7,6 +7,7 @@
 
 import UIKit
 
+// 온보딩 뷰 데이터 모델
 struct OnboardingDataModel {
     let title: String
     let info: String

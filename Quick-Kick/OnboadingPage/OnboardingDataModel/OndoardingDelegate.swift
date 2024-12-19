@@ -7,6 +7,7 @@
 
 import UIKit
 
+// 온보딩 뷰 델리게이트
 protocol OndoardingDelegate: AnyObject {
     
     func changedView(_ direction: UISwipeGestureRecognizer.Direction)
