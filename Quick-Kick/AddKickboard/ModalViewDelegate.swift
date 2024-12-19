@@ -19,6 +19,7 @@ extension ModalViewDelegate {
     
     func presentModalView(_ latitude: Double, _ longitude: Double, address: String) {
         let modalVC = RegistrationModalViewController()
+        modalVC.setAddressInfo(latitude, longitude, address)
         modalVC.modalPresentationStyle = .formSheet
         modalVC.sheetPresentationController?.preferredCornerRadius = 50
         modalVC.sheetPresentationController?.detents = [.medium()]

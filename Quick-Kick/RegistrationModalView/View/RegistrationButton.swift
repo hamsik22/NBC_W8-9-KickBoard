@@ -13,6 +13,8 @@ final class RegistrationButton: UIView {
     
     private let addButton = UIButton()
     
+    weak var registrationDelegate: RegistrationViewDelegate?
+    
     // MARK: - RegistrationButton Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -43,6 +45,7 @@ final class RegistrationButton: UIView {
         case false:
             self.addButton.isEnabled = false
             self.addButton.backgroundColor = .PersonalLight.light
+            self.addButton.removeTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         }
     }
 }
@@ -72,7 +75,6 @@ private extension RegistrationButton {
 @objc private extension RegistrationButton {
     /// 버튼을 눌렀을 때 액션
     func buttonTapped() {
-        // CoreData에 데이터 전달
-        print(#function)
+        self.registrationDelegate?.savedKickboardData()
     }
 }
