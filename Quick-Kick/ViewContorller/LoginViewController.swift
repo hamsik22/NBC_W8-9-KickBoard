@@ -26,10 +26,13 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.hidesBackButton = true
+        navigationItem.hidesBackButton = false
         view.backgroundColor = .systemBackground
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
+        let backButton = UIBarButtonItem(title: "뒤로 가기", style: .plain, target: nil, action: nil)
+        backButton.tintColor = UIColor.PersonalNomal.nomal
+        navigationItem.backBarButtonItem = backButton
         printUserInfoStatus()
         processAuthOption()
     }
@@ -49,10 +52,7 @@ extension LoginViewController: LoginViewDelegate {
             login()
             loginView.showOnboardingPage()
         } else {
-            let alert = UIAlertController(title: "로그인 실패", message: "입력값을 확인해주세요.", preferredStyle: .alert)
-            let okAction = UIAlertAction(title: "OK", style: .default)
-            alert.addAction(okAction)
-            self.present(alert, animated: true)
+            showAlert(message: "입력 값을 확인해주세요!")
             print("로그인 실패")
             initTextFields()
         }
@@ -88,7 +88,6 @@ extension LoginViewController: LoginViewDelegate {
     func didSignUpButtonTapped() {
         print("회원가입 화면으로 이동")
         let signUpVC = SignUpViewController()
-        signUpVC.navigationItem.hidesBackButton = true
         navigationController?.pushViewController(signUpVC, animated: true)
     }
 }
