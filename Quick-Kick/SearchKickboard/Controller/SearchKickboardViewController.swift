@@ -17,7 +17,7 @@ final class SearchKickboardViewController: UIViewController {
         super.viewDidLoad()
         let kickboards = CoreDataManager.shared.fetch()
         searchKickboardView.deliverKickboardsData(kickboards)
-        makeMockData()
+//        makeMockData()
     }
 }
 
