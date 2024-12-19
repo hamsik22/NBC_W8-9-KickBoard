@@ -129,6 +129,8 @@ extension LoginView {
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
         }
+        emailField.autocapitalizationType = .none
+        emailField.textContentType = .none
         
         passwordField.snp.makeConstraints { make in
             make.top.equalTo(emailField.snp.bottom).offset(10)
@@ -138,6 +140,7 @@ extension LoginView {
         }
         passwordField.isSecureTextEntry = true
         passwordField.textContentType = .none
+        passwordField.autocapitalizationType = .none
                 
         autoLoginOption.snp.makeConstraints { make in
             make.top.equalTo(passwordField.snp.bottom).offset(10)
@@ -214,8 +217,12 @@ extension LoginView {
     }
     // 화면 이동 시, 텍스트필드 초기화
     func initTextFields() {
-        emailField.text = ""
-        passwordField.text = ""
+        if UserDefaultsManager.shared.rememberIDOption {
+            passwordField.text = ""
+        } else {
+            emailField.text = ""
+            passwordField.text = ""
+        }
     }
     
     // 자동 로그인 터치

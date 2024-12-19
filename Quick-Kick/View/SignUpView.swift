@@ -74,6 +74,8 @@ extension SignUpView {
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
         }
+        emailField.autocapitalizationType = .none
+        emailField.textContentType = .none
         
         passwordField.snp.makeConstraints { make in
             make.top.equalTo(emailField.snp.bottom).offset(25)
@@ -83,6 +85,7 @@ extension SignUpView {
         }
         passwordField.isSecureTextEntry = true
         passwordField.textContentType = .none
+        passwordField.autocapitalizationType = .none
         
         confermPasswordField.snp.makeConstraints { make in
             make.top.equalTo(passwordField.snp.bottom).offset(25)
@@ -92,6 +95,7 @@ extension SignUpView {
         }
         confermPasswordField.isSecureTextEntry = true
         confermPasswordField.textContentType = .none
+        confermPasswordField.autocapitalizationType = .none
         
         signUpButton.snp.makeConstraints { make in
             make.top.equalTo(confermPasswordField.snp.bottom).offset(100)

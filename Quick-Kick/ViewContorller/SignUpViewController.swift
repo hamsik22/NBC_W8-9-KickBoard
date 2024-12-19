@@ -40,6 +40,7 @@ extension SignUpViewController: SignUpViewDelegate {
         case .success:
             print("Success")
             UserDefaultsManager.shared.saveUser(User(email: email, password: pass))
+            UserDefaultsManager.shared.recentEmail = email
             if let targetVC = navigationController?.viewControllers.first(where: { $0 is LoginViewController }) {
                 navigationController?.popToViewController(targetVC, animated: true)
             } else {
