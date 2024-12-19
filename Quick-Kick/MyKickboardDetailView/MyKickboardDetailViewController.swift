@@ -10,6 +10,8 @@ import SnapKit
 
 final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate {
     
+    private let coreDataManager = CoreDataManager.shared
+    
     private let kickboardDetailView = MyKickboardDetailView()
     
     override func viewDidLoad() {
@@ -17,6 +19,7 @@ final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate
         
         setupViewConfiguration()
         setupDetailView()
+        kickboardDetailView.delegate = self
     }
     
     private func setupViewConfiguration() {
@@ -36,5 +39,15 @@ final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate
         self.kickboardDetailView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+    }
+}
+
+extension MyKickboardDetailViewController: MyKickboardDetailViewDelegate {
+    func getKickboardsCount() -> Int {
+        coreDataManager.fetchMyKickboards().count
+    }
+    
+    func getKickboards() -> [Kickboard] {
+        coreDataManager.fetchMyKickboards()
     }
 }

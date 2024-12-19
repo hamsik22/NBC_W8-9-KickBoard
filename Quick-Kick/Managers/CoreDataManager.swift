@@ -67,4 +67,15 @@ final class CoreDataManager: CoreDataManageable {
             try context.save()
         }
     }
+    
+    /// 내가 등록한 킥보드 fetch
+    func fetchMyKickboards() -> [Kickboard] {
+        let request: NSFetchRequest<Kickboard> = Kickboard.fetchRequest()
+        
+        // filter : isOccupied == true
+        let isOccupiedPredicate = NSPredicate(format: "isOccupied == true")
+        request.predicate = isOccupiedPredicate
+        
+        return (try? context.fetch(request)) ?? []
+    }
 }

@@ -8,9 +8,15 @@
 import UIKit
 import SnapKit
 
+protocol MyKickboardDetailViewDelegate: AnyObject {
+    func getKickboardsCount() -> Int
+    func getKickboards() -> [Kickboard]
+}
+
 final class MyKickboardDetailView: UIView {
     
     weak var modalViewDelegate: ModalViewDelegate?
+    weak var delegate: MyKickboardDetailViewDelegate?
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -59,22 +65,31 @@ final class MyKickboardDetailView: UIView {
 
 extension MyKickboardDetailView: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        guard let count = delegate?.getKickboardsCount() else { return 0 }
+        return count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyKickboardDetailViewItem.id, for: indexPath) as? MyKickboardDetailViewItem else {
+        guard
+            let kickboards = delegate?.getKickboards(),
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyKickboardDetailViewItem.id, for: indexPath) as? MyKickboardDetailViewItem
+        else {
             return UICollectionViewCell()
         }
         
-        cell.insertKickboardImage(type: false)
-        cell.useKickboard(false)
-        cell.updateKickboardInfo(nickName: "Sparta의 킥보드", location: "서울 중구 세종대로 110 서울특별시청")
+        let kickboard = kickboards[indexPath.item]
+        
+        cell.insertKickboardImage(type: kickboard.isSaddled)
+        cell.updateKickboardInfo(nickName: kickboard.nickName, location: kickboard.address)
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.modalViewDelegate?.editKickboardModalView()
+        guard
+            let kickboard = delegate?.getKickboards()[indexPath.item],
+            let nickName = kickboard.nickName
+        else { return }
+        self.modalViewDelegate?.editKickboardModalView(kickboard.isSaddled, nickName)
     }
 }
