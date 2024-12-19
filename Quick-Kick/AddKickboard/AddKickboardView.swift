@@ -95,6 +95,6 @@ class AddKickboardView: UIView {
     }
     
     @objc private func presentModal() {
-        self.modalViewDelegate?.presentModalVIew()
+        self.modalViewDelegate?.presentModalView(mapView.centerCoordinate.latitude, mapView.centerCoordinate.longitude, address: noticeView.address)
     }
 }

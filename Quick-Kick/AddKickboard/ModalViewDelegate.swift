@@ -9,7 +9,9 @@ import UIKit
 
 protocol ModalViewDelegate: AnyObject where Self: UIViewController {
         
-    func presentModalVIew()
+    func presentModalView(_ latitude: Double, _ longitude: Double, address: String)
+    
+    func editKickboardModalView()
     
     func editKickboardModalView()
     
@@ -17,8 +19,19 @@ protocol ModalViewDelegate: AnyObject where Self: UIViewController {
 
 extension ModalViewDelegate {
     
-    func presentModalVIew() {
+    func presentModalView(_ latitude: Double, _ longitude: Double, address: String) {
         let modalVC = RegistrationModalViewController()
+        modalVC.modalPresentationStyle = .formSheet
+        modalVC.sheetPresentationController?.preferredCornerRadius = 50
+        modalVC.sheetPresentationController?.detents = [.medium()]
+        
+        self.present(modalVC, animated: true)
+    }
+    
+    func editKickboardModalView() {
+        let modalVC = RegistrationModalViewController()
+        modalVC.editKickboardData(false, "Sparta의 킥보드") // 추후 코어데이터에서 데이터를 받아와서 입력
+        
         modalVC.modalPresentationStyle = .formSheet
         modalVC.sheetPresentationController?.preferredCornerRadius = 50
         modalVC.sheetPresentationController?.detents = [.medium()]

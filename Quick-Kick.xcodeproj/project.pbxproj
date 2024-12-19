@@ -153,6 +153,8 @@
 /* Begin XCBuildConfiguration section */
 		089C26402D0C09A9004DF78C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 089C262E2D0C09A7004DF78C /* Quick-Kick */;
+			baseConfigurationReferenceRelativePath = API/APIKey.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
