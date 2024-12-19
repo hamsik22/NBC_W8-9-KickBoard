@@ -46,12 +46,11 @@ final class KickboardTypeButton: UIView {
         case true:
             self.quickboardSeatTypeButton.backgroundColor = .PersonalLight.active
             self.quickboardSeatTypeButton.isSelected = true
-            self.registrationDelegate?.typeSeleted = true
         case false:
             self.quickboardNormalTypeButton.backgroundColor = .PersonalLight.active
             self.quickboardNormalTypeButton.isSelected = true
-            self.registrationDelegate?.typeSeleted = true
         }
+        self.registrationDelegate?.typeSeleted = true
     }
 }
 

@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import CoreData
 
 final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate {
     
@@ -23,6 +24,8 @@ final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate
     }
     
     private func setupViewConfiguration() {
+        self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.navigationBar.backgroundColor = .white
         view.backgroundColor = .white
         
         let naviTitle = UILabel()
@@ -30,6 +33,7 @@ final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate
         naviTitle.textColor = .black
         naviTitle.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         self.navigationItem.titleView = naviTitle
+        self.navigationController?.navigationBar.tintColor = .PersonalNomal.nomal
     }
     
     private func setupDetailView() {
@@ -40,6 +44,25 @@ final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate
             $0.edges.equalToSuperview()
         }
     }
+    
+    func editKickboardModalView(_ isSaddled: Bool, _ nickName: String, _ id: NSManagedObjectID) {
+        let modalVC = RegistrationModalViewController()
+        modalVC.editKickboardData(isSaddled, nickName, id)
+        
+        modalVC.modalPresentationStyle = .formSheet
+        modalVC.sheetPresentationController?.preferredCornerRadius = 50
+        modalVC.sheetPresentationController?.detents = [.medium()]
+        
+        modalVC.disappear = { [weak self] in
+            guard let self else { return }
+            
+            self.kickboardDetailView.reloadCellData()
+            
+        }
+        
+        self.present(modalVC, animated: true)
+    }
+    
 }
 
 extension MyKickboardDetailViewController: MyKickboardDetailViewDelegate {
