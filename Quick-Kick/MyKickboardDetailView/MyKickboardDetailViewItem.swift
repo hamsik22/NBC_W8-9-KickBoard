@@ -35,7 +35,7 @@ final class MyKickboardDetailViewItem: UICollectionViewCell {
         self.layer.shadowOffset = CGSize(width: 0, height: 2)
         self.layer.shadowRadius = 4
         self.layer.masksToBounds = false
-        self.backgroundColor = .white
+        self.backgroundColor = .PersonalLight.light
         
         setupImageView()
         setupLabel()
@@ -107,7 +107,7 @@ final class MyKickboardDetailViewItem: UICollectionViewCell {
         }
     }
     
-    func updateKickboardInfo(nickName: String, location: String) {
+    func updateKickboardInfo(nickName: String?, location: String?) {
         self.kickboardNickNameView.text = nickName
         self.kickboardLocationView.text = location
         self.layoutIfNeeded()
