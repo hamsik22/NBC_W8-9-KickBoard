@@ -8,7 +8,7 @@
 import UIKit
 
 class HistorySectionView: UIView {
-    
+
     // MARK: - UI Components
     private let containerView: UIView = {
         let view = UIView()
@@ -28,7 +28,6 @@ class HistorySectionView: UIView {
     }()
     
     private var historyViews: [UIView] = []
-    private var histories: [Kickboard] = []
 
     // MARK: - Initialization
     override init(frame: CGRect) {
@@ -58,16 +57,15 @@ class HistorySectionView: UIView {
     }
     
     // MARK: - Configure Method
-    func configure(with histories: [Kickboard]) {
+    func configure(with histories: [(String, String)]) {
         // 기존 뷰 제거
         historyViews.forEach { $0.removeFromSuperview() }
         historyViews.removeAll()
 
-        self.histories = histories
         var previousView: UIView?
 
-        for kickboard in histories {
-            let historyView = createHistoryView(for: kickboard)
+        for history in histories {
+            let historyView = createHistoryView(date: history.0, time: history.1)
             historyView.translatesAutoresizingMaskIntoConstraints = false
             containerView.addSubview(historyView)
             
@@ -75,7 +73,7 @@ class HistorySectionView: UIView {
                 historyView.topAnchor.constraint(equalTo: previousView?.bottomAnchor ?? titleLabel.bottomAnchor, constant: 10),
                 historyView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
                 historyView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-                historyView.heightAnchor.constraint(equalToConstant: 60)
+                historyView.heightAnchor.constraint(equalToConstant: 70)
             ])
             
             previousView = historyView
@@ -85,34 +83,43 @@ class HistorySectionView: UIView {
         previousView?.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10).isActive = true
     }
     
-    // MARK: - Create Individual History View
-    private func createHistoryView(for kickboard: Kickboard) -> UIView {
+    private func createHistoryView(date: String, time: String) -> UIView {
         let container = UIView()
         container.backgroundColor = .white
-        container.layer.cornerRadius = 10
+        container.layer.cornerRadius = 24
         container.layer.shadowColor = UIColor.black.withAlphaComponent(0.1).cgColor
         container.layer.shadowOpacity = 0.5
         container.layer.shadowOffset = CGSize(width: 0, height: 2)
         container.layer.shadowRadius = 4
         
+        let imageView = UIImageView(image: UIImage(named: "QuickBoard"))
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
         let dateLabel = UILabel()
-        dateLabel.text = formatDate(kickboard.startTime)
+        dateLabel.text = "날짜 \(date)"
         dateLabel.font = UIFont.boldSystemFont(ofSize: 14)
-        dateLabel.textColor = .systemPurple
+        dateLabel.textColor = .black
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         
         let timeLabel = UILabel()
-        timeLabel.text = "\(formatTime(kickboard.startTime)) - \(formatTime(kickboard.endTime))"
+        timeLabel.text = "운행 시간 \(time)"
         timeLabel.font = UIFont.systemFont(ofSize: 12)
         timeLabel.textColor = .darkGray
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+
+        container.addSubview(imageView)
         container.addSubview(dateLabel)
         container.addSubview(timeLabel)
         
         NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
+            imageView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            imageView.widthAnchor.constraint(equalToConstant: 40),
+            imageView.heightAnchor.constraint(equalToConstant: 40),
+            
             dateLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 10),
-            dateLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 10),
+            dateLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 10),
             dateLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -10),
             
             timeLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 5),
@@ -121,20 +128,5 @@ class HistorySectionView: UIView {
         ])
         
         return container
-    }
-    
-    // MARK: - Helpers
-    private func formatDate(_ date: Date?) -> String {
-        guard let date = date else { return "날짜 없음" }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yy.MM.dd"
-        return formatter.string(from: date)
-    }
-    
-    private func formatTime(_ date: Date?) -> String {
-        guard let date = date else { return "시간 없음" }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: date)
     }
 }

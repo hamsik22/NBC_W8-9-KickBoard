@@ -8,15 +8,14 @@
 import UIKit
 
 protocol ModalViewDelegate: AnyObject where Self: UIViewController {
-        
-    func presentModalView(_ latitude: Double, _ longitude: Double, address: String)
     
+    func presentModalView(_ latitude: Double, _ longitude: Double, address: String)
+
     func editKickboardModalView(_ isSaddled: Bool, _ nickName: String)
-        
+
 }
 
-extension ModalViewDelegate {
-    
+extension ModalViewDelegate {   
     func presentModalView(_ latitude: Double, _ longitude: Double, address: String) {
         let modalVC = RegistrationModalViewController()
         modalVC.setAddressInfo(latitude, longitude, address)

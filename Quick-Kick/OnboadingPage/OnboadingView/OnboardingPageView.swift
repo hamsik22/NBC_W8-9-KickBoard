@@ -145,6 +145,7 @@ private extension OnboardingPageView {
     
     /// 뷰 컨트롤러를 바꾸는 메소드
     func changeViewController() {
+        UserDefaultsManager.shared.onboarded = true
         DispatchQueue.main.async {
             UIView.transition(with: self.window!, duration: 0.5, options: .transitionCrossDissolve) {
                 self.window?.rootViewController = UINavigationController(rootViewController: ViewController())

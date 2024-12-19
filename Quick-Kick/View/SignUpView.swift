@@ -12,6 +12,16 @@ class SignUpView: UIView {
     
     weak var delegate: SignUpViewDelegate?
     
+    var inputStatus: SignUpType? = nil {
+        didSet {
+            guard let inputStatus = inputStatus,
+            let email = emailField.text,
+            let password = passwordField.text
+            else { return }
+            delegate?.didSignupButtonTapped(email: email, pass: password, type: inputStatus)
+        }
+    }
+    
     private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "AppLogo_WhiteBG")
@@ -34,8 +44,8 @@ class SignUpView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubviews()
-        signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
         setupLayout()
+        signUpButton.addTarget(self, action: #selector(signUpButtonTapped), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -96,35 +106,56 @@ extension SignUpView {
     
     // 회원가입 버튼이 눌렸을 때 동작
     @objc func signUpButtonTapped() {
-        if isValidUser() {
-            if let email = emailField.text, let password = passwordField.text {
-                delegate?.didSignupButtonTapped(email, pass: password)
-            }
+        if isEmptyField() {
+            inputStatus = .emptyInput
+        } else if !isValidEmail() {
+            inputStatus = .invalidEmail
+        } else if !isValidPassword() {
+            inputStatus = .invalidPassword
+        } else if isInCorrectPassword() {
+            inputStatus = .wrongConfirmPassword
+        } else {
+            inputStatus = .success
         }
     }
     
-    // 입력값이 유효한지 검증하는 함수
-    private func isValidUser() -> Bool {
-        // case0. 비어있는 값이 있을 경우
-        guard ((emailField.text?.isEmpty) != nil) ||
-            ((passwordField.text?.isEmpty) != nil) ||
-            ((confermPasswordField.text?.isEmpty) != nil) else {
-            print("입력값을 확인해주세요")
-            return false
-        }
-    
-        if passwordField.text != confermPasswordField.text {
-            // case1. 2개의 비밀번호 입력값이 상이한 경우
-            print("비밀번호가 다릅니다")
-            return false
-        } else { return true }
+    // 비어있는 값이 있을 경우
+    private func isEmptyField() -> Bool {
+        return emailField.text?.isEmpty ?? true ||
+               passwordField.text?.isEmpty ?? true ||
+               confermPasswordField.text?.isEmpty ?? true
     }
+    
+    // 2개의 비밀번호 입력값이 상이한 경우
+    private func isInCorrectPassword() -> Bool {
+        return passwordField.text != confermPasswordField.text
+    }
+    
+    private func isValidPassword() -> Bool {
+        guard let password = passwordField.text, password.count >= 4 else { return false }
+        guard let confirmPassword = confermPasswordField.text, confirmPassword.count >= 4 else { return false }
+        return true
+    }
+    
+    private func isValidEmail() -> Bool {
+        let emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
+        return NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: emailField.text)
+    }
+    
 }
 // MARK: - Protocol
 protocol SignUpViewDelegate: AnyObject {
-    func didSignupButtonTapped(_ email: String, pass: String)
+    func didSignupButtonTapped(email: String, pass: String, type: SignUpType)
 }
 @available(iOS 17.0, *)
 #Preview {
     return SignUpViewController()
+}
+
+enum SignUpType {
+    case emptyInput
+    case invalidEmail
+    case invalidPassword
+    case wrongConfirmPassword
+    case success
 }
