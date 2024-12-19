@@ -13,6 +13,7 @@ enum UserDefaultsKeys {
     static let loginStatus = "LoginStatus"
     static let autoLoginOption = "AutoLoginOption"
     static let rememberIDOption = "RememberIDOption"
+    static let onboarded = "Onboarded"
 }
 
 // MARK: - Protocol
@@ -22,6 +23,7 @@ protocol UserDataManageable {
     var isLoggedIn: Bool { get set }
     var autoLoginOption: Bool { get set }
     var rememberIDOption: Bool { get set }
+    var onboarded: Bool { get set }
     func setLoggedOut()
 }
 
@@ -72,6 +74,7 @@ struct User: Codable {
 
 // MARK: - UserDefaultsManager
 final class UserDefaultsManager: UserDataManageable {
+    
   static let shared = UserDefaultsManager()
   private init() {}
     var isLoggedIn: Bool {
@@ -87,5 +90,10 @@ final class UserDefaultsManager: UserDataManageable {
     var rememberIDOption: Bool {
         get { UserDefaults.standard.bool(forKey: UserDefaultsKeys.rememberIDOption) }
         set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.rememberIDOption) }
+    }
+    
+    var onboarded: Bool {
+        get { UserDefaults.standard.bool(forKey: UserDefaultsKeys.onboarded) }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.onboarded) }
     }
  }

@@ -20,16 +20,14 @@ class LoginView: UIView {
     }()
     private let emailField = UITextField().setCustomPlaceholder(placeholder: "이메일")
     private let passwordField = UITextField().setCustomPlaceholder(placeholder: "비밀번호")
-    
-    private let rememberIDOption: UIButton = {
-        let button = UIButton()
-        button.setTitle("아이디 저장", for: .normal)
-        button.setTitleColor(.systemGray, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 12)
-        button.setTitleColor(UIColor.PersonalNomal.nomal, for: .normal)
-        return button
+    private let rememberIDOption = UIView()
+    private let rememberIDOptionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "아이디 저장"
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = UIColor.PersonalNomal.nomal
+        return label
     }()
-    
     private let rememberIDCheckBox: UIImageView = {
         let image = UIImage(systemName: "square")
         let imageView = UIImageView(image: image)
@@ -37,13 +35,14 @@ class LoginView: UIView {
         imageView.tintColor = UIColor.PersonalNomal.nomal
         return imageView
     }()
-    private let autoLoginOption: UIButton = {
-        let button = UIButton()
-        button.setTitle("자동 로그인", for: .normal)
-        button.setTitleColor(.systemGray, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 12)
-        button.setTitleColor(UIColor.PersonalNomal.nomal, for: .normal)
-        return button
+    private let autoLoginOption = UIView()
+    
+    private let autoLoginOptionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "자동 로그인"
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = UIColor.PersonalNomal.nomal
+        return label
     }()
     private lazy var autoLoginCheckBox: UIImageView = {
         let image = UIImage(systemName: "square")
@@ -101,7 +100,17 @@ class LoginView: UIView {
 // MARK: - Layout
 extension LoginView {
     private func setupSubviews() {
-        [logoImageView, emailField, passwordField, rememberIDCheckBox, autoLoginOption, autoLoginCheckBox, rememberIDOption, loginButton, signupButton]
+        [rememberIDCheckBox, rememberIDOptionLabel]
+            .forEach{ rememberIDOption.addSubview($0) }
+        [autoLoginCheckBox, autoLoginOptionLabel]
+            .forEach{ autoLoginOption.addSubview($0) }
+        [logoImageView,
+         emailField,
+         passwordField,
+         rememberIDOption,
+         autoLoginOption,
+         loginButton,
+         signupButton]
             .forEach{ addSubview($0) }
         layout()
     }
@@ -133,30 +142,45 @@ extension LoginView {
         autoLoginOption.snp.makeConstraints { make in
             make.top.equalTo(passwordField.snp.bottom).offset(10)
             make.left.equalTo(passwordField.snp.left)
+            make.width.equalTo(80)
+            make.height.equalTo(20)
+        }
+        
+        autoLoginOptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(passwordField.snp.bottom).offset(10)
+            make.left.equalTo(passwordField.snp.left)
             make.width.equalTo(60)
             make.height.equalTo(20)
         }
         
         autoLoginCheckBox.snp.makeConstraints { make in
-            make.top.equalTo(passwordField.snp.bottom).offset(10)
-            make.left.equalTo(autoLoginOption.snp.right)
+            make.top.equalTo(autoLoginOption.snp.top)
+            make.left.equalTo(autoLoginOptionLabel.snp.right)
             make.size.equalTo(20)
         }
         autoLoginCheckBox.image = UIImage(systemName: autoLoginCheckBoxIsChecked ? "checkmark.square.fill" : "square")
         
+        rememberIDOption.snp.makeConstraints { make in
+            make.top.equalTo(passwordField.snp.bottom).offset(10)
+            make.left.equalTo(autoLoginOption.snp.right).offset(10)
+            make.width.equalTo(80)
+            make.height.equalTo(20)
+        }
+        
+        rememberIDOptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(passwordField.snp.bottom).offset(10)
+            make.left.equalTo(rememberIDOption.snp.left)
+            make.width.equalTo(60)
+            make.height.equalTo(20)
+        }
+        
         rememberIDCheckBox.snp.makeConstraints { make in
             make.top.equalTo(passwordField.snp.bottom).offset(10)
-            make.left.equalTo(rememberIDOption.snp.right)
+            make.left.equalTo(rememberIDOptionLabel.snp.right)
             make.size.equalTo(20)
         }
         rememberIDCheckBox.image = UIImage(systemName: rememberIDCheckBoxIsChecked ? "checkmark.square.fill" : "square")
         
-        rememberIDOption.snp.makeConstraints { make in
-            make.top.equalTo(passwordField.snp.bottom).offset(10)
-            make.left.equalTo(autoLoginCheckBox.snp.right)
-            make.width.equalTo(60)
-            make.height.equalTo(20)
-        }
         
         loginButton.snp.makeConstraints { make in
             make.top.equalTo(rememberIDOption.snp.bottom).offset(100)
@@ -177,8 +201,10 @@ extension LoginView {
 extension LoginView {
     // 버튼 타겟추가
     private func settingActions() {
-        autoLoginOption.addTarget(self, action: #selector(autoLoginOptionTapped), for: .touchUpInside)
-        rememberIDOption.addTarget(self, action: #selector(rememberIDOptionTapped), for: .touchUpInside)
+        let autoLoginOptionTapGesture = UITapGestureRecognizer(target: self, action: #selector(autoLoginOptionTapped))
+        let rememberIDOptionTapGesture = UITapGestureRecognizer(target: self, action: #selector(rememberIDOptionTapped))
+        autoLoginOption.addGestureRecognizer(autoLoginOptionTapGesture)
+        rememberIDOption.addGestureRecognizer(rememberIDOptionTapGesture)
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         signupButton.addTarget(self, action: #selector(signupButtonTapped), for: .touchUpInside)
     }
@@ -205,12 +231,15 @@ extension LoginView {
         if let email = emailField.text, let password = passwordField.text {
             delegate?.didLoginButtonTapped(email, password)
         }
+    }
+    func showOnboardingPage() {
         DispatchQueue.main.async {
             UIView.transition(with: self.window!, duration: 0.5, options: .transitionCrossDissolve) {
                 self.window?.rootViewController = UINavigationController(rootViewController: OnboardingPageViewController())
             }
         }
     }
+    
     // 회원가입 터치
     @objc func signupButtonTapped() {
         delegate?.didSignUpButtonTapped()

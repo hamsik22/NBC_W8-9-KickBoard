@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class MyPageViewController: UIViewController {
     
@@ -101,7 +102,36 @@ class MyPageViewController: UIViewController {
 
     // MARK: - Logout Action
     @objc private func handleLogout() {
-        print("로그아웃 성공")
+        logoutAlert { [weak self] in
+            guard let self = self else { return }
+            UserDefaultsManager.shared.setLoggedOut()
+            print("로그아웃 성공")
+            
+            DispatchQueue.main.async {
+                UIView.transition(with: self.view.window!, duration: 0.5, options: .transitionCrossDissolve) {
+                    let loginView = LoginViewController()
+                    self.view.window?.rootViewController = UINavigationController(rootViewController: loginView)
+                    self.successLogoutAlert(view: loginView)
+                }
+            }
+        }
+    }
+    
+    private func logoutAlert(_ completion: @escaping () -> Void) {
+        let alert = UIAlertController(title: "경고", message: "로그아웃 하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        alert.addAction(UIAlertAction(title: "로그아웃", style: .destructive) { _ in
+            completion()
+        })
+        
+        self.present(alert, animated: true)
+    }
+    
+    private func successLogoutAlert(view: UIViewController) {
+        let alert = UIAlertController(title: "알림", message: "로그아웃 되었습니다.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "확인", style: .default))
+        
+        view.present(alert, animated: true)
     }
     
     private func viewTapAction() {

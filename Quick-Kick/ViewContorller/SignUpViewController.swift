@@ -27,12 +27,24 @@ class SignUpViewController: UIViewController {
 
 // MARK: - Delegate
 extension SignUpViewController: SignUpViewDelegate {
-    func didSignupButtonTapped(_ email: String, pass: String) {
-        UserDefaultsManager.shared.saveUser(User(email: email, password: pass))
-        if let targetVC = navigationController?.viewControllers.first(where: { $0 is LoginViewController }) {
-            navigationController?.popToViewController(targetVC, animated: true)
-        } else {
-            print("이동할 LoginViewController가 스택에 없음")
+    func didSignupButtonTapped(email: String, pass: String, type: SignUpType) {
+        switch type {
+        case .emptyInput:
+            showAlert(message: "정보를 입력해주세요!")
+        case .invalidEmail:
+            showAlert(message: "이메일을 확인해주세요!")
+        case .invalidPassword:
+            showAlert(message: "비밀번호를 4자리 이상 입력해주세요!")
+        case .wrongConfirmPassword:
+            showAlert(message: "비밀번호를 확인해주세요!")
+        case .success:
+            print("Success")
+            UserDefaultsManager.shared.saveUser(User(email: email, password: pass))
+            if let targetVC = navigationController?.viewControllers.first(where: { $0 is LoginViewController }) {
+                navigationController?.popToViewController(targetVC, animated: true)
+            } else {
+                print("이동할 LoginViewController가 스택에 없음")
+            }
         }
     }
 }
