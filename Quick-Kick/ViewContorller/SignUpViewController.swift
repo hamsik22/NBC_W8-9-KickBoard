@@ -20,6 +20,8 @@ class SignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
     }
 }
 
@@ -32,6 +34,13 @@ extension SignUpViewController: SignUpViewDelegate {
         } else {
             print("이동할 LoginViewController가 스택에 없음")
         }
+    }
+}
+
+extension SignUpViewController {
+    // 키보드 내리기
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 @available(iOS 17.0, *)

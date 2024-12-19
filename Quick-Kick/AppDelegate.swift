@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func setInitialView() -> UIViewController {
         if UserDefaultsManager.shared.isLoggedIn {
-            return ViewController()
+            return LoginViewController()
         } else if UserDefaultsManager.shared.autoLoginOption {
             return ViewController()
         } else {

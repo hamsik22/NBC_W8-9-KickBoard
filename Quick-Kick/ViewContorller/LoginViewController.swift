@@ -12,6 +12,7 @@ class LoginViewController: UIViewController {
     private let loginView = LoginView()
     var delegate : LoginViewDelegate?
     
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         initTextFields()
@@ -27,6 +28,8 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
         view.backgroundColor = .systemBackground
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tapGesture)
         printUserInfoStatus()
         processAuthOption()
     }
@@ -95,7 +98,10 @@ extension LoginViewController {
         print("아이디저장 : \(UserDefaultsManager.shared.rememberIDOption)")
         print("자동로그인 : \(UserDefaultsManager.shared.autoLoginOption)")
     }
-    
+    // 키보드 내리기
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
+    }
     // 로그인 정보를 확인하는 함수
     private func isCorrectInfo(email: String?, password: String?) -> Bool {
         guard let email, let password else {
