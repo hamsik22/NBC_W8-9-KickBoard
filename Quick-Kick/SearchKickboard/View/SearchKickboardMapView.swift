@@ -14,12 +14,7 @@ protocol SearchKickboardMapViewDelegate: AnyObject {
 }
 
 final class SearchKickboardMapView: MKMapView {
-    private let locationManager: CLLocationManager = {
-        let manager = CLLocationManager()
-        manager.requestWhenInUseAuthorization()
-        manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-        return manager
-    }()
+    private let locationManager = LocationManager()
     
     private var kickboards: [Kickboard]?
     weak var mapViewDelegate: SearchKickboardMapViewDelegate?
@@ -32,11 +27,6 @@ final class SearchKickboardMapView: MKMapView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-#if DEBUG
-        setupDebugLocation()
-#else
-        setupLocation()
-#endif
         setupMapView()
     }
     
@@ -44,16 +34,8 @@ final class SearchKickboardMapView: MKMapView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupDebugLocation() {
-        setMapCenter(gangnamStation)
-    }
-    
-    private func setupLocation() {
-        locationManager.delegate = self
-        locationManager.startUpdatingLocation()
-    }
-    
     private func setupMapView() {
+        locationManager.delegate = self
         self.preferredConfiguration = MKStandardMapConfiguration()
         self.showsUserLocation = true
         self.setUserTrackingMode(.follow, animated: true)
@@ -78,29 +60,21 @@ final class SearchKickboardMapView: MKMapView {
     }
 }
 
-extension SearchKickboardMapView: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-#if DEBUG
-        setMapCenter(gangnamStation)
-#else
-        guard let location = locations.last else { return }
-        setMapCenter(location)
-#endif
+extension SearchKickboardMapView: LocationManagerDelegate {
+    func didUpdateLocation() {
+        setMapCenter()
     }
     
-    private func setMapCenter(_ location: CLLocation) {
-        let region = MKCoordinateRegion(
-            center: location.coordinate,
-            latitudinalMeters: 200,
-            longitudinalMeters: 200
-        )
+    private func setMapCenter() {
+        guard let location = locationManager.currentLocation else {
+            return
+        }
+        let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 200, longitudinalMeters: 200)
         setRegion(region, animated: true)
     }
     
     func moveToUserLocation() {
-        if let location = userLocation.location {
-            setMapCenter(location)
-        }
+        setMapCenter()
     }
 }
 
