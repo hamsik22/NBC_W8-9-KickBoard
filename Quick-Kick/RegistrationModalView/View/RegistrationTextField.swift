@@ -109,6 +109,7 @@ private extension RegistrationTextField {
         print(#function)
         if self.nickNameField.text?.count ?? 0 > 0 {
             self.registrationDelegate?.haveNickNameText = true
+            self.registrationDelegate?.sendNickName = self.nickNameField.text
         } else {
             self.registrationDelegate?.haveNickNameText = false
         }
