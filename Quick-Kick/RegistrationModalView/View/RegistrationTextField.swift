@@ -48,7 +48,7 @@ private extension RegistrationTextField {
     /// 텍스트필드를 세팅하는 메소드
     func setupTextField() {
         [self.nickNameField, self.locationField].forEach {
-            $0.textColor = .PersonalLight.active
+            $0.textColor = .PersonalDark.darker
             $0.textAlignment = .left
             $0.font = UIFont.systemFont(ofSize: 15, weight: .regular)
             $0.borderStyle = .none

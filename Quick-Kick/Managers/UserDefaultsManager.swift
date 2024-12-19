@@ -2,10 +2,18 @@
 //  UserDefaultsManager.swift
 //  Quick-Kick
 //
-//  Created by 반성준 on 12/18/24.
+//  Created by 반성준 on 12/16/24.
 //
 
 import Foundation
+
+// MARK: - Key 관리 열거형
+enum UserDefaultsKeys {
+    static let user = "user"
+    static let loginStatus = "LoginStatus"
+    static let autoLoginOption = "AutoLoginOption"
+    static let rememberIDOption = "RememberIDOption"
+}
 
 // MARK: - Protocol
 protocol UserDataManageable {
@@ -21,17 +29,12 @@ protocol UserDataManageable {
 extension UserDataManageable {
     func saveUser(_ user: User) {
         if let encoded = try? JSONEncoder().encode(user) {
-            UserDefaults.standard.set(encoded, forKey: Keys.user)
-            if let user = getUser() {
-                print("저장완료-> 이메일:\(user.email), 비밀번호:\(user.password), 닉네임:\(user.nickName)")
-            } else {
-                print("저장 실패")
-            }
+            UserDefaults.standard.set(encoded, forKey: UserDefaultsKeys.user)
         }
     }
 
     func getUser() -> User? {
-        if let data = UserDefaults.standard.data(forKey: "user"),
+        if let data = UserDefaults.standard.data(forKey: UserDefaultsKeys.user),
            let user = try? JSONDecoder().decode(User.self, from: data) {
             return user
         }
@@ -39,31 +42,22 @@ extension UserDataManageable {
     }
 
     func setLoggedOut() {
-        UserDefaults.standard.set(false, forKey: "LoginStatus")
+        UserDefaults.standard.set(false, forKey: UserDefaultsKeys.loginStatus)
     }
 
     var isLoggedIn: Bool {
-        get { UserDefaults.standard.bool(forKey: Keys.loginStatus) }
-        set {
-            UserDefaults.standard.set(newValue, forKey: Keys.loginStatus)
-            print("로그인 상태 : \(newValue)")
-        }
+        get { UserDefaults.standard.bool(forKey: UserDefaultsKeys.loginStatus) }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.loginStatus) }
     }
 
     var autoLoginOption: Bool {
-        get { UserDefaults.standard.bool(forKey: Keys.autoLogin) }
-        set {
-            UserDefaults.standard.set(newValue, forKey: Keys.autoLogin)
-            print("자동 로그인 옵션 : \(newValue)")
-        }
+        get { UserDefaults.standard.bool(forKey: UserDefaultsKeys.autoLoginOption) }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.autoLoginOption) }
     }
 
     var rememberIDOption: Bool {
-        get { UserDefaults.standard.bool(forKey: Keys.rememberID) }
-        set {
-            UserDefaults.standard.set(newValue, forKey: Keys.rememberID)
-            print("아이디 저장 옵션 : \(newValue)")
-        }
+        get { UserDefaults.standard.bool(forKey: UserDefaultsKeys.rememberIDOption) }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.rememberIDOption) }
     }
 }
 
