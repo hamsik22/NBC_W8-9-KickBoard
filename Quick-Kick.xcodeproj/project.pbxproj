@@ -11,8 +11,19 @@
 		089C264C2D0C0DD0004DF78C /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 089C264B2D0C0DD0004DF78C /* Alamofire */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		3856623A2D1400DF00D08575 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 089C26242D0C09A7004DF78C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 089C262B2D0C09A7004DF78C;
+			remoteInfo = "Quick-Kick";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		089C262C2D0C09A7004DF78C /* Quick-Kick.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Quick-Kick.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		385662362D1400DF00D08575 /* Quick-KickTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Quick-KickTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -34,6 +45,11 @@
 			path = "Quick-Kick";
 			sourceTree = "<group>";
 		};
+		385662372D1400DF00D08575 /* Quick-KickTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Quick-KickTests";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +62,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		385662332D1400DF00D08575 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -53,6 +76,7 @@
 			isa = PBXGroup;
 			children = (
 				089C262E2D0C09A7004DF78C /* Quick-Kick */,
+				385662372D1400DF00D08575 /* Quick-KickTests */,
 				089C262D2D0C09A7004DF78C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				089C262C2D0C09A7004DF78C /* Quick-Kick.app */,
+				385662362D1400DF00D08575 /* Quick-KickTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -92,6 +117,29 @@
 			productReference = 089C262C2D0C09A7004DF78C /* Quick-Kick.app */;
 			productType = "com.apple.product-type.application";
 		};
+		385662352D1400DF00D08575 /* Quick-KickTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3856623C2D1400DF00D08575 /* Build configuration list for PBXNativeTarget "Quick-KickTests" */;
+			buildPhases = (
+				385662322D1400DF00D08575 /* Sources */,
+				385662332D1400DF00D08575 /* Frameworks */,
+				385662342D1400DF00D08575 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3856623B2D1400DF00D08575 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				385662372D1400DF00D08575 /* Quick-KickTests */,
+			);
+			name = "Quick-KickTests";
+			packageProductDependencies = (
+			);
+			productName = "Quick-KickTests";
+			productReference = 385662362D1400DF00D08575 /* Quick-KickTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -104,6 +152,10 @@
 				TargetAttributes = {
 					089C262B2D0C09A7004DF78C = {
 						CreatedOnToolsVersion = 16.1;
+					};
+					385662352D1400DF00D08575 = {
+						CreatedOnToolsVersion = 16.1;
+						TestTargetID = 089C262B2D0C09A7004DF78C;
 					};
 				};
 			};
@@ -126,12 +178,20 @@
 			projectRoot = "";
 			targets = (
 				089C262B2D0C09A7004DF78C /* Quick-Kick */,
+				385662352D1400DF00D08575 /* Quick-KickTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		089C262A2D0C09A7004DF78C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		385662342D1400DF00D08575 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -148,7 +208,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		385662322D1400DF00D08575 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3856623B2D1400DF00D08575 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 089C262B2D0C09A7004DF78C /* Quick-Kick */;
+			targetProxy = 3856623A2D1400DF00D08575 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		089C26402D0C09A9004DF78C /* Debug */ = {
@@ -156,14 +231,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UF3R52LYV7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Quick-Kick/Info.plist";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -176,7 +248,6 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "nbc-ios5-4.Quick-Kick";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -192,14 +263,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = UF3R52LYV7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Quick-Kick/Info.plist";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -212,7 +280,6 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "nbc-ios5-4.Quick-Kick";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -342,6 +409,42 @@
 			};
 			name = Release;
 		};
+		3856623D2D1400DF00D08575 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6XVTBTTTFN;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "soungjunban.Quick-KickTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Quick-Kick.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Quick-Kick";
+			};
+			name = Debug;
+		};
+		3856623E2D1400DF00D08575 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 6XVTBTTTFN;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "soungjunban.Quick-KickTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Quick-Kick.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Quick-Kick";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -359,6 +462,15 @@
 			buildConfigurations = (
 				089C26402D0C09A9004DF78C /* Debug */,
 				089C26412D0C09A9004DF78C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3856623C2D1400DF00D08575 /* Build configuration list for PBXNativeTarget "Quick-KickTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3856623D2D1400DF00D08575 /* Debug */,
+				3856623E2D1400DF00D08575 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

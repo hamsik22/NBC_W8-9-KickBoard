@@ -72,4 +72,15 @@ struct User: Codable {
 final class UserDefaultsManager: UserDataManageable {
     static let shared = UserDefaultsManager()
     private init() {}
-}
+    
+    
+      var autoLoginOption: Bool {
+          get {
+              UserDefaults.standard.bool(forKey: "autoLoginOption") // UserDefaults에서 값 가져오기
+          }
+          set {
+              UserDefaults.standard.set(newValue, forKey: "autoLoginOption") // UserDefaults에 값 저장
+              print("AutoLoginOption updated: \(newValue)") // 디버그용 로그
+          }
+      }
+  }
