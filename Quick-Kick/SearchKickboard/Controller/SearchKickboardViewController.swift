@@ -15,16 +15,13 @@ final class SearchKickboardViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchKickboardView.delegate = self
-        makeMockData()
+        let kickboards = CoreDataManager.shared.fetchKickboards()
+        searchKickboardView.deliverKickboardsData(kickboards)
+//        makeMockData()
     }
 }
 
-extension SearchKickboardViewController: SearchKickboardViewDelegate {
-    func getKickboardsData() -> [Kickboard] {
-        return CoreDataManager.shared.fetchKickboards()
-    }
-    
+extension SearchKickboardViewController {
     private func makeMockData() {
         CoreDataManager.shared.createKickboard(
             nickName: "씽씽이A",
