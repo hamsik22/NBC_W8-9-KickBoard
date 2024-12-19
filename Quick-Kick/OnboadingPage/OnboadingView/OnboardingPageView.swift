@@ -29,12 +29,14 @@ final class OnboardingPageView: UIView {
         super.init(frame: .infinite)
         
         configUI()
+        addSwipeGesture()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         
         configUI()
+        addSwipeGesture()
     }
     
     private func configUI() {
@@ -115,25 +117,31 @@ final class OnboardingPageView: UIView {
     }
     
     private func addSwipeGesture() {
-        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(pageSwipe))
-        self.addGestureRecognizer(swipeGesture)
+        let swipeGestureRight = UISwipeGestureRecognizer(target: self, action: #selector(pageSwipe))
+        swipeGestureRight.direction = .right
+        let swipeGestureLeft = UISwipeGestureRecognizer(target: self, action: #selector(pageSwipe))
+        swipeGestureLeft.direction = .left
+        self.addGestureRecognizer(swipeGestureRight)
+        self.addGestureRecognizer(swipeGestureLeft)
     }
     
     @objc private func pageSwipe(_ gesture: UIGestureRecognizer) {
         if let swipeGesture = gesture as? UISwipeGestureRecognizer {
             switch swipeGesture.direction {
             case UISwipeGestureRecognizer.Direction.right:
-                
+                self.onboardingDelegate?.changedView(.right)
+                print("right")
                 
             case UISwipeGestureRecognizer.Direction.left:
-                
+                self.onboardingDelegate?.changedView(.left)
+                print("left")
                 
             default: break
             }
         }
     }
     
-    private func changedData(data: OnboardingDataModel) {
+    func changedData(data: OnboardingDataModel) {
         self.titleLabel.text = data.title
         self.infoLabel.text = data.info
         self.infoImageView.image = data.image
