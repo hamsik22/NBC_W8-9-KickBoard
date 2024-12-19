@@ -30,12 +30,14 @@ extension UserDataManageable {
     func saveUser(_ user: User) {
         if let encoded = try? JSONEncoder().encode(user) {
             UserDefaults.standard.set(encoded, forKey: UserDefaultsKeys.user)
+            print("저장 성공")
         }
     }
 
     func getUser() -> User? {
         if let data = UserDefaults.standard.data(forKey: UserDefaultsKeys.user),
            let user = try? JSONDecoder().decode(User.self, from: data) {
+            print("getUser: \(user.email), \(user.password), \(user.nickName)")
             return user
         }
         return nil
@@ -70,6 +72,20 @@ struct User: Codable {
 
 // MARK: - UserDefaultsManager
 final class UserDefaultsManager: UserDataManageable {
-    static let shared = UserDefaultsManager()
-    private init() {}
-}
+  static let shared = UserDefaultsManager()
+  private init() {}
+    var isLoggedIn: Bool {
+        get { UserDefaults.standard.bool(forKey: UserDefaultsKeys.loginStatus) }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.loginStatus) }
+    }
+
+    var autoLoginOption: Bool {
+        get { UserDefaults.standard.bool(forKey: UserDefaultsKeys.autoLoginOption) }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.autoLoginOption) }
+    }
+
+    var rememberIDOption: Bool {
+        get { UserDefaults.standard.bool(forKey: UserDefaultsKeys.rememberIDOption) }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.rememberIDOption) }
+    }
+ }

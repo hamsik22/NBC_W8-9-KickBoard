@@ -23,8 +23,3 @@ class ViewController: UIViewController {
             mainTabBarController.didMove(toParent: self)
         }
 }
-
-// temprorary
-class FirstVC: UIViewController {
-    
-}
