@@ -16,10 +16,13 @@ final class OnboadingPageView: UIView {
     
     private let infoImageView = UIImageView()
     
-    init(title: String, info: String, image: UIImage?) {
+    private let startButton = UIButton()
+    
+    init(title: String, info: String, image: UIImage?, isButton: Bool) {
         self.titleLabel.text = title
         self.infoLabel.text = info
         self.infoImageView.image = image
+        self.startButton.isHidden = isButton
         
         super.init(frame: .infinite)
         
@@ -38,6 +41,7 @@ final class OnboadingPageView: UIView {
         setupTitleLabel()
         setupInfoLabel()
         setupImageView()
+        setupButton()
         setupLayout()
     }
     
@@ -65,6 +69,24 @@ final class OnboadingPageView: UIView {
         self.addSubview(self.infoImageView)
     }
     
+    private func setupButton() {
+        self.startButton.setTitle("시작하기", for: .normal)
+        self.startButton.setTitleColor(UIColor.PersonalNomal.nomal, for: .normal)
+        self.startButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        self.startButton.backgroundColor = UIColor.PersonalLight.hover
+        self.startButton.layer.cornerRadius = 25
+        self.startButton.addTarget(self, action: #selector(popSelf), for: .touchUpInside)
+        self.addSubview(self.startButton)
+    }
+    
+    @objc private func popSelf() {
+        DispatchQueue.main.async {
+            UIView.transition(with: self.window!, duration: 0.5, options: .transitionCrossDissolve) {
+                self.window?.rootViewController = UINavigationController(rootViewController: ViewController())
+            }
+        }
+    }
+    
     private func setupLayout() {
         self.titleLabel.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
@@ -80,6 +102,13 @@ final class OnboadingPageView: UIView {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(self.infoLabel.snp.bottom).offset(20)
             $0.width.equalTo(320)
+        }
+        
+        self.startButton.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(50)
+            $0.width.equalTo(300)
+            $0.bottom.equalToSuperview().inset(100)
         }
     }
     
