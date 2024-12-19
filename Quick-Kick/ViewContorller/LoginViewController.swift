@@ -26,10 +26,13 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.hidesBackButton = true
+        navigationItem.hidesBackButton = false
         view.backgroundColor = .systemBackground
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
+        let backButton = UIBarButtonItem(title: "뒤로 가기", style: .plain, target: nil, action: nil)
+        backButton.tintColor = UIColor.PersonalNomal.nomal
+        navigationItem.backBarButtonItem = backButton
         printUserInfoStatus()
         processAuthOption()
     }
@@ -47,8 +50,11 @@ extension LoginViewController: LoginViewDelegate {
     func didLoginButtonTapped(_ email: String, _ password: String) {
         if isCorrectInfo(email: email, password: password) {
             login()
+            loginView.showOnboardingPage()
         } else {
+            showAlert(message: "입력 값을 확인해주세요!")
             print("로그인 실패")
+            initTextFields()
         }
     }
     
@@ -82,7 +88,6 @@ extension LoginViewController: LoginViewDelegate {
     func didSignUpButtonTapped() {
         print("회원가입 화면으로 이동")
         let signUpVC = SignUpViewController()
-        signUpVC.navigationItem.hidesBackButton = true
         navigationController?.pushViewController(signUpVC, animated: true)
     }
 }
@@ -107,7 +112,10 @@ extension LoginViewController {
         guard let email, let password else {
             print("정보를 입력해주세요")
             return false }
+        print("isCorrectInfo()")
         guard let user = UserDefaultsManager.shared.getUser() else { return false }
+        print("\(user.email), \(user.password)")
+        print("\(email), \(password)")
         if email == user.email && password == user.password {
             return true
         } else {
