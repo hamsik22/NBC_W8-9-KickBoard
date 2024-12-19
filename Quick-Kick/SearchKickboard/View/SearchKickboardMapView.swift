@@ -175,6 +175,11 @@ extension SearchKickboardMapView {
             $0.bottom.equalToSuperview().offset(-10)
             $0.leading.trailing.equalToSuperview().inset(10)
         }
+        
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
+            self.rentKickboardModalView.alpha = 1
+            self.rentKickboardModalView.transform = .identity
+        }
     }
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
