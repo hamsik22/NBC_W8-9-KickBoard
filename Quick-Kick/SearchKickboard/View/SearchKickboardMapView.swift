@@ -8,6 +8,11 @@ import UIKit
 import MapKit
 import CoreLocation
 
+protocol SearchKickboardMapViewDelegate: AnyObject {
+    func showLocationResetButton()
+    func hideLocationResetButton()
+}
+
 final class SearchKickboardMapView: MKMapView {
     private let locationManager: CLLocationManager = {
         let manager = CLLocationManager()
@@ -17,6 +22,7 @@ final class SearchKickboardMapView: MKMapView {
     }()
     
     private var kickboards: [Kickboard]?
+    weak var mapViewDelegate: SearchKickboardMapViewDelegate?
     
     private let gangnamStation = CLLocation(
         latitude: 37.498095,
@@ -135,6 +141,25 @@ extension SearchKickboardMapView: MKMapViewDelegate {
         rentKickboardModalView.snp.makeConstraints {
             $0.bottom.equalToSuperview().offset(-10)
             $0.leading.trailing.equalToSuperview().inset(10)
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        // 맵의 중심 좌표
+        let mapCenter = CLLocation(latitude: mapView.centerCoordinate.latitude,
+                                   longitude: mapView.centerCoordinate.longitude)
+        
+        // 사용자 현재 위치
+        if let userLocation = userLocation.location {
+            // 두 위치 간의 거리
+            let distance = mapCenter.distance(from: userLocation)
+            
+            // 50미터 이상 차이나면 버튼 보여주기
+            if distance > 50 {
+                mapViewDelegate?.showLocationResetButton()
+            } else {
+                mapViewDelegate?.hideLocationResetButton()
+            }
         }
     }
 }
