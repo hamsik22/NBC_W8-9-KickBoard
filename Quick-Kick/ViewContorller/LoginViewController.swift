@@ -80,8 +80,8 @@ extension LoginViewController: LoginViewDelegate {
     
     // 아이디 저장 옵션 시, 동작할 함수
     func getEmailTextField() {
-        guard let user = UserDefaultsManager.shared.getUser() else { return }
-        loginView.setEmailFieldText(email: user.email)
+        let email = UserDefaultsManager.shared.recentEmail
+        loginView.setEmailFieldText(email: email)
     }
     
     // 회원가입 버튼 터치 시
