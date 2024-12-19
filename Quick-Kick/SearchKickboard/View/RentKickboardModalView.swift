@@ -7,6 +7,8 @@
 import UIKit
 
 final class RentKickboardModalView: UIView {
+    private var kickboard: Kickboard?
+    
     private let kickboardImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "QuickBoard")
@@ -17,7 +19,6 @@ final class RentKickboardModalView: UIView {
     
     private let kickboardNicknameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Sparta의 킥보드"
         label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textColor = .black
         label.textAlignment = .right
@@ -26,7 +27,6 @@ final class RentKickboardModalView: UIView {
     
     private let kickboardLocationLabel: UILabel = {
         let label = UILabel()
-        label.text = "서울 중구 세종대로 110 서울특별시청"
         label.font = .systemFont(ofSize: 11, weight: .regular)
         label.textColor = .black
         label.textAlignment = .right
@@ -60,9 +60,11 @@ final class RentKickboardModalView: UIView {
         return stackView
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(kickboard: Kickboard) {
+        super.init(frame: .zero)
+        self.kickboard = kickboard
         setupModalView()
+        setupLayout()
     }
     
     required init?(coder: NSCoder) {
@@ -71,14 +73,31 @@ final class RentKickboardModalView: UIView {
     
     private func setupModalView() {
         self.backgroundColor = .white
+        self.kickboardNicknameLabel.text = self.kickboard?.nickName
+        self.kickboardLocationLabel.text = self.kickboard?.address
+        self.rentButton.addTarget(self, action: #selector(rentButtonTapped), for: .touchUpInside)
+    }
+    
+    private func setupLayout() {
         self.addSubview(kickboardHorizontalStackView)
-        kickboardHorizontalStackView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(25)
+        kickboardHorizontalStackView.snp.makeConstraints {
+            $0.edges.equalToSuperview().inset(25)
+        }
+        
+        self.layer.cornerRadius = 40
+        self.snp.makeConstraints {
+            $0.height.equalTo(180)
         }
     }
-}
-
-@available(iOS 17.0, *)
-#Preview {
-    RentKickboardModalView()
+    
+    @objc
+    private func rentButtonTapped() {
+        if self.kickboard?.startTime == nil {
+            self.kickboard?.startTime = Date()
+            self.rentButton.titleLabel?.text = "이용 종료"
+        } else {
+            self.kickboard?.endTime = Date()
+            self.rentButton.titleLabel?.text = "이용 시작"
+        }
+    }
 }

@@ -8,7 +8,7 @@ import UIKit
 import SnapKit
 
 final class SearchKickboardView: UIView {
-    private let searchKickboardMapView = SearchKickboardMapView()
+    private(set) var searchKickboardMapView = SearchKickboardMapView()
     private lazy var searchLocationBarView: SearchLocationBarView = {
         let view = SearchLocationBarView()
         view.mapView = searchKickboardMapView
@@ -36,6 +36,7 @@ final class SearchKickboardView: UIView {
         setupSubviews()
         setupAutoLayout()
         setupAddTarget()
+        setupDelegate()
     }
     
     required init?(coder: NSCoder) {
@@ -44,8 +45,8 @@ final class SearchKickboardView: UIView {
     
     private func setupSubviews() {
         self.addSubview(searchKickboardMapView)
-        self.addSubview(searchLocationBarView)
         self.addSubview(locationResetButton)
+        self.addSubview(searchLocationBarView)
     }
     
     private func setupAutoLayout() {
@@ -53,16 +54,17 @@ final class SearchKickboardView: UIView {
             $0.edges.equalToSuperview()
         }
         
-        searchLocationBarView.snp.makeConstraints {
-            $0.top.equalTo(safeAreaLayoutGuide).offset(-15)
-            $0.trailing.leading.equalToSuperview().inset(20)
-            $0.height.equalTo(60)
-        }
-        
         locationResetButton.snp.makeConstraints {
             $0.top.equalTo(searchLocationBarView.snp.bottom).offset(15)
             $0.centerX.equalToSuperview()
             $0.height.equalTo(30)
+        }
+        locationResetButton.isHidden = true
+        
+        searchLocationBarView.snp.makeConstraints {
+            $0.top.equalTo(safeAreaLayoutGuide).offset(-15)
+            $0.trailing.leading.equalToSuperview().inset(20)
+            $0.height.equalTo(60)
         }
     }
     
@@ -70,8 +72,39 @@ final class SearchKickboardView: UIView {
         self.locationResetButton.addTarget(self, action: #selector(locationResetButtonTapped), for: .touchUpInside)
     }
     
+    private func setupDelegate() {
+        searchLocationBarView.delegate = self
+        searchKickboardMapView.mapViewDelegate = self
+    }
+    
     @objc
     private func locationResetButtonTapped() {
         searchKickboardMapView.moveToUserLocation()
+    }
+}
+
+extension SearchKickboardView {
+    func deliverKickboardsData(_ kickboards: [Kickboard]) {
+        self.searchKickboardMapView.setupKickboardsData(kickboards: kickboards)
+    }
+}
+
+extension SearchKickboardView: SearchLocationBarViewDelegate {
+    func searchResultsTableViewWillShow() {
+        locationResetButton.isEnabled = false
+    }
+    
+    func searchResultsTableViewWillHide() {
+        locationResetButton.isEnabled = true
+    }
+}
+
+extension SearchKickboardView: SearchKickboardMapViewDelegate {
+    func showLocationResetButton() {
+        self.locationResetButton.isHidden = false
+    }
+    
+    func hideLocationResetButton() {
+        self.locationResetButton.isHidden = true
     }
 }

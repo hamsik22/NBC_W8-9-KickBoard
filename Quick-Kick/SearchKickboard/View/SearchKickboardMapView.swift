@@ -8,6 +8,11 @@ import UIKit
 import MapKit
 import CoreLocation
 
+protocol SearchKickboardMapViewDelegate: AnyObject {
+    func showLocationResetButton()
+    func hideLocationResetButton()
+}
+
 final class SearchKickboardMapView: MKMapView {
     private let locationManager: CLLocationManager = {
         let manager = CLLocationManager()
@@ -15,6 +20,9 @@ final class SearchKickboardMapView: MKMapView {
         manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         return manager
     }()
+    
+    private var kickboards: [Kickboard]?
+    weak var mapViewDelegate: SearchKickboardMapViewDelegate?
     
     private let gangnamStation = CLLocation(
         latitude: 37.498095,
@@ -50,8 +58,22 @@ final class SearchKickboardMapView: MKMapView {
         self.setUserTrackingMode(.follow, animated: true)
         self.setCameraZoomRange(MKMapView.CameraZoomRange(minCenterCoordinateDistance: 200, maxCenterCoordinateDistance: 2000), animated: true)
         self.delegate = self
+    }
+    
+    func setupKickboardsData(kickboards: [Kickboard]) {
+        self.kickboards = kickboards
+        addMarkersOnMap()
+    }
+    
+    private func addMarkersOnMap() {
+        removeAnnotations(annotations)
         
-        self.addMarker(at: CLLocationCoordinate2D(latitude: 37.49467056976841, longitude: 127.02821385513921))
+        self.kickboards?.forEach({ kickboard in
+            if kickboard.startTime == nil {
+                let annotation = KickboardAnnotation(kickboard: kickboard)
+                self.addAnnotation(annotation)
+            }
+        })
     }
 }
 
@@ -93,29 +115,51 @@ extension SearchKickboardMapView: MKMapViewDelegate {
         } else {
             annotationView?.annotation = annotation
         }
-        annotationView?.image = UIImage(named: "mapPicker")
+        
+        if let kickboardAnnotation = annotation as? KickboardAnnotation {
+            // isOccupied 상태에 따라 다른 이미지 설정
+            if kickboardAnnotation.kickboard.isOccupied {
+                annotationView?.image = UIImage(named: "myMapPicker")  // 내 킥보드
+            } else {
+                annotationView?.image = UIImage(named: "mapPicker")  // 남의 킥보드
+            }
+        }
+        
         annotationView?.frame.size = CGSize(width: 55, height: 91)
         return annotationView
-    }
-    
-    func addMarker(at coordinate: CLLocationCoordinate2D) {
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = coordinate
-        self.addAnnotation(annotation)
     }
     
     func mapView(_ mapView: MKMapView, didSelect annotation: MKAnnotation) {
         if annotation is MKUserLocation {
             return
         }
+        guard let kickboardAnnotation = annotation as? KickboardAnnotation else { return }
+        let kickboard = kickboardAnnotation.kickboard
         
-        let rentKitboardModalView = RentKickboardModalView()
-        self.addSubview(rentKitboardModalView)
-        rentKitboardModalView.snp.makeConstraints {
+        let rentKickboardModalView = RentKickboardModalView(kickboard: kickboard)
+        self.addSubview(rentKickboardModalView)
+        rentKickboardModalView.snp.makeConstraints {
             $0.bottom.equalToSuperview().offset(-10)
             $0.leading.trailing.equalToSuperview().inset(10)
-            $0.height.equalTo(180)
         }
-        rentKitboardModalView.layer.cornerRadius = 40
+    }
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        // 맵의 중심 좌표
+        let mapCenter = CLLocation(latitude: mapView.centerCoordinate.latitude,
+                                   longitude: mapView.centerCoordinate.longitude)
+        
+        // 사용자 현재 위치
+        if let userLocation = userLocation.location {
+            // 두 위치 간의 거리
+            let distance = mapCenter.distance(from: userLocation)
+            
+            // 50미터 이상 차이나면 버튼 보여주기
+            if distance > 50 {
+                mapViewDelegate?.showLocationResetButton()
+            } else {
+                mapViewDelegate?.hideLocationResetButton()
+            }
+        }
     }
 }

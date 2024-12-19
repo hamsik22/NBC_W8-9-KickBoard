@@ -7,6 +7,11 @@
 import UIKit
 import MapKit
 
+protocol SearchLocationBarViewDelegate: AnyObject {
+    func searchResultsTableViewWillShow()
+    func searchResultsTableViewWillHide()
+}
+
 final class SearchLocationBarView: UIView {
     private let containerView: UIView = {
         let view = UIView()
@@ -41,6 +46,7 @@ final class SearchLocationBarView: UIView {
     
     private var searchResults: [MKLocalSearchCompletion] = []
     weak var mapView: MKMapView?
+    weak var delegate: SearchLocationBarViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -85,18 +91,25 @@ extension SearchLocationBarView: UISearchBarDelegate {
             searchResults = []
             searchResultsTableView.isHidden = true
             searchResultsTableView.reloadData()
+            delegate?.searchResultsTableViewWillHide()
         } else {
             searchResultsTableView.isHidden = false
             searchCompleter.queryFragment = searchText
+            delegate?.searchResultsTableViewWillShow()
         }
     }
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchResultsTableView.isHidden = searchBar.text?.isEmpty ?? true
+        let isHidden = searchBar.text?.isEmpty ?? true
+        searchResultsTableView.isHidden = isHidden
+        if !isHidden {
+            delegate?.searchResultsTableViewWillShow()
+        }
     }
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchResultsTableView.isHidden = true
+        delegate?.searchResultsTableViewWillHide()
     }
 }
 
