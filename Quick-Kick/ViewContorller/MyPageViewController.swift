@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import CoreData
 
 class MyPageViewController: UIViewController {
     
@@ -26,26 +25,13 @@ class MyPageViewController: UIViewController {
         return button
     }()
     
-    // MARK: - Core Data
-    private var kickboardData: [Kickboard] = []
-    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         viewTapAction()
         setupUI()
-        loadKickboards()
         configureSections()
         logoutButton.addTarget(self, action: #selector(handleLogout), for: .touchUpInside)
-    }
-    
-    // MARK: - Core Data: Load Kickboards
-    private func loadKickboards() {
-        do {
-            kickboardData = try CoreDataManager.shared.context.fetch(Kickboard.fetchRequest())
-        } catch {
-            print("킥보드 데이터를 불러오는 데 실패했습니다: \(error)")
-        }
     }
     
     // MARK: - Setup UI
@@ -95,17 +81,7 @@ class MyPageViewController: UIViewController {
     // MARK: - Configure Sections
     private func configureSections() {
         // 프로필 설정
-        if let user = UserDefaultsManager.shared.getUser() {
-            profileView.configure(name: user.nickName, email: user.email)
-        } else {
-            profileView.configure(name: "User1", email: "user1234@gmail.com")
-        }
-        
-        profileView.onNameChange = { newName in
-            var user = UserDefaultsManager.shared.getUser() ?? User(email: "user1234@gmail.com", password: "")
-            user.nickName = newName
-            UserDefaultsManager.shared.saveUser(user)
-        }
+        profileView.configure(name: "User1", email: "user1234@gmail.com")
         
         // 내가 등록한 킥보드 섹션
         kickboardSectionView.configure {
@@ -114,18 +90,18 @@ class MyPageViewController: UIViewController {
             self.navigationController?.pushViewController(detailVC, animated: true)
         }
         
-        // 히스토리 섹션 설정
-        let historyList = kickboardData.filter { $0.startTime != nil && $0.endTime != nil }
-        historySectionView.configure(with: historyList)
+        // 히스토리 섹션 더미 데이터 설정
+        let dummyHistories = [
+            ("24.12.01", "15:00 - 15:30"),
+            ("24.12.01", "15:00 - 15:30"),
+            ("24.12.01", "15:00 - 15:30")
+        ]
+        historySectionView.configure(with: dummyHistories)
     }
 
-    
     // MARK: - Logout Action
-    // 로그아웃 액션
     @objc private func handleLogout() {
-        UserDefaultsManager.shared.setLoggedOut()
         print("로그아웃 성공")
-        // 로그아웃 후 화면 전환 로직 추가
     }
     
     private func viewTapAction() {

@@ -13,7 +13,7 @@ class KickboardSectionView: UIView {
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.PersonalLight.light
-        view.layer.cornerRadius = 32
+        view.layer.cornerRadius = 24
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
