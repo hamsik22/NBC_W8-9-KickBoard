@@ -9,6 +9,6 @@ import UIKit
 
 protocol OndoardingDelegate: AnyObject {
     
-    func changedView()
+    func changedView(_ direction: UISwipeGestureRecognizer.Direction)
     
 }
