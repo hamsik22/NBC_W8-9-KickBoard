@@ -50,10 +50,13 @@ class KickboardEditViewController: UIViewController {
         kickboard.setValue(updatedAddress, forKey: #keyPath(Kickboard.address))
         kickboard.setValue(kickboardEditView.saddledSwitch.isOn, forKey: #keyPath(Kickboard.isSaddled))
 
-        CoreDataManager.shared.saveContext()
-        
-        print("킥보드 수정됨: \(updatedName), \(updatedAddress), \(kickboard.isSaddled ? "안장형" : "일반형")")
-        navigationController?.popViewController(animated: true)
+        do {
+            try CoreDataManager.shared.saveContext()
+            print("킥보드 수정됨: \(updatedName), \(updatedAddress), \(kickboard.isSaddled ? "안장형" : "일반형")")
+            navigationController?.popViewController(animated: true)
+        } catch {
+            print("Error saving context: \(error.localizedDescription)")
+        }
     }
     
     @objc private func deleteButtonTapped() {
@@ -62,7 +65,7 @@ class KickboardEditViewController: UIViewController {
         let alert = UIAlertController(title: "삭제", message: "킥보드를 삭제하시겠습니까?", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "취소", style: .cancel))
         alert.addAction(UIAlertAction(title: "삭제", style: .destructive, handler: { _ in
-            CoreDataManager.shared.deleteKickboard(kickboard)
+            CoreDataManager.shared.delete(kickboard)
             print("킥보드 삭제됨")
             self.navigationController?.popViewController(animated: true)
         }))

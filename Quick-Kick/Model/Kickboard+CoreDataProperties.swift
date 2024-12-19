@@ -5,7 +5,6 @@
 //  Created by 반성준 on 12/18/24.
 //
 
-import Foundation
 import CoreData
 
 @objc(Kickboard)
@@ -26,4 +25,18 @@ extension Kickboard {
     @NSManaged public var address: String
 }
 
-extension Kickboard: Identifiable {}
+// MARK: - Kickboard Extension for DTO
+extension Kickboard {
+    func toDTO() -> KickboardDTO {
+        return KickboardDTO(
+            nickName: self.nickName,
+            isSaddled: self.isSaddled,
+            isOccupied: self.isOccupied,
+            startTime: self.startTime,
+            endTime: self.endTime,
+            latitude: self.latitude,
+            longitude: self.longitude,
+            address: self.address
+        )
+    }
+}
