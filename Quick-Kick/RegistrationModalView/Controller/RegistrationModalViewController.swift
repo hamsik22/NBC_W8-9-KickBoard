@@ -95,6 +95,8 @@ final class RegistrationModalViewController: UIViewController {
     func editKickboardData(_ type: Bool, _ text: String) {
         self.typeButton.updateData(type)
         self.textField.updateData(text)
+        self._haveNickNameText = true
+        self.addButton.activateButton(true)
     }
 }
 
@@ -129,8 +131,6 @@ extension RegistrationModalViewController: RegistrationViewDelegate {
             guard let self else { return }
             self.dismiss(animated: true)
         }
-        
-        print(CoreDataManager.shared.fetch().last)
     }
     
     var typeSeleted: Bool {
