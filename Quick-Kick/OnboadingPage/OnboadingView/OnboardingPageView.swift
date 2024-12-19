@@ -18,11 +18,13 @@ final class OnboardingPageView: UIView {
     
     private let startButton = UIButton()
     
-    init(title: String, info: String, image: UIImage?, isButton: Bool) {
-        self.titleLabel.text = title
-        self.infoLabel.text = info
-        self.infoImageView.image = image
-        self.startButton.isHidden = isButton
+    weak var onboardingDelegate: OndoardingDelegate?
+    
+    init(data: OnboardingDataModel) {
+        self.titleLabel.text = data.title
+        self.infoLabel.text = data.info
+        self.infoImageView.image = data.image
+        self.startButton.isHidden = data.isButtonHidden
         
         super.init(frame: .infinite)
         
@@ -112,4 +114,30 @@ final class OnboardingPageView: UIView {
         }
     }
     
+    private func addSwipeGesture() {
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(pageSwipe))
+        self.addGestureRecognizer(swipeGesture)
+    }
+    
+    @objc private func pageSwipe(_ gesture: UIGestureRecognizer) {
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+            switch swipeGesture.direction {
+            case UISwipeGestureRecognizer.Direction.right:
+                
+                
+            case UISwipeGestureRecognizer.Direction.left:
+                
+                
+            default: break
+            }
+        }
+    }
+    
+    private func changedData(data: OnboardingDataModel) {
+        self.titleLabel.text = data.title
+        self.infoLabel.text = data.info
+        self.infoImageView.image = data.image
+        self.startButton.isHidden = data.isButtonHidden
+        self.layoutIfNeeded()
+    }
 }
