@@ -15,7 +15,7 @@ final class SearchKickboardViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let kickboards = CoreDataManager.shared.fetchKickboards()
+        let kickboards = CoreDataManager.shared.fetch()
         searchKickboardView.deliverKickboardsData(kickboards)
 //        makeMockData()
     }
@@ -23,35 +23,17 @@ final class SearchKickboardViewController: UIViewController {
 
 extension SearchKickboardViewController {
     private func makeMockData() {
-        CoreDataManager.shared.createKickboard(
+        print(CoreDataManager.shared.fetch())
+        let data = KickboardDTO(
             nickName: "씽씽이A",
             isSaddled: false,
             isOccupied: false,
             startTime: nil,
             endTime: nil,
-            latitude: 37.498095,
-            longitude: 127.027610,
+            latitude: 37.517430,
+            longitude: 127.047515,
             address: "강남역 1번출구"
         )
-        CoreDataManager.shared.createKickboard(
-            nickName: "씽씽이B",
-            isSaddled: true,
-            isOccupied: true,
-            startTime: Date(),
-            endTime: Date().addingTimeInterval(3600),
-            latitude: 37.497922,
-            longitude: 127.027637,
-            address: "강남역 2번출구"
-        )
-        CoreDataManager.shared.createKickboard(
-            nickName: "씽씽이C",
-            isSaddled: false,
-            isOccupied: false,
-            startTime: nil,
-            endTime: nil,
-            latitude: 37.504507,
-            longitude: 127.048962,
-            address: "삼성중앙역 4번출구"
-        )
+        CoreDataManager.shared.create(with: data)
     }
 }
