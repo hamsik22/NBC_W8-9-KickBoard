@@ -37,11 +37,6 @@ final class SearchKickboardMapView: MKMapView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        addMarkersOnMap()
-    }
-    
     private func setupDebugLocation() {
         setMapCenter(gangnamStation)
     }
@@ -61,9 +56,12 @@ final class SearchKickboardMapView: MKMapView {
     
     func setupKickboardsData(kickboards: [Kickboard]) {
         self.kickboards = kickboards
+        addMarkersOnMap()
     }
     
     private func addMarkersOnMap() {
+        removeAnnotations(annotations)
+        
         self.kickboards?.forEach({ kickboard in
             if kickboard.startTime == nil {
                 let annotation = KickboardAnnotation(kickboard: kickboard)
