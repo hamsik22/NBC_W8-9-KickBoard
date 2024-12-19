@@ -11,6 +11,10 @@ import SnapKit
 // 킥보드 등록을 모달뷰 컨트롤러
 final class RegistrationModalViewController: UIViewController {
     
+    private var latitude: Double?
+    private var longitude: Double?
+    private var address: String?
+    
     private var _typeSeleted: Bool = false
     private var _haveNickNameText: Bool = false
     
@@ -27,6 +31,14 @@ final class RegistrationModalViewController: UIViewController {
         setupTypeButton()
         setupTextField()
         setupAddButton()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        /// 디버깅용 코드 - 주소값 잘 전달 받았는지 출력으로 확인
+        print(latitude)
+        print(longitude)
+        print(address)
     }
     
     // MARK: - RegistrationModalViewController UI Setting Method
@@ -71,6 +83,13 @@ final class RegistrationModalViewController: UIViewController {
     func editKickboardData(_ type: Bool, _ text: String) {
         self.typeButton.updateData(type)
         self.textField.updateData(text)
+    }
+    
+    /// 킥보드 등록 탭에서 + 버튼 눌렀을 때 주소 정보 전달 받는 메소드
+    func setAddressInfo(_ latitude: Double, _ longitude: Double, _ address: String) {
+        self.latitude = latitude
+        self.longitude = longitude
+        self.address = address
     }
 }
 

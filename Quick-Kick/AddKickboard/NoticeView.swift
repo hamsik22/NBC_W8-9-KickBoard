@@ -30,12 +30,17 @@ class NoticeView: UIView {
     private lazy var addressLabel: UILabel = {
         let label = UILabel()
         
-        label.text = "서울 서초구 강남대로 110 메리츠타워"
+        label.text = "서울 강남구 강남대로 지하 396 강남역"
         label.font = .boldSystemFont(ofSize: 20)
         label.textAlignment = .center
         
         return label
     }()
+    
+    // address 값 전달용 계산 프로퍼티
+    var address: String {
+        addressLabel.text ?? ""
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

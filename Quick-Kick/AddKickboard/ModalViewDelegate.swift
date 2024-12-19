@@ -9,7 +9,7 @@ import UIKit
 
 protocol ModalViewDelegate: AnyObject where Self: UIViewController {
         
-    func presentModalVIew()
+    func presentModalView(_ latitude: Double, _ longitude: Double, address: String)
     
     func editKickboardModalView()
     
@@ -17,7 +17,7 @@ protocol ModalViewDelegate: AnyObject where Self: UIViewController {
 
 extension ModalViewDelegate {
     
-    func presentModalVIew() {
+    func presentModalView(_ latitude: Double, _ longitude: Double, address: String) {
         let modalVC = RegistrationModalViewController()
         modalVC.modalPresentationStyle = .formSheet
         modalVC.sheetPresentationController?.preferredCornerRadius = 50
