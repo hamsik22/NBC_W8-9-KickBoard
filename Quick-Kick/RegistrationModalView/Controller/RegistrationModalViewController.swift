@@ -114,7 +114,7 @@ extension RegistrationModalViewController: RegistrationViewDelegate {
         
         let kickboardData = KickboardDTO(nickName: nickName,
                                          isSaddled: type,
-                                         isOccupied: false,
+                                         isOccupied: true,
                                          startTime: nil,
                                          endTime: nil,
                                          latitude: latitude,
