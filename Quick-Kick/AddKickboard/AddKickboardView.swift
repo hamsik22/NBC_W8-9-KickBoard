@@ -14,6 +14,23 @@ class AddKickboardView: UIView {
     
     private lazy var noticeView: NoticeView = .init()
     
+    /// SearchKickboardView - 명지님 코드 복붙 / 시간 없어서 객체 분리 X
+    private lazy var locationResetButton: UIButton = {
+        let button = UIButton()
+        button.isHidden = true
+        var config = UIButton.Configuration.filled()
+        config.image = UIImage(named: "LocationResetButtonIcon.png")
+        config.title = "현위치로 가기"
+        config.imagePadding = 10
+        config.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
+        config.imagePlacement = .leading
+        config.background.backgroundColor = UIColor(named: "personalLight/light")
+        config.baseForegroundColor = UIColor(named: "personalDark/darker")
+        config.cornerStyle = .capsule
+        button.configuration = config
+        return button
+    }()
+    
     private lazy var addButton: UIButton = {
         let button = UIButton()
         
@@ -43,6 +60,7 @@ class AddKickboardView: UIView {
         addSubviews()
         layout()
         setAction()
+        mapView.currentLocationDelegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -55,7 +73,7 @@ class AddKickboardView: UIView {
     }
     
     private func addSubviews() {
-        [mapView, noticeView, addButton, centerPinImage]
+        [mapView, noticeView, locationResetButton, addButton, centerPinImage]
             .forEach { addSubview($0) }
     }
     
@@ -73,6 +91,12 @@ class AddKickboardView: UIView {
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
             $0.height.equalTo(100)
+        }
+        
+        locationResetButton.snp.makeConstraints {
+            $0.top.equalTo(noticeView.snp.bottom).offset(16)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(30)
         }
         
         addButton.snp.makeConstraints {
@@ -94,9 +118,24 @@ class AddKickboardView: UIView {
     
     private func setAction() {
         self.addButton.addTarget(self, action: #selector(presentModal), for: .touchUpInside)
+        self.locationResetButton.addTarget(self, action: #selector(resetLocation), for: .touchUpInside)
     }
     
     @objc private func presentModal() {
         self.modalViewDelegate?.presentModalView(mapView.centerCoordinate.latitude, mapView.centerCoordinate.longitude, address: noticeView.address)
+    }
+    
+    @objc private func resetLocation() {
+        mapView.setMapCenter()
+    }
+}
+
+extension AddKickboardView: CurrentLocationDelegate {
+    func showLocationResetButton() {
+        locationResetButton.isHidden = false
+    }
+    
+    func hideLocationResetButton() {
+        locationResetButton.isHidden = true
     }
 }
