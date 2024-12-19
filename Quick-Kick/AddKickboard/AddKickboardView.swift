@@ -18,9 +18,11 @@ class AddKickboardView: UIView {
         let button = UIButton()
         
         button.tintColor = UIColor.PersonalNomal.nomal
+        button.backgroundColor = .systemBackground
         
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 70)
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 60)
         button.setImage(UIImage(systemName: "plus.circle.fill", withConfiguration: imageConfig), for: .normal)
+        button.imageView?.contentMode = .center
         
         return button
     }()
@@ -75,7 +77,7 @@ class AddKickboardView: UIView {
         
         addButton.snp.makeConstraints {
             $0.trailing.bottom.equalToSuperview().offset(-32)
-            $0.height.width.equalTo(70)
+            $0.height.width.equalTo(60)
         }
         
         centerPinImage.snp.makeConstraints {
