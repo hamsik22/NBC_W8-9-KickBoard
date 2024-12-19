@@ -7,8 +7,8 @@
 
 import Foundation
 
-// MARK: - Key 관리 구조체
-struct UserDefaultsKeys {
+// MARK: - Key 관리 열거형
+enum UserDefaultsKeys {
     static let user = "user"
     static let loginStatus = "LoginStatus"
     static let autoLoginOption = "AutoLoginOption"
