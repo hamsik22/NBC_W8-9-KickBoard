@@ -13,7 +13,7 @@ class HistorySectionView: UIView {
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.PersonalLight.light
-        view.layer.cornerRadius = 20
+        view.layer.cornerRadius = 24
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
