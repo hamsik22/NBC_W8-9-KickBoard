@@ -6,12 +6,32 @@
 //
 
 import CoreData
-import UIKit
 
-final class CoreDataManager: KickboardDataManageable {
+protocol CoreDataManageable {
+    associatedtype Model: EntityTransformAble
+    associatedtype Entity: NSManagedObject
+
+    func create(with model: Model)
+    func fetch() -> [Entity]
+    func delete(_ entity: Entity)
+    func saveContext() throws
+}
+
+protocol EntityTransformAble {
+    associatedtype Entity: NSManagedObject
+    func toEntity(context: NSManagedObjectContext) -> Entity
+}
+
+
+final class CoreDataManager: CoreDataManageable {
+    typealias Model = KickboardDTO
+    typealias Entity = Kickboard
+
+    // MARK: - Singleton
     static let shared = CoreDataManager()
     private init() {}
 
+    // MARK: - Core Data Stack
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "KickboardModel")
         container.loadPersistentStores { _, error in
@@ -26,44 +46,25 @@ final class CoreDataManager: KickboardDataManageable {
         return persistentContainer.viewContext
     }
 
-    // MARK: - KickboardDataManageable
-    func createKickboard(nickName: String,
-                         isSaddled: Bool,
-                         isOccupied: Bool = false,
-                         startTime: Date? = nil,
-                         endTime: Date? = nil,
-                         latitude: Double,
-                         longitude: Double,
-                         address: String) {
-        let newKickboard = Kickboard(context: context)
-        newKickboard.nickName = nickName
-        newKickboard.isSaddled = isSaddled
-        newKickboard.isOccupied = isOccupied
-        newKickboard.startTime = startTime
-        newKickboard.endTime = endTime
-        newKickboard.latitude = latitude
-        newKickboard.longitude = longitude
-        newKickboard.address = address
-        saveContext()
+    // MARK: - CoreDataManageable Methods
+    func create(with model: KickboardDTO) {
+        _ = model.toEntity(context: context)
+        try? saveContext()
     }
 
-    func fetchKickboards() -> [Kickboard] {
+    func fetch() -> [Kickboard] {
         let request: NSFetchRequest<Kickboard> = Kickboard.fetchRequest()
         return (try? context.fetch(request)) ?? []
     }
 
-    func deleteKickboard(_ kickboard: Kickboard) {
-        context.delete(kickboard)
-        saveContext()
+    func delete(_ entity: Kickboard) {
+        context.delete(entity)
+        try? saveContext()
     }
 
-    func saveContext() {
+    func saveContext() throws {
         if context.hasChanges {
-            do {
-                try context.save()
-            } catch {
-                print("Error saving context: \(error.localizedDescription)")
-            }
+            try context.save()
         }
     }
 }
