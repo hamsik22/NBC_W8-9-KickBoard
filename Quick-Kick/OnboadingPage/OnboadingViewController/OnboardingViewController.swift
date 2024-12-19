@@ -10,13 +10,19 @@ import SnapKit
 
 final class OnboardingViewController: UIViewController {
     
-    private let onboadingView = OnboardingPageView(title: "환영합니다!!", info: "퀵킥은 목적지까지\n빠르게 이동하기 위해\n공용 킥보드를\nQuick 하게\n빌릴 수 있는 앱입니다!", image: UIImage(named: "onboadingImage_kickboard"), isButton: false)
+    private let onboardingView: UIView
     
-    override func loadView() {
-        view = self.onboadingView
+    init(view: UIView) {
+        self.onboardingView = view
+        
+        super.init(nibName: nil, bundle: nil)
     }
     
-    deinit {
-        print("OnboadingViewController deinit")
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func loadView() {
+        view = self.onboardingView
     }
 }
