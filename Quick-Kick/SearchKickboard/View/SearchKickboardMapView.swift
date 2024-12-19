@@ -18,7 +18,7 @@ final class SearchKickboardMapView: MKMapView {
     
     private var kickboards: [Kickboard]?
     weak var mapViewDelegate: SearchKickboardMapViewDelegate?
-    private var rentKickboardModalView = RentKickboardModalView()
+    private(set) var rentKickboardModalView = RentKickboardModalView()
     
     private let gangnamStation = CLLocation(
         latitude: 37.498095,
