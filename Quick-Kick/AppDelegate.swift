@@ -15,9 +15,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = UINavigationController(rootViewController: MyPageViewController())
+        window.rootViewController = UINavigationController(rootViewController: setInitialView())
         window.makeKeyAndVisible()
         self.window = window
         return true
+    }
+    
+    private func setInitialView() -> UIViewController {
+        if UserDefaultsManager.shared.isLoggedIn {
+            return ViewController()
+        } else if UserDefaultsManager.shared.autoLoginOption {
+            return ViewController()
+        } else {
+            return LoginViewController()
+        }
     }
 }
