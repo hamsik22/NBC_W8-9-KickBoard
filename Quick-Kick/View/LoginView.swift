@@ -129,6 +129,8 @@ extension LoginView {
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
         }
+        emailField.autocapitalizationType = .none
+        emailField.textContentType = .none
         
         passwordField.snp.makeConstraints { make in
             make.top.equalTo(emailField.snp.bottom).offset(10)
@@ -138,6 +140,7 @@ extension LoginView {
         }
         passwordField.isSecureTextEntry = true
         passwordField.textContentType = .none
+        passwordField.autocapitalizationType = .none
                 
         autoLoginOption.snp.makeConstraints { make in
             make.top.equalTo(passwordField.snp.bottom).offset(10)
