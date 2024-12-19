@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import CoreData
 
 // 킥보드 등록을 모달뷰 컨트롤러
 final class RegistrationModalViewController: UIViewController {
@@ -20,9 +21,13 @@ final class RegistrationModalViewController: UIViewController {
     private var _sendNickName: String?
     private var _kickboardType: Bool?
     
+    private var kickboardID: NSManagedObjectID?
+    
     private let textField = RegistrationTextField()
     private let typeButton = KickboardTypeButton()
     private let addButton = RegistrationButton()
+    
+    var disappear: (() -> Void)?
     
     // MARK: - RegistrationModalViewController LifeCycle
     override func viewDidLoad() {
@@ -33,6 +38,12 @@ final class RegistrationModalViewController: UIViewController {
         setupTypeButton()
         setupTextField()
         setupAddButton()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        self.disappear?()
     }
     
     // MARK: - RegistrationModalViewController UI Setting Method
@@ -75,8 +86,8 @@ final class RegistrationModalViewController: UIViewController {
         }
     }
     
-    private func completeRegistrationAlert(_ completion: @escaping () -> Void) {
-        let alert = UIAlertController(title: "등록 완료", message: "내 킥보드가 Quick하게\n저장되었습니다!", preferredStyle: .alert)
+    private func completeRegistrationAlert(message: String, _ completion: @escaping () -> Void) {
+        let alert = UIAlertController(title: "등록 완료", message: "내 킥보드가 Quick하게\n\(message)되었습니다!", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "확인", style: .default) { _ in
             completion()
         })
@@ -92,16 +103,36 @@ final class RegistrationModalViewController: UIViewController {
     }
     
     /// 내 킥보드 관리에서 cell을 탭했을 때 킥보드 유형과 별명을 전달 받는 메소드
-    func editKickboardData(_ type: Bool, _ text: String) {
+    func editKickboardData(_ type: Bool, _ text: String, _ id: NSManagedObjectID) {
+        self.kickboardID = id
+        self._sendNickName = text
+        self._kickboardType = type
+        self._haveNickNameText = true
+        self._typeSeleted = true
         self.typeButton.updateData(type)
         self.textField.updateData(text)
-        self._haveNickNameText = true
+        self.addButton.modalMode = .edit
         self.addButton.activateButton(true)
     }
 }
 
 // MARK: RegistrationViewDelegate Method
 extension RegistrationModalViewController: RegistrationViewDelegate {
+    func updateKickboardData() {
+        guard let id = self.kickboardID, let sendNickName = self._sendNickName, let kickboardType = self._kickboardType else { return }
+        
+        do {
+            try CoreDataManager.shared.update(id, sendNickName, kickboardType)
+            
+            completeRegistrationAlert(message: "수정") { [weak self] in
+                guard let self else { return }
+                self.dismiss(animated: true)
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
     var sendNickName: String? {
         get { self._sendNickName }
         set { self._sendNickName = newValue }
@@ -127,7 +158,7 @@ extension RegistrationModalViewController: RegistrationViewDelegate {
         
         CoreDataManager.shared.create(with: kickboardData)
         
-        completeRegistrationAlert() { [weak self] in
+        completeRegistrationAlert(message: "저장") { [weak self] in
             guard let self else { return }
             self.dismiss(animated: true)
         }

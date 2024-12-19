@@ -21,4 +21,6 @@ protocol RegistrationViewDelegate: AnyObject {
     func activateButton() // 버튼 활성화
     
     func savedKickboardData() // 킥보드 정보 저장
+    
+    func updateKickboardData() // 킥보드 정보 업데이트
 }

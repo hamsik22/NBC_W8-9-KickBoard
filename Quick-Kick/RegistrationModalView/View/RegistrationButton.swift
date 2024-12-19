@@ -11,7 +11,14 @@ import SnapKit
 // 모달뷰의 등록하기 버튼 뷰
 final class RegistrationButton: UIView {
     
+    enum ModalMode {
+        case edit
+        case normal
+    }
+    
     private let addButton = UIButton()
+    
+    var modalMode: ModalMode = .normal
     
     weak var registrationDelegate: RegistrationViewDelegate?
     
@@ -75,6 +82,11 @@ private extension RegistrationButton {
 @objc private extension RegistrationButton {
     /// 버튼을 눌렀을 때 액션
     func buttonTapped() {
-        self.registrationDelegate?.savedKickboardData()
+        switch self.modalMode {
+        case .edit:
+            self.registrationDelegate?.updateKickboardData()
+        case .normal:
+            self.registrationDelegate?.savedKickboardData()
+        }
     }
 }

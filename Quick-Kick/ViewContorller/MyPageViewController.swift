@@ -35,6 +35,12 @@ class MyPageViewController: UIViewController {
         logoutButton.addTarget(self, action: #selector(handleLogout), for: .touchUpInside)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.navigationBar.isHidden = true
+    }
+    
     // MARK: - Setup UI
     private func setupUI() {
         view.backgroundColor = .white
@@ -55,7 +61,7 @@ class MyPageViewController: UIViewController {
             contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
-            profileView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            profileView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
             profileView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30),
             profileView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -30),
             profileView.heightAnchor.constraint(equalToConstant: 150),
@@ -75,7 +81,7 @@ class MyPageViewController: UIViewController {
             logoutButton.leadingAnchor.constraint(equalTo: historySectionView.leadingAnchor),
             logoutButton.trailingAnchor.constraint(equalTo: historySectionView.trailingAnchor),
             logoutButton.heightAnchor.constraint(equalToConstant: 50),
-            logoutButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            logoutButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30)
         ])
     }
     

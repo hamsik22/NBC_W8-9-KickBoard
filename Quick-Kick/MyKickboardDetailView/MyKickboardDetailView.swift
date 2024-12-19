@@ -61,6 +61,12 @@ final class MyKickboardDetailView: UIView {
             $0.edges.equalToSuperview()
         }
     }
+    
+    func reloadCellData() {
+        UIView.animate(withDuration: 0.3) {
+            self.collectionView.reloadData()
+        }
+    }
 }
 
 extension MyKickboardDetailView: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -90,6 +96,8 @@ extension MyKickboardDetailView: UICollectionViewDelegate, UICollectionViewDataS
             let kickboard = delegate?.getKickboards()[indexPath.item],
             let nickName = kickboard.nickName
         else { return }
-        self.modalViewDelegate?.editKickboardModalView(kickboard.isSaddled, nickName)
+        self.modalViewDelegate?.editKickboardModalView(kickboard.isSaddled, nickName, kickboard.objectID)
     }
 }
+
+

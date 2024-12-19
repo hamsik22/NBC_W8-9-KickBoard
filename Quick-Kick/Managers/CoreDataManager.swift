@@ -68,6 +68,24 @@ final class CoreDataManager: CoreDataManageable {
         }
     }
     
+    func search(_ id: NSManagedObjectID) -> Entity? {
+        do {
+            let kickboard = try context.existingObject(with: id) as? Entity
+            return kickboard
+            
+        } catch {
+            print(error)
+            return nil
+        }
+    }
+    
+    func update(_ id: NSManagedObjectID, _ nickName: String, _ isSaddled: Bool) throws {
+        guard let kickboard = search(id) else { return }
+        kickboard.nickName = nickName
+        kickboard.isSaddled = isSaddled
+        try saveContext()
+    }
+    
     /// 내가 등록한 킥보드 fetch
     func fetchMyKickboards() -> [Kickboard] {
         let request: NSFetchRequest<Kickboard> = Kickboard.fetchRequest()
