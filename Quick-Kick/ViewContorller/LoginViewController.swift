@@ -47,8 +47,14 @@ extension LoginViewController: LoginViewDelegate {
     func didLoginButtonTapped(_ email: String, _ password: String) {
         if isCorrectInfo(email: email, password: password) {
             login()
+            loginView.showOnboardingPage()
         } else {
+            let alert = UIAlertController(title: "로그인 실패", message: "입력값을 확인해주세요.", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "OK", style: .default)
+            alert.addAction(okAction)
+            self.present(alert, animated: true)
             print("로그인 실패")
+            initTextFields()
         }
     }
     
@@ -107,7 +113,10 @@ extension LoginViewController {
         guard let email, let password else {
             print("정보를 입력해주세요")
             return false }
+        print("isCorrectInfo()")
         guard let user = UserDefaultsManager.shared.getUser() else { return false }
+        print("\(user.email), \(user.password)")
+        print("\(email), \(password)")
         if email == user.email && password == user.password {
             return true
         } else {

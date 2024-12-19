@@ -205,12 +205,15 @@ extension LoginView {
         if let email = emailField.text, let password = passwordField.text {
             delegate?.didLoginButtonTapped(email, password)
         }
+    }
+    func showOnboardingPage() {
         DispatchQueue.main.async {
             UIView.transition(with: self.window!, duration: 0.5, options: .transitionCrossDissolve) {
                 self.window?.rootViewController = UINavigationController(rootViewController: OnboardingPageViewController())
             }
         }
     }
+    
     // 회원가입 터치
     @objc func signupButtonTapped() {
         delegate?.didSignUpButtonTapped()
