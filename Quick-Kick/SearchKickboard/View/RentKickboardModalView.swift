@@ -7,7 +7,7 @@
 import UIKit
 
 final class RentKickboardModalView: UIView {
-    private var kickboard: Kickboard?
+    private(set) var kickboard: Kickboard?
     
     private let kickboardImageView: UIImageView = {
         let imageView = UIImageView()
@@ -60,9 +60,8 @@ final class RentKickboardModalView: UIView {
         return stackView
     }()
     
-    init(kickboard: Kickboard) {
-        super.init(frame: .zero)
-        self.kickboard = kickboard
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setupModalView()
         setupLayout()
     }
@@ -73,8 +72,6 @@ final class RentKickboardModalView: UIView {
     
     private func setupModalView() {
         self.backgroundColor = .white
-        self.kickboardNicknameLabel.text = self.kickboard?.nickName
-        self.kickboardLocationLabel.text = self.kickboard?.address
         self.rentButton.addTarget(self, action: #selector(rentButtonTapped), for: .touchUpInside)
     }
     
@@ -90,14 +87,23 @@ final class RentKickboardModalView: UIView {
         }
     }
     
+    func setupKickboardData(_ kickboard: Kickboard) {
+        self.kickboard = kickboard
+        self.kickboardNicknameLabel.text = kickboard.nickName
+        self.kickboardLocationLabel.text = kickboard.address
+        if kickboard.isSaddled {
+            self.kickboardImageView.image = UIImage(named: "QuickBoard - Seat")
+        }
+    }
+    
     @objc
     private func rentButtonTapped() {
         if self.kickboard?.startTime == nil {
             self.kickboard?.startTime = Date()
-            self.rentButton.titleLabel?.text = "이용 종료"
+            self.rentButton.setTitle("이용 종료", for: .normal)
         } else {
             self.kickboard?.endTime = Date()
-            self.rentButton.titleLabel?.text = "이용 시작"
+            self.rentButton.setTitle("이용 시작", for: .normal)
         }
     }
 }
