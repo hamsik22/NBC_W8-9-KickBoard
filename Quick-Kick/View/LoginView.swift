@@ -29,11 +29,12 @@ class LoginView: UIView {
         button.setTitleColor(UIColor.PersonalNomal.nomal, for: .normal)
         return button
     }()
+    
     private let rememberIDCheckBox: UIImageView = {
         let image = UIImage(systemName: "square")
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = UIColor.PersonalLight.active
+        imageView.tintColor = UIColor.PersonalNomal.nomal
         return imageView
     }()
     private let autoLoginOption: UIButton = {
@@ -48,16 +49,8 @@ class LoginView: UIView {
         let image = UIImage(systemName: "square")
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = UIColor.PersonalLight.active
+        imageView.tintColor = UIColor.PersonalNomal.nomal
         return imageView
-    }()
-    private let findPasswordButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("비밀번호를 잊어버렸습니까?", for: .normal)
-        button.setTitleColor(.systemGray, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 12)
-        button.setTitleColor(UIColor.PersonalNomal.nomal, for: .normal)
-        return button
     }()
     private let loginButton: UIButton = {
         let button = UIButton()
@@ -77,32 +70,38 @@ class LoginView: UIView {
         button.layer.cornerRadius = 20
         return button
     }()
-    var autoLoginCheckBoxIsChecked: Bool = false {
+    
+    // 체크박스 상태변수
+    var autoLoginCheckBoxIsChecked: Bool = UserDefaultsManager.shared.autoLoginOption {
         didSet {
-            autoLoginCheckBox.image = UIImage(systemName: autoLoginCheckBoxIsChecked ? "checkmark.square" : "square")
-            print("자동 로그인 상태: \(autoLoginCheckBoxIsChecked)")
+            autoLoginCheckBox.image = UIImage(systemName: autoLoginCheckBoxIsChecked ? "checkmark.square.fill" : "square")
+            UserDefaults.standard.set(autoLoginCheckBoxIsChecked, forKey: "autoLoginCheckBoxIsChecked")
         }
     }
-    var rememberIDCheckBoxIsChecked: Bool = false {
+    var rememberIDCheckBoxIsChecked: Bool = UserDefaultsManager.shared.rememberIDOption {
         didSet {
-            rememberIDCheckBox.image = UIImage(systemName: rememberIDCheckBoxIsChecked ? "checkmark.square" : "square")
-            print("아이디 저장 상태: \(rememberIDCheckBoxIsChecked)")
+            rememberIDCheckBox.image = UIImage(systemName: rememberIDCheckBoxIsChecked ? "checkmark.square.fill" : "square")
+            UserDefaults.standard.set(rememberIDCheckBoxIsChecked, forKey: "rememberIDCheckBoxIsChecked")
         }
     }
     
+
+    // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
         settingActions()
         layout()
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+}
+
+// MARK: - Layout
+extension LoginView {
     private func setupSubviews() {
-        [logoImageView, emailField, passwordField, rememberIDCheckBox, autoLoginOption, autoLoginCheckBox, rememberIDOption, findPasswordButton, loginButton, signupButton]
+        [logoImageView, emailField, passwordField, rememberIDCheckBox, autoLoginOption, autoLoginCheckBox, rememberIDOption, loginButton, signupButton]
             .forEach{ addSubview($0) }
         layout()
     }
@@ -128,6 +127,8 @@ class LoginView: UIView {
             make.height.equalTo(40)
             make.centerX.equalToSuperview()
         }
+        passwordField.isSecureTextEntry = true
+        passwordField.textContentType = .none
                 
         autoLoginOption.snp.makeConstraints { make in
             make.top.equalTo(passwordField.snp.bottom).offset(10)
@@ -141,12 +142,14 @@ class LoginView: UIView {
             make.left.equalTo(autoLoginOption.snp.right)
             make.size.equalTo(20)
         }
+        autoLoginCheckBox.image = UIImage(systemName: autoLoginCheckBoxIsChecked ? "checkmark.square.fill" : "square")
         
         rememberIDCheckBox.snp.makeConstraints { make in
             make.top.equalTo(passwordField.snp.bottom).offset(10)
             make.left.equalTo(rememberIDOption.snp.right)
             make.size.equalTo(20)
         }
+        rememberIDCheckBox.image = UIImage(systemName: rememberIDCheckBoxIsChecked ? "checkmark.square.fill" : "square")
         
         rememberIDOption.snp.makeConstraints { make in
             make.top.equalTo(passwordField.snp.bottom).offset(10)
@@ -155,15 +158,8 @@ class LoginView: UIView {
             make.height.equalTo(20)
         }
         
-        findPasswordButton.snp.makeConstraints { make in
-            make.top.equalTo(autoLoginOption.snp.bottom).offset(10)
-            make.left.equalTo(passwordField.snp.left)
-            make.width.equalTo(140)
-            make.height.equalTo(20)
-        }
-        
         loginButton.snp.makeConstraints { make in
-            make.top.equalTo(findPasswordButton.snp.bottom).offset(100)
+            make.top.equalTo(rememberIDOption.snp.bottom).offset(100)
             make.centerX.equalToSuperview()
             make.width.equalTo(300)
             make.height.equalTo(50)
@@ -177,54 +173,65 @@ class LoginView: UIView {
         }
     }
 }
-
-extension UITextField {
-    func setCustomPlaceholder(placeholder: String) -> UITextField {
-        let tf = UITextField()
-        tf.font = .systemFont(ofSize: 14)
-        tf.placeholder = placeholder
-        tf.borderStyle = .roundedRect
-        tf.backgroundColor = UIColor.PersonalLight.light
-        tf.setPlaceholder(color: UIColor.PersonalLight.active)
-        tf.layer.cornerRadius = 10
-        return tf
-    }
-}
-
-protocol LoginViewDelegate: AnyObject {
-    func didAutoLoginOptionTapped()
-    func didRememberIDOptionTapped()
-    func didFindPasswordButtonTapped()
-    func didLoginButtonTapped()
-    func didSignupButtonTapped()
-}
-
+// MARK: - Functions
 extension LoginView {
+    // 버튼 타겟추가
     private func settingActions() {
         autoLoginOption.addTarget(self, action: #selector(autoLoginOptionTapped), for: .touchUpInside)
         rememberIDOption.addTarget(self, action: #selector(rememberIDOptionTapped), for: .touchUpInside)
-        findPasswordButton.addTarget(self, action: #selector(findPasswordButtonTapped), for: .touchUpInside)
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         signupButton.addTarget(self, action: #selector(signupButtonTapped), for: .touchUpInside)
     }
+    // 아이디 저장 옵션에 필요한 함수
+    func setEmailFieldText(email: String) {
+        emailField.text = email
+    }
+    // 화면 이동 시, 텍스트필드 초기화
+    func initTextFields() {
+        emailField.text = ""
+        passwordField.text = ""
+    }
     
+    // 자동 로그인 터치
     @objc func autoLoginOptionTapped() {
         delegate?.didAutoLoginOptionTapped()
     }
+    // 아이디 저장 터치
     @objc func rememberIDOptionTapped() {
-        delegate?.didRememberIDOptionTapped()
+        delegate?.didRememberIDOptionTapped(emailField)
     }
-    @objc func findPasswordButtonTapped() {
-        delegate?.didFindPasswordButtonTapped()
-    }
+    // 로그인 버튼 터치
     @objc func loginButtonTapped() {
-        delegate?.didLoginButtonTapped()
+        if let email = emailField.text, let password = passwordField.text {
+            delegate?.didLoginButtonTapped(email, password)
+        }
     }
+    // 회원가입 터치
     @objc func signupButtonTapped() {
-        delegate?.didSignupButtonTapped()
+        delegate?.didSignUpButtonTapped()
+    }
+    // 텍스트 필드가 비어있는지 확인
+    private func isTextFieldsEmpty() -> Bool {
+        // 비어있는 값이 있을 경우
+        guard ((emailField.text?.isEmpty) != nil) ||
+            ((passwordField.text?.isEmpty) != nil)else {
+            print("정보를 입력해주세요")
+            return false
+        }
+        return true
     }
 }
+// MARK: - Protocol
+protocol LoginViewDelegate: AnyObject {
+    func didAutoLoginOptionTapped()
+    func didRememberIDOptionTapped(_ textField: UITextField)
+    func didLoginButtonTapped(_ email: String, _ password: String)
+    func didSignUpButtonTapped()
+    func getEmailTextField()
+    func initTextFields()
+}
 
+// Preview
 @available(iOS 17.0, *)
 #Preview {
     LoginViewController()

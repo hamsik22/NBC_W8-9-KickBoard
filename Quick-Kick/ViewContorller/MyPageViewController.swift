@@ -11,7 +11,6 @@ import CoreData
 class MyPageViewController: UIViewController {
     
     // MARK: - UI Components
-    private let scrollView = UIScrollView()
     private let contentView = UIView()
     
     private let profileView = ProfileView()
@@ -20,7 +19,7 @@ class MyPageViewController: UIViewController {
     private let logoutButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("로그아웃", for: .normal)
-        button.backgroundColor = UIColor.systemPurple
+        button.backgroundColor = UIColor.PersonalNomal.nomal
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 20
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
@@ -33,6 +32,7 @@ class MyPageViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewTapAction()
         setupUI()
         loadKickboards()
         configureSections()
@@ -52,28 +52,21 @@ class MyPageViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .white
         
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
+        view.addSubview(contentView)
         
         [profileView, kickboardSectionView, historySectionView, logoutButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
         }
         
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
             profileView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             profileView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30),
@@ -92,9 +85,10 @@ class MyPageViewController: UIViewController {
             
             logoutButton.topAnchor.constraint(equalTo: historySectionView.bottomAnchor, constant: 30),
             logoutButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            logoutButton.widthAnchor.constraint(equalToConstant: 200),
+            logoutButton.leadingAnchor.constraint(equalTo: historySectionView.leadingAnchor),
+            logoutButton.trailingAnchor.constraint(equalTo: historySectionView.trailingAnchor),
             logoutButton.heightAnchor.constraint(equalToConstant: 50),
-            logoutButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30)
+            logoutButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     
@@ -130,5 +124,15 @@ class MyPageViewController: UIViewController {
         UserDefaultsManager.shared.setLoggedOut()
         print("로그아웃 성공")
         // 로그아웃 후 화면 전환 로직 추가
+    }
+    
+    private func viewTapAction() {
+        let touchEvent = UITapGestureRecognizer(target: self, action: #selector(pushDetailView))
+        self.kickboardSectionView.addGestureRecognizer(touchEvent)
+    }
+    
+    @objc private func pushDetailView() {
+        self.navigationController?.pushViewController(MyKickboardDetailViewController(), animated: true)
+        self.navigationController?.navigationBar.isHidden = false
     }
 }

@@ -67,6 +67,11 @@ final class RegistrationModalViewController: UIViewController {
             $0.width.equalTo(320)
         }
     }
+    
+    func editKickboardData(_ type: Bool, _ text: String) {
+        self.typeButton.updateData(type)
+        self.textField.updateData(text)
+    }
 }
 
 // MARK: RegistrationViewDelegate Method

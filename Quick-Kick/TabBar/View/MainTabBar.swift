@@ -9,10 +9,23 @@ import UIKit
 import SnapKit
 
 // 현재 페이지 상태를 나타내는 enum
-enum PageIndex {
-    case search
-    case registration
-    case myPage
+enum PageIndex: String {
+    case search = "킥보드 찾기"
+    case registration = "킥보드 등록"
+    case myPage = "마이 페이지"
+    
+    mutating func changedPageIndex(_ index: Int) {
+        switch index {
+        case 0:
+            self = .search
+        case 1:
+            self = .registration
+        case 2:
+            self = .myPage
+            
+        default: break
+        }
+    }
 }
 
 // 탭바 UI를 구현하는 UIView
@@ -116,7 +129,7 @@ extension MainTabBar: UICollectionViewDelegate, UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        cell.setupLabelConfig(indexPath.row)
+        cell.setupLabelConfig(indexPath.item)
         cell.selectedTab(self.pageIndex)
         
         return cell
@@ -124,18 +137,10 @@ extension MainTabBar: UICollectionViewDelegate, UICollectionViewDataSource {
     
     // 셀이 선택되었을 때 액션 구현
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        switch indexPath.row {
-        case 0:
-            self.pageIndex = .search
-        case 1:
-            self.pageIndex = .registration
-        case 2:
-            self.pageIndex = .myPage
-        default: break
-        }
+        self.pageIndex.changedPageIndex(indexPath.item)
         
         moveIndicator()
         collectionView.reloadData()
-        self.tabBarDelegate?.changeVC(indexPath.row)
+        self.tabBarDelegate?.changeVC(indexPath.item)
     }
 }

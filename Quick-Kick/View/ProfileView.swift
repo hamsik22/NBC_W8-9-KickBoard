@@ -13,7 +13,7 @@ class ProfileView: UIView {
     
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.systemPurple.withAlphaComponent(0.1) // 연한 보라색 네모
+        view.backgroundColor = UIColor.PersonalLight.light
         view.layer.cornerRadius = 20
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -21,7 +21,7 @@ class ProfileView: UIView {
     
     private let purpleCircleView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.systemPurple // 진한 보라색 원
+        view.backgroundColor = UIColor.PersonalLight.active
         view.layer.cornerRadius = 50
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -37,8 +37,9 @@ class ProfileView: UIView {
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 24)
-        label.textColor = .systemPurple
+        label.textColor = UIColor.PersonalDark.dark
         label.text = "User1" // 기본 닉네임
+        label.textAlignment = .right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -48,12 +49,13 @@ class ProfileView: UIView {
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .darkGray
         label.text = "user1234@gmail.com"
+        label.textAlignment = .right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let editIconImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "pencil"))
+        let imageView = UIImageView(image: UIImage(systemName: "pencil.circle.fill"))
         imageView.tintColor = .systemPurple
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.isUserInteractionEnabled = true
@@ -88,14 +90,13 @@ class ProfileView: UIView {
         NSLayoutConstraint.activate([
             // Container View
             containerView.topAnchor.constraint(equalTo: topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            containerView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            containerView.heightAnchor.constraint(equalToConstant: 120),
             
             // Purple Circle
             purpleCircleView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            purpleCircleView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 6), // 더 왼쪽으로 조정
+            purpleCircleView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20), // 더 왼쪽으로 조정
             purpleCircleView.widthAnchor.constraint(equalToConstant: 100),
             purpleCircleView.heightAnchor.constraint(equalToConstant: 100),
             
@@ -105,21 +106,21 @@ class ProfileView: UIView {
             kickboardImageView.widthAnchor.constraint(equalToConstant: 80),
             kickboardImageView.heightAnchor.constraint(equalToConstant: 80),
             
+            // Edit Icon
+            editIconImageView.topAnchor.constraint(equalTo: purpleCircleView.topAnchor, constant: 10),
+            editIconImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            editIconImageView.widthAnchor.constraint(equalToConstant: 24),
+            editIconImageView.heightAnchor.constraint(equalToConstant: 24),
+            
             // Name Label
-            nameLabel.topAnchor.constraint(equalTo: purpleCircleView.topAnchor, constant: 10),
+            nameLabel.centerYAnchor.constraint(equalTo: editIconImageView.centerYAnchor),
             nameLabel.leadingAnchor.constraint(equalTo: purpleCircleView.trailingAnchor, constant: 20),
             nameLabel.trailingAnchor.constraint(equalTo: editIconImageView.leadingAnchor, constant: -10),
             
             // Email Label
             emailLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5),
             emailLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
-            emailLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            
-            // Edit Icon
-            editIconImageView.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor),
-            editIconImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            editIconImageView.widthAnchor.constraint(equalToConstant: 20),
-            editIconImageView.heightAnchor.constraint(equalToConstant: 20)
+            emailLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20)
         ])
     }
     

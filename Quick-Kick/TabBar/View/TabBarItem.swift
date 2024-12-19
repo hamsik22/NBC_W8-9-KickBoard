@@ -14,9 +14,7 @@ final class TabBarItem: UICollectionViewCell {
     static let id: String = "TabBarItem" // 셀의 고유 이름
     
     private var pageIndex: PageIndex = .search
-    
-    private let tabTitle: [String] = ["킥보드 찾기", "킥보드 등록", "마이 페이지"] // 셀의 타이틀
-    
+        
     private let tabLabel =  UILabel() // 탭의 타이틀 UI
     
     // MARK: - TabBarItem Initializer
@@ -72,19 +70,11 @@ final class TabBarItem: UICollectionViewCell {
     }
     
     /// 셀의 레이블을 설정하는 메소드
-    /// - Parameter row: 현재 셀의 indexPath row
-    func setupLabelConfig(_ row: Int) {
-        self.tabLabel.text = self.tabTitle[row]
+    /// - Parameter item: 현재 셀의 indexPath item
+    func setupLabelConfig(_ item: Int) {
+        self.pageIndex.changedPageIndex(item)
         
-        switch row {
-        case 0:
-            self.pageIndex = .search
-        case 1:
-            self.pageIndex = .registration
-        case 2:
-            self.pageIndex = .myPage
-        default: break
-        }
+        self.tabLabel.text = self.pageIndex.rawValue
     }
     
     /// 셀이 선택되었을 때 강조를 해주는 메소드
