@@ -74,13 +74,18 @@ struct User: Codable {
 final class UserDefaultsManager: UserDataManageable {
   static let shared = UserDefaultsManager()
   private init() {}
-   var autoLoginOption: Bool {
-     get {
-       UserDefaults.standard.bool(forKey: "autoLoginOption")
-     }
-     set {
-       UserDefaults.standard.set(newValue, forKey: "autoLoginOption")
-       print("AutoLoginOption updated: \(newValue)")
-     }
-   }
+    var isLoggedIn: Bool {
+        get { UserDefaults.standard.bool(forKey: UserDefaultsKeys.loginStatus) }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.loginStatus) }
+    }
+
+    var autoLoginOption: Bool {
+        get { UserDefaults.standard.bool(forKey: UserDefaultsKeys.autoLoginOption) }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.autoLoginOption) }
+    }
+
+    var rememberIDOption: Bool {
+        get { UserDefaults.standard.bool(forKey: UserDefaultsKeys.rememberIDOption) }
+        set { UserDefaults.standard.set(newValue, forKey: UserDefaultsKeys.rememberIDOption) }
+    }
  }

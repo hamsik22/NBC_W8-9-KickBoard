@@ -56,9 +56,9 @@ extension LoginViewController: LoginViewDelegate {
     func didAutoLoginOptionTapped() {
         loginView.autoLoginCheckBoxIsChecked.toggle()
         if loginView.autoLoginCheckBoxIsChecked {
-            UserDefaults.standard.set(true, forKey: UserDefaultsKeys.autoLoginOption)
+            UserDefaultsManager.shared.autoLoginOption = true
         } else {
-            UserDefaults.standard.set(false, forKey: UserDefaultsKeys.autoLoginOption)
+            UserDefaultsManager.shared.autoLoginOption = false
         }
     }
     
@@ -66,9 +66,9 @@ extension LoginViewController: LoginViewDelegate {
     func didRememberIDOptionTapped(_ textField: UITextField) {
         loginView.rememberIDCheckBoxIsChecked.toggle()
         if loginView.rememberIDCheckBoxIsChecked {
-            UserDefaults.standard.set(true, forKey: UserDefaultsKeys.rememberIDOption)
+            UserDefaultsManager.shared.rememberIDOption = true
         } else {
-            UserDefaults.standard.set(false, forKey: UserDefaultsKeys.rememberIDOption)
+            UserDefaultsManager.shared.rememberIDOption = false
         }
     }
     
@@ -116,7 +116,7 @@ extension LoginViewController {
     }
     // 로그인 시 동작할 함수
     private func login() {
-        UserDefaults.standard.set(true, forKey: UserDefaultsKeys.loginStatus)
+        UserDefaultsManager.shared.isLoggedIn = true
     }
     // 로그인 옵션에 따라 동작하는 함수
     private func processAuthOption() {
