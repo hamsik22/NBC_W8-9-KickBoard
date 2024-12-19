@@ -1,5 +1,5 @@
 //
-//  OnboadingPageView.swift
+//  OnboardingPageView.swift
 //  Quick-Kick
 //
 //  Created by 장상경 on 12/19/24.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class OnboadingPageView: UIView {
+final class OnboardingPageView: UIView {
     
     private let titleLabel = UILabel()
     
@@ -75,11 +75,11 @@ final class OnboadingPageView: UIView {
         self.startButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
         self.startButton.backgroundColor = UIColor.PersonalLight.hover
         self.startButton.layer.cornerRadius = 25
-        self.startButton.addTarget(self, action: #selector(popSelf), for: .touchUpInside)
+        self.startButton.addTarget(self, action: #selector(changeViewController), for: .touchUpInside)
         self.addSubview(self.startButton)
     }
     
-    @objc private func popSelf() {
+    @objc private func changeViewController() {
         DispatchQueue.main.async {
             UIView.transition(with: self.window!, duration: 0.5, options: .transitionCrossDissolve) {
                 self.window?.rootViewController = UINavigationController(rootViewController: ViewController())
