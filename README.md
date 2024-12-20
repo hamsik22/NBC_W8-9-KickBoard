@@ -122,7 +122,26 @@
 ## 🚨 트러블 슈팅
 
 
+## 🛠️ 1. Core Data Fetch 문제
+### 문제
+`MyPageViewController`에서 Core Data Fetch 이후 데이터가 `KickboardSectionView`와 `HistorySectionView`에 표시되지 않는 문제 발생.
 
+### 원인
+- Core Data Fetch 후 UI 갱신 로직이 누락됨.
+- Fetch한 데이터를 뷰로 전달하지 않음.
+
+### 해결
+Core Data에서 데이터를 Fetch한 후 `configureSections()` 메서드를 호출하여 데이터를 UI에 전달하고 갱신하도록 수정하였습니다.
+
+```swift
+private func loadKickboards() {
+    do {
+        kickboardData = try CoreDataManager.shared.context.fetch(Kickboard.fetchRequest())
+        configureSections() // Fetch 후 UI 갱신
+    } catch {
+        print("킥보드 데이터를 불러오는 데 실패했습니다: \(error)")
+    }
+}
 
 
 
