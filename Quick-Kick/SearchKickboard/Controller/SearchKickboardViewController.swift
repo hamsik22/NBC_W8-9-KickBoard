@@ -9,13 +9,15 @@ import UIKit
 final class SearchKickboardViewController: UIViewController {
     let searchKickboardView = SearchKickboardView()
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchKickboards()
+    }
+    
     override func loadView() {
         super.loadView()
-        
         searchKickboardView.searchKickboardMapView.rentKickboardModalView.alertDelegate = self
-        fetchKickboards()
         view = searchKickboardView
-        
     }
     
     private func fetchKickboards() {
