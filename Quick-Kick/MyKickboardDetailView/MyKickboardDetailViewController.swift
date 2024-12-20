@@ -76,6 +76,9 @@ final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate
                     guard let self else { return }
                     self.kickboardDetailView.deledteCell()
                     self.kickboardDetailView.reloadCellData()
+                    self.mode = .normal
+                    self.setupEditButton()
+                    self.setupViewConfiguration()
                 }
             } else {
                 self.mode = .normal

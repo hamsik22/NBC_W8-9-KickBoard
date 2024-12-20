@@ -50,7 +50,7 @@ final class KickboardTypeButton: UIView {
             self.quickboardNormalTypeButton.backgroundColor = .PersonalLight.active
             self.quickboardNormalTypeButton.isSelected = true
         }
-        self.registrationDelegate?.typeSeleted = true
+        self.registrationDelegate?.typeSelected = true
     }
 }
 
@@ -132,11 +132,11 @@ private extension KickboardTypeButton {
         if self.quickboardNormalTypeButton.isSelected {
             self.quickboardNormalTypeButton.backgroundColor = .clear
             self.quickboardNormalTypeButton.isSelected = false
-            self.registrationDelegate?.typeSeleted = false
+            self.registrationDelegate?.typeSelected = false
         } else {
             self.quickboardNormalTypeButton.backgroundColor = .PersonalLight.active
             self.quickboardNormalTypeButton.isSelected = true
-            self.registrationDelegate?.typeSeleted = true
+            self.registrationDelegate?.typeSelected = true
             self.registrationDelegate?.kickboardType = false
         }
         
@@ -150,11 +150,11 @@ private extension KickboardTypeButton {
         if self.quickboardSeatTypeButton.isSelected {
             self.quickboardSeatTypeButton.backgroundColor = .clear
             self.quickboardSeatTypeButton.isSelected = false
-            self.registrationDelegate?.typeSeleted = false
+            self.registrationDelegate?.typeSelected = false
         } else {
             self.quickboardSeatTypeButton.backgroundColor = .PersonalLight.active
             self.quickboardSeatTypeButton.isSelected = true
-            self.registrationDelegate?.typeSeleted = true
+            self.registrationDelegate?.typeSelected = true
             self.registrationDelegate?.kickboardType = true
         }
         

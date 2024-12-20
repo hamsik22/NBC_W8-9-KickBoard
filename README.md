@@ -239,5 +239,34 @@ private func loadKickboards() {
 AutoLayout 제약 조건을 조정하여 간격 및 마진을 통일하였습니다.
 
 
-
-
+=======
+## 🛠️ 9. UIButton offset 문제
+### 문제
+![Screenshot 2024-12-16 at 17 36 05](https://github.com/user-attachments/assets/deaa3c29-4a08-4040-98f6-03cb3f06ae77)
+<br>`systemImage`로 구성한 `UIButton`에 `backgroundColor`를 지정했을 때 자동으로 `Baseline offset`이 생겨 원치 않는 흰 테두리가 생기는 문제
+### 원인
+`Baseline offset`이 `UIButton`의 default임
+### 해결
+```swift
+button.imageView?.contentMode = .center
+```
+![Screenshot 2024-12-19 at 21 18 44](https://github.com/user-attachments/assets/1fc1c21e-800c-4178-b645-0a93e4395a2a)
+<br>버튼 내 이미지 뷰가 `button`의 `bounds`의 중앙에 있겠다는 명령으로, `baseline offset`을 무시하게 됨.
+## 3. addressLabel font 문제
+### 문제
+![Screenshot 2024-12-19 at 21 13 00](https://github.com/user-attachments/assets/850b4e6d-d689-4f3c-ae9a-58cb8713296a)
+<br>주소가 길어질 경우 `label.text`가 컨테이너 밖으로 벗어나는 문제
+### 원인
+- `label.font`가 정적인 값을 가짐
+- `label`의 `leading`과 `trailing`에 대한 제약조건이 걸려있지 않음
+### 해결
+```swift
+label.adjustsFontSizeToFitWidth = true
+```
+```swift
+addressLabel.snp.makeConstraints {
+    $0.leading.equalToSuperview().offset(8)
+    $0.trailing.equalToSuperview().offset(-8)
+}
+```
+![Screenshot 2024-12-19 at 21 20 28](https://github.com/user-attachments/assets/e1ef323e-1579-4f88-b063-b7a73f6a6e48)
