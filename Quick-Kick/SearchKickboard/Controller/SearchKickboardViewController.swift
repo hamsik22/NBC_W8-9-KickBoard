@@ -22,6 +22,13 @@ final class SearchKickboardViewController: UIViewController {
         let kickboards = CoreDataManager.shared.fetch()
         searchKickboardView.deliverKickboardsData(kickboards)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.navigationBar.backgroundColor = .clear
+    }
 }
 
 extension SearchKickboardViewController: RentKickboardModalViewAlertDelegate {

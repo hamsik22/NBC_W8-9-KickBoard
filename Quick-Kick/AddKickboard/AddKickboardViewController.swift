@@ -22,6 +22,13 @@ class AddKickboardViewController: UIViewController {
         containerView.setDelegate(self, addressRepository)
         containerView.modalViewDelegate = self
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.navigationBar.backgroundColor = .clear
+    }
 }
 
 extension AddKickboardViewController: MapViewDelegate, ModalViewDelegate {

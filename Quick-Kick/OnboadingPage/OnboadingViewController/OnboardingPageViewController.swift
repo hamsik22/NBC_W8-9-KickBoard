@@ -25,7 +25,7 @@ final class OnboardingPageViewController: UIViewController {
                                                        isButtonHidden: true)
         
         let thirdOnboardingView = OnboardingDataModel(title: "시작합시다!!",
-                                                      info: "퀵킥에 로그인하고\nQuick하게\n킥보드를 이용해요!!",
+                                                      info: "준비 되셨나요?\n지금 바로\nQuick하게\nKick보드를\n타러가요!!",
                                                       image: nil,
                                                       isButtonHidden: false)
         

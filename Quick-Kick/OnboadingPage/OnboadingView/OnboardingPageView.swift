@@ -23,12 +23,8 @@ final class OnboardingPageView: UIView {
     
     // MARK: - OnboardingPageView Initializer
     init(_ data: OnboardingDataModel) {
-        self.titleLabel.text = data.title
-        self.infoLabel.text = data.info
-        self.infoImageView.image = data.image
-        self.startButton.isHidden = data.isButtonHidden
-        
         super.init(frame: .infinite)
+        changedData(data)
         
         configUI()
     }
@@ -40,8 +36,8 @@ final class OnboardingPageView: UIView {
     /// 현재 뷰의 표시 데이터를 변경하는 메소드
     /// - Parameter data: 데이터 모델
     func changedData(_ data: OnboardingDataModel) {
-        self.titleLabel.text = data.title
-        self.infoLabel.text = data.info
+        self.titleLabel.attributedText = infoLabelConfig(data.title)
+        self.infoLabel.attributedText = infoLabelConfig(data.info)
         self.infoImageView.image = data.image
         self.startButton.isHidden = data.isButtonHidden
         self.layoutIfNeeded()
@@ -50,6 +46,37 @@ final class OnboardingPageView: UIView {
 
 // MARK: - OnboardingPageView UI Setting Method
 private extension OnboardingPageView {
+    
+    func infoLabelConfig(_ text: String) -> NSMutableAttributedString {
+        if text.contains("Kick") {
+            let fullText = text
+            let boldPart = "Quick"
+            let target = "Kick"
+            
+            let attributedString = NSMutableAttributedString(string: fullText)
+            
+            let boldFont = UIFont.systemFont(ofSize: 20, weight: .black)
+            let range = (fullText as NSString).range(of: boldPart)
+            attributedString.addAttribute(.font, value: boldFont, range: range)
+            
+            let targetFont = UIFont.systemFont(ofSize: 20, weight: .black)
+            let targetrange = (fullText as NSString).range(of: target)
+            attributedString.addAttribute(.font, value: targetFont, range: targetrange)
+            
+            return attributedString
+        }
+        
+        let fullText = text
+        let boldPart = "Quick"
+        
+        let attributedString = NSMutableAttributedString(string: fullText)
+        
+        let boldFont = UIFont.systemFont(ofSize: 20, weight: .black)
+        let range = (fullText as NSString).range(of: boldPart)
+        attributedString.addAttribute(.font, value: boldFont, range: range)
+        
+        return attributedString
+    }
     
     /// 온보딩 뷰의 모든 UI를 세팅하는 메소드
     func configUI() {

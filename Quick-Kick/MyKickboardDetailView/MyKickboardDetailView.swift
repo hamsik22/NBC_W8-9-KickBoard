@@ -11,12 +11,17 @@ import SnapKit
 protocol MyKickboardDetailViewDelegate: AnyObject {
     func getKickboardsCount() -> Int
     func getKickboards() -> [Kickboard]
+    func deleteKickboard(_ items: [Kickboard])
 }
 
 final class MyKickboardDetailView: UIView {
     
     weak var modalViewDelegate: ModalViewDelegate?
     weak var delegate: MyKickboardDetailViewDelegate?
+    
+    var mode: ViewMode = .normal
+    
+    private var selectedItem: Set<Kickboard> = []
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -67,6 +72,10 @@ final class MyKickboardDetailView: UIView {
             self.collectionView.reloadData()
         }
     }
+    
+    func deledteCell() {
+        self.delegate?.deleteKickboard(Array(self.selectedItem))
+    }
 }
 
 extension MyKickboardDetailView: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -85,18 +94,40 @@ extension MyKickboardDetailView: UICollectionViewDelegate, UICollectionViewDataS
         
         let kickboard = kickboards[indexPath.item]
         
-        cell.insertKickboardImage(type: kickboard.isSaddled)
-        cell.updateKickboardInfo(nickName: kickboard.nickName, location: kickboard.address)
+        switch self.mode {
+        case .normal:
+            cell.insertKickboardImage(type: kickboard.isSaddled)
+            cell.updateKickboardInfo(nickName: kickboard.nickName, location: kickboard.address)
+        case .edit:
+            let isSelected: Bool = self.selectedItem.contains(kickboard)
+            
+            cell.insertKickboardImage(type: kickboard.isSaddled)
+            cell.editingCell(nickName: kickboard.nickName, location: kickboard.address, isSelected: isSelected)
+        }
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
         guard
             let kickboard = delegate?.getKickboards()[indexPath.item],
             let nickName = kickboard.nickName
         else { return }
-        self.modalViewDelegate?.editKickboardModalView(kickboard.isSaddled, nickName, kickboard.objectID)
+        
+        switch self.mode {
+        case .normal:
+            self.modalViewDelegate?.editKickboardModalView(kickboard.isSaddled, nickName, kickboard.objectID)
+        case .edit:
+            if self.selectedItem.contains(kickboard) {
+                self.selectedItem.remove(kickboard)
+                self.collectionView.reloadItems(at: [indexPath])
+            } else {
+                self.selectedItem.insert(kickboard)
+                self.collectionView.reloadItems(at: [indexPath])
+            }
+        }
+
     }
 }
 

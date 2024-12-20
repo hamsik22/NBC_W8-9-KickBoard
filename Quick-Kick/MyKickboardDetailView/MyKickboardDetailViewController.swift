@@ -9,17 +9,25 @@ import UIKit
 import SnapKit
 import CoreData
 
+enum ViewMode {
+    case normal
+    case edit
+}
+
 final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate {
     
     private let coreDataManager = CoreDataManager.shared
     
     private let kickboardDetailView = MyKickboardDetailView()
     
+    private var mode: ViewMode = .normal
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupViewConfiguration()
         setupDetailView()
+        setupEditButton()
         kickboardDetailView.delegate = self
     }
     
@@ -29,11 +37,44 @@ final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate
         view.backgroundColor = .white
         
         let naviTitle = UILabel()
-        naviTitle.text = "내 킥보드 관리"
+        naviTitle.text = self.mode == .normal ? "내 킥보드 관리" : "삭제할 킥보드 선택"
         naviTitle.textColor = .black
         naviTitle.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         self.navigationItem.titleView = naviTitle
         self.navigationController?.navigationBar.tintColor = .PersonalNomal.nomal
+    }
+    
+    private func setupEditButton() {
+        let buttonTitle = self.mode == .normal ? "편집" : "지우기"
+        let rightButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(onEditMode))
+        self.navigationItem.rightBarButtonItem = rightButton
+    }
+    
+    private func confirmDeleteDataAlert(on viewController: UIViewController, completion: @escaping () -> Void) {
+        let alert = UIAlertController(title: "경고", message: "정말 삭제 하시겠습니까?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "삭제", style: .destructive) { _ in
+            completion()
+        })
+        alert.addAction(UIAlertAction(title: "취소", style: .cancel))
+        viewController.present(alert, animated: true)
+    }
+    
+    @objc private func onEditMode() {
+        switch self.mode {
+        case .normal:
+            self.kickboardDetailView.mode = .edit
+            self.mode = .edit
+            setupEditButton()
+            setupViewConfiguration()
+            self.kickboardDetailView.reloadCellData()
+        case .edit:
+            confirmDeleteDataAlert(on: self) { [weak self] in
+                guard let self else { return }
+                self.kickboardDetailView.deledteCell()
+                self.kickboardDetailView.reloadCellData()
+            }
+        }
+
     }
     
     private func setupDetailView() {
@@ -66,6 +107,12 @@ final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate
 }
 
 extension MyKickboardDetailViewController: MyKickboardDetailViewDelegate {
+    func deleteKickboard(_ items: [Kickboard]) {
+        items.forEach {
+            coreDataManager.delete($0)
+        }
+    }
+    
     func getKickboardsCount() -> Int {
         coreDataManager.fetchMyKickboards().count
     }
