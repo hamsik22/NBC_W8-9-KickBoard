@@ -12,6 +12,7 @@ protocol MyKickboardDetailViewDelegate: AnyObject {
     func getKickboardsCount() -> Int
     func getKickboards() -> [Kickboard]
     func deleteKickboard(_ items: [Kickboard])
+    func getSelectItemCount(_ items: Int)
 }
 
 final class MyKickboardDetailView: UIView {
@@ -75,6 +76,7 @@ final class MyKickboardDetailView: UIView {
     
     func deledteCell() {
         self.delegate?.deleteKickboard(Array(self.selectedItem))
+        self.selectedItem.removeAll()
     }
 }
 
@@ -121,9 +123,11 @@ extension MyKickboardDetailView: UICollectionViewDelegate, UICollectionViewDataS
         case .edit:
             if self.selectedItem.contains(kickboard) {
                 self.selectedItem.remove(kickboard)
+                self.delegate?.getSelectItemCount(self.selectedItem.count)
                 self.collectionView.reloadItems(at: [indexPath])
             } else {
                 self.selectedItem.insert(kickboard)
+                self.delegate?.getSelectItemCount(self.selectedItem.count)
                 self.collectionView.reloadItems(at: [indexPath])
             }
         }

@@ -22,6 +22,8 @@ final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate
     
     private var mode: ViewMode = .normal
     
+    private var selectedItmeCount: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,7 +47,8 @@ final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate
     }
     
     private func setupEditButton() {
-        let buttonTitle = self.mode == .normal ? "편집" : "지우기"
+        let editTitle = self.selectedItmeCount > 0 ? "\(self.selectedItmeCount)개 지우기" : "취소"
+        let buttonTitle = self.mode == .normal ? "편집" : editTitle
         let rightButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(onEditMode))
         self.navigationItem.rightBarButtonItem = rightButton
     }
@@ -68,10 +71,16 @@ final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate
             setupViewConfiguration()
             self.kickboardDetailView.reloadCellData()
         case .edit:
-            confirmDeleteDataAlert(on: self) { [weak self] in
-                guard let self else { return }
-                self.kickboardDetailView.deledteCell()
-                self.kickboardDetailView.reloadCellData()
+            if self.selectedItmeCount > 0 {
+                confirmDeleteDataAlert(on: self) { [weak self] in
+                    guard let self else { return }
+                    self.kickboardDetailView.deledteCell()
+                    self.kickboardDetailView.reloadCellData()
+                }
+            } else {
+                self.mode = .normal
+                setupEditButton()
+                setupViewConfiguration()
             }
         }
 
@@ -107,6 +116,11 @@ final class MyKickboardDetailViewController: UIViewController, ModalViewDelegate
 }
 
 extension MyKickboardDetailViewController: MyKickboardDetailViewDelegate {
+    func getSelectItemCount(_ items: Int) {
+        self.selectedItmeCount = items
+        self.setupEditButton()
+    }
+    
     func deleteKickboard(_ items: [Kickboard]) {
         items.forEach {
             coreDataManager.delete($0)
