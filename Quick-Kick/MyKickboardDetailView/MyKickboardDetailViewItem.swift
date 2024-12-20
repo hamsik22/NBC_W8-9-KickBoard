@@ -112,4 +112,9 @@ final class MyKickboardDetailViewItem: UICollectionViewCell {
         self.kickboardLocationView.text = location
         self.layoutIfNeeded()
     }
+    
+    func editingCell(nickName: String?, location: String?, isSelected: Bool) {
+        updateKickboardInfo(nickName: nickName, location: location)
+        self.backgroundColor = isSelected ? UIColor.PersonalNomal.nomal : UIColor.PersonalLight.light
+    }
 }
