@@ -142,8 +142,101 @@ private func loadKickboards() {
         print("킥보드 데이터를 불러오는 데 실패했습니다: \(error)")
     }
 }
+```
 
 
+---
+
+## 🛠️ 2. UserDefaults 데이터 초기화 문제
+### 문제
+`ProfileView`에서 사용자 정보가 항상 초기값("User1", "user1234@gmail.com")으로 표시되는 문제 발생.
+
+### 원인
+- `UserDefaultsManager`의 `getUser()` 메서드 호출 누락.
+- 사용자 정보 저장 로직이 제대로 작동하지 않음.
+
+### 해결
+`UserDefaultsManager`를 통해 사용자 정보를 가져오고 닉네임 변경 시 데이터를 저장하도록 수정하였습니다.
+
+
+
+
+---
+
+## 🛠️ 3. 더미 데이터 UI 반영 문제
+### 문제
+`HistorySectionView`에 전달한 더미 데이터가 UI에 표시되지 않는 문제 발생.
+
+### 원인
+- `HistorySectionView`의 `configure(with:)` 메서드가 호출되지 않음.
+
+### 해결
+`configure(with:)` 메서드를 호출하여 더미 데이터를 전달하고 UI를 업데이트하도록 수정하였습니다.
+
+
+---
+
+## 🛠️ 4. KickboardSectionView 버튼 액션 문제
+### 문제
+"내가 등록한 킥보드 >" 버튼 클릭 시 상세 화면으로 이동하지 않는 문제 발생.
+
+### 원인
+- `KickboardSectionView`의 `configure` 메서드에서 `onTap` 클로저 설정이 누락됨.
+
+### 해결
+클로저를 설정하여 버튼 클릭 시 상세 화면으로 이동하도록 구현하였습니다.
+
+
+---
+
+## 🛠️ 5. Core Data 데이터 필터링 문제
+### 문제
+"내가 등록한 킥보드"에서 올바른 데이터가 표시되지 않는 문제 발생.
+
+### 원인
+- Core Data Fetch Request에서 `NSPredicate` 설정이 누락됨.
+
+### 해결
+`isOccupied` 필터를 추가하여 Fetch된 데이터가 올바르게 필터링되도록 수정하였습니다.
+
+
+---
+
+## 🛠️ 6. ModalViewDelegate 미구현 문제
+### 문제
+`ModalViewDelegate` 프로토콜의 필수 메서드가 구현되지 않아 컴파일 오류가 발생.
+
+### 원인
+- `AddKickboardViewController`와 `MyKickboardDetailViewController`에서 필수 메서드가 누락됨.
+
+### 해결
+필수 메서드를 구현하여 컴파일 오류를 해결하였습니다.
+
+
+---
+
+## 🛠️ 7. 로그아웃 후 화면 전환 문제
+### 문제
+로그아웃 이후 로그인 화면으로 전환되지 않는 문제 발생.
+
+### 원인
+- 로그아웃 후 새로운 Root View Controller 설정 누락.
+
+### 해결
+`LoginViewController`를 Root View Controller로 설정하여 로그아웃 이후 화면이 전환되도록 구현하였습니다.
+
+
+---
+
+## 🛠️ 8. UI 레이아웃 문제
+### 문제
+`HistorySectionView`와 `KickboardSectionView`의 UI 간격 및 레이아웃이 어긋나는 문제 발생.
+
+### 원인
+- AutoLayout 제약 조건에서 상하 간격 및 좌우 마진이 통일되지 않음.
+
+### 해결
+AutoLayout 제약 조건을 조정하여 간격 및 마진을 통일하였습니다.
 
 
 
