@@ -12,6 +12,9 @@ final class SearchKickboardViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchKickboards()
+        
+        self.navigationController?.navigationBar.isHidden = false
+        self.navigationController?.navigationBar.backgroundColor = .clear
     }
     
     override func loadView() {
@@ -23,13 +26,6 @@ final class SearchKickboardViewController: UIViewController {
     private func fetchKickboards() {
         let kickboards = CoreDataManager.shared.fetch()
         searchKickboardView.deliverKickboardsData(kickboards)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.navigationController?.navigationBar.isHidden = false
-        self.navigationController?.navigationBar.backgroundColor = .clear
     }
 }
 
