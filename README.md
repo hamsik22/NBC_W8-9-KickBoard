@@ -357,3 +357,32 @@ func editKickboardData(_ type: Bool, _ text: String, _ id: NSManagedObjectID) {
     self.addButton.activateButton(true)
 }
 ```
+
+## 🛠️ 13. 로그인 옵션 버튼 활성화
+![image](https://github.com/user-attachments/assets/6f4f8628-64ce-4d2f-86a4-bc4e4c472557)
+
+
+### 문제
+로그인 버튼은 `UIButton`인데 체크박스는 `UIImageView`이다.    
+따라서, 체크박스를 터치해도 아무 동작이 이루어지지 않는다.    
+하지만 사용자에게는 혼동을 줄 수 있는 부분이다.
+
+그럼 왜 처음부터 이것을 `UIButton`으로 만들지 않았는가? 라는 의문이 든다.
+`UIButton`의 `setImage()`, `setTitle()`를 사용해서 만들면 간단했겠지만
+와이어프레임에 나와있는 UI에서는 버튼과 텍스트의 위치가 다르다.
+
+따라서, 오토레이아웃을 통해서 위치를 배정하기 위해 
+`UIButton`과 `UIImageView`를 사용했었다.
+
+### 해결
+`UIView`를 생성하고 `UILabel`, `UIImageView`를 서브 뷰로 추가하고
+`UITapGestureRecognizer`를 통해서 사용자의 화면 터치를 감지한다.
+이를 `addTapGesture()`에 액션 함수로 추가하여서
+해당 영역이 터치가 되면 버튼처럼 함수를 동작한다.
+
+```swift
+let autoLoginOptionTapGesture = UITapGestureRecognizer(target: self, action: #selector(autoLoginOptionTapped))
+let rememberIDOptionTapGesture = UITapGestureRecognizer(target: self, action: #selector(rememberIDOptionTapped))
+autoLoginOption.addGestureRecognizer(autoLoginOptionTapGesture)
+rememberIDOption.addGestureRecognizer(rememberIDOptionTapGesture)
+```
