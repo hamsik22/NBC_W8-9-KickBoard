@@ -238,8 +238,8 @@ private func loadKickboards() {
 ### 해결
 AutoLayout 제약 조건을 조정하여 간격 및 마진을 통일하였습니다.
 
+---
 
-=======
 ## 🛠️ 9. UIButton offset 문제
 ### 문제
 ![Screenshot 2024-12-16 at 17 36 05](https://github.com/user-attachments/assets/deaa3c29-4a08-4040-98f6-03cb3f06ae77)
@@ -252,7 +252,10 @@ button.imageView?.contentMode = .center
 ```
 ![Screenshot 2024-12-19 at 21 18 44](https://github.com/user-attachments/assets/1fc1c21e-800c-4178-b645-0a93e4395a2a)
 <br>버튼 내 이미지 뷰가 `button`의 `bounds`의 중앙에 있겠다는 명령으로, `baseline offset`을 무시하게 됨.
-## 3. addressLabel font 문제
+
+---
+
+## 🛠️ 10. addressLabel font 문제
 ### 문제
 ![Screenshot 2024-12-19 at 21 13 00](https://github.com/user-attachments/assets/850b4e6d-d689-4f3c-ae9a-58cb8713296a)
 <br>주소가 길어질 경우 `label.text`가 컨테이너 밖으로 벗어나는 문제
@@ -273,7 +276,7 @@ addressLabel.snp.makeConstraints {
 
 ---
 
-## 🛠️ 10. 터치 이벤트 전달 문제
+## 🛠️ 11. 터치 이벤트 전달 문제
 ### 문제
 
 ![](https://velog.velcdn.com/images/myungjilee/post/5fe4146c-b37b-478d-a844-d48ca953f375/image.gif)
@@ -302,4 +305,55 @@ addressLabel.snp.makeConstraints {
 
         return super.hitTest(point, with: event)
     }
+```
+---
+
+## 🛠️ 12. 상세 페이지에서 데이터 수정 시 모달 버튼 비활성화 버그
+
+### 문제
+
+- 상세페이지에서 수정을 위해 모달뷰를 열면 해당 킥보드에 대한 정보(닉네임, 타입 등)를 가져오는데, 데이터를 수정해도 '등록하기' 버튼이 비활성화 되는 버그
+- 텍스트 필드(닉네임)를 지우는 행동을 하면 버튼이 활성화 되는 현상 확인
+- 타입 버튼을 선택해도 버튼은 비활성화 상태
+
+### 원인
+
+원인을 이해하려면 우선 '등록하기' 버튼의 활성화 조건을 이해해야 하는데, '등록하기' 버튼은 '닉네임' 텍스트 필드가 채워져 있고, '킥보드 타입'이 선택되어 있을 때 활성화 된다.
+```swift
+/// 등록하기 버튼을 활성화 하는 메소드
+func activateButton() {
+    guard self.typeSelected, self.haveNickNameText else {
+        self.addButton.activateButton(false)
+        return
+    }
+        
+    self.addButton.activateButton(true)
+}
+```
+이 때, `typeSelected`와 `haveNickNameText`는 델리게이트가 가진 프로토콜이고, 닉네임 텍스트 필드의 텍스트 수가 0보다 크고 킥보드 타입이 선택 되어 있을 때 `true`로 설정된다.
+왜 활성화가 안될까 싶어서 브레이크 포인트를 걸고 출력을 해봤는데...
+
+![스크린샷 2024-12-20 11 43 13](https://github.com/user-attachments/assets/059837c9-2731-4b16-8060-920cd58c51e7)
+
+조건이 충족되지 않는 모습을 볼 수 있었다.
+분명 메소드를 통해 `Bool` 값을 바꿔주도록 했는데 제대로 작동이 되질 않는다...
+
+### 해결
+
+메소드를 수정해보고 값도 수정해 보고 여러 시도를 했지만 제대로 동작하지 않아서
+결국 직접 값을 수정하도록 메소드를 수정하였다.
+
+```swift
+/// 내 킥보드 관리에서 cell을 탭했을 때 킥보드 유형과 별명을 전달 받는 메소드
+func editKickboardData(_ type: Bool, _ text: String, _ id: NSManagedObjectID) {
+    self.kickboardID = id
+    self._sendNickName = text
+    self._kickboardType = type
+    self._haveNickNameText = true
+    self._typeSelected = true
+    self.typeButton.updateData(type)
+    self.textField.updateData(text)
+    self.addButton.modalMode = .edit
+    self.addButton.activateButton(true)
+}
 ```
