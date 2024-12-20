@@ -270,3 +270,36 @@ addressLabel.snp.makeConstraints {
 }
 ```
 ![Screenshot 2024-12-19 at 21 20 28](https://github.com/user-attachments/assets/e1ef323e-1579-4f88-b063-b7a73f6a6e48)
+
+---
+
+## 🛠️ 10. 터치 이벤트 전달 문제
+### 문제
+
+![](https://velog.velcdn.com/images/myungjilee/post/5fe4146c-b37b-478d-a844-d48ca953f375/image.gif)
+
+`SearchLocationBarView`에서 `searchResultsTableView`의 `cell`을 터치해도 터치 이벤트 메서드가 호출되지 않는 문제.
+
+
+### 원인
+- 터치 이벤트가 `searchResultsTableView`의 `cell`로 전달되는 것이 아니라 다른 뷰로 전달되는 것.
+
+### 해결
+- hitTest를 오버라이드 해 터치가 `searchResultsTableView`의 `cell` 영역 내에 발생하면 해당 뷰로 이벤트 전달하도록 수정.
+
+```swift
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if !searchResultsTableView.isHidden {
+            let convertedPoint = convert(point, to: searchResultsTableView)
+
+            if searchResultsTableView.bounds.contains(convertedPoint) {
+                if let hitView = searchResultsTableView.hitTest(convertedPoint, with: event) {
+                    print("TableView cell hit at point: \(point)")
+                    return hitView
+                }
+            }
+        }
+
+        return super.hitTest(point, with: event)
+    }
+```
