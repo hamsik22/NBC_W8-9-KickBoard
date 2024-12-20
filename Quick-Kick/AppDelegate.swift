@@ -24,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func setInitialView() -> UIViewController {
         print("isLoggedIn:\(UserDefaultsManager.shared.isLoggedIn)")
         print("autoLoginOption:\(UserDefaultsManager.shared.autoLoginOption)")
+        print("onboarded:\(UserDefaultsManager.shared.onboarded)")
         if UserDefaultsManager.shared.isLoggedIn {
             return ViewController()
         } else if UserDefaultsManager.shared.autoLoginOption {

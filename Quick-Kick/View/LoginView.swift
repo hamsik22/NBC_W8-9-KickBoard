@@ -247,6 +247,15 @@ extension LoginView {
         }
     }
     
+    func changeViewController() {
+        UserDefaultsManager.shared.onboarded = true
+        DispatchQueue.main.async {
+            UIView.transition(with: self.window!, duration: 0.5, options: .transitionCrossDissolve) {
+                self.window?.rootViewController = UINavigationController(rootViewController: ViewController())
+            }
+        }
+    }
+    
     // 회원가입 터치
     @objc func signupButtonTapped() {
         delegate?.didSignUpButtonTapped()

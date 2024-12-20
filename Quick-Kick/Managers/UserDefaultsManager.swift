@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Key 관리 열거형
 enum UserDefaultsKeys {
-    static let user = "user"
+    static let user = "User"
     static let loginStatus = "LoginStatus"
     static let autoLoginOption = "AutoLoginOption"
     static let rememberIDOption = "RememberIDOption"
@@ -71,7 +71,7 @@ extension UserDataManageable {
 struct User: Codable {
     var email: String
     var password: String
-    var nickName: String = "User1"
+    var nickName: String = "4과해요나한테"
 }
 
 // MARK: - UserDefaultsManager
