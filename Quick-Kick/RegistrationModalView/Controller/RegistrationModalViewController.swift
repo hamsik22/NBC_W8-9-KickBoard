@@ -16,7 +16,7 @@ final class RegistrationModalViewController: UIViewController {
     private var longitude: Double?
     private var address: String?
     
-    private var _typeSeleted: Bool = false
+    private var _typeSelected: Bool = false
     private var _haveNickNameText: Bool = false
     private var _sendNickName: String?
     private var _kickboardType: Bool?
@@ -108,7 +108,7 @@ final class RegistrationModalViewController: UIViewController {
         self._sendNickName = text
         self._kickboardType = type
         self._haveNickNameText = true
-        self._typeSeleted = true
+        self._typeSelected = true
         self.typeButton.updateData(type)
         self.textField.updateData(text)
         self.addButton.modalMode = .edit
@@ -164,9 +164,9 @@ extension RegistrationModalViewController: RegistrationViewDelegate {
         }
     }
     
-    var typeSeleted: Bool {
-        get { return self._typeSeleted }
-        set { self._typeSeleted = newValue }
+    var typeSelected: Bool {
+        get { return self._typeSelected }
+        set { self._typeSelected = newValue }
     }
     
     var haveNickNameText: Bool {
@@ -176,7 +176,7 @@ extension RegistrationModalViewController: RegistrationViewDelegate {
     
     /// 등록하기 버튼을 활성화 하는 메소드
     func activateButton() {
-        guard self.typeSeleted, self.haveNickNameText else {
+        guard self.typeSelected, self.haveNickNameText else {
             self.addButton.activateButton(false)
             return
         }
