@@ -71,7 +71,7 @@ extension UserDataManageable {
 struct User: Codable {
     var email: String
     var password: String
-    var nickName: String = "4과해요나한테"
+    var nickName: String = "킥보드무4고"
 }
 
 // MARK: - UserDefaultsManager
