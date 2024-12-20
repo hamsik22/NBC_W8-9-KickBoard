@@ -87,8 +87,10 @@ class MyPageViewController: UIViewController {
     
     // MARK: - Configure Sections
     private func configureSections() {
+        
+        guard let user = UserDefaultsManager.shared.getUser() else { return }
         // 프로필 설정
-        profileView.configure(name: "User1", email: "user1234@gmail.com")
+        profileView.configure(name: user.nickName, email: user.email)
         
         // 내가 등록한 킥보드 섹션
         kickboardSectionView.configure {
@@ -99,9 +101,9 @@ class MyPageViewController: UIViewController {
         
         // 히스토리 섹션 더미 데이터 설정
         let dummyHistories = [
-            ("24.12.01", "15:00 - 15:30"),
-            ("24.12.01", "15:00 - 15:30"),
-            ("24.12.01", "15:00 - 15:30")
+            ("24.12.19", "08:30 - 09:00"),
+            ("24.12.19", "15:00 - 15:30"),
+            ("24.12.20", "03:00 - 04:00")
         ]
         historySectionView.configure(with: dummyHistories)
     }

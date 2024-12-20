@@ -56,7 +56,11 @@ extension LoginViewController: LoginViewDelegate {
         
         if isCorrectInfo(email: email, password: password) {
             login()
-            loginView.showOnboardingPage()
+            if !UserDefaultsManager.shared.onboarded {
+                loginView.showOnboardingPage()
+            } else {
+                loginView.changeViewController()
+            }
         } else {
             showAlert(message: "입력 값을 확인해주세요!")
             print("로그인 실패")
