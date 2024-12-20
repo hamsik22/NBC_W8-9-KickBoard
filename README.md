@@ -143,7 +143,104 @@ private func loadKickboards() {
     }
 }
 ```
-## 🛠️ 2. UIButton offset 문제
+
+
+---
+
+## 🛠️ 2. UserDefaults 데이터 초기화 문제
+### 문제
+`ProfileView`에서 사용자 정보가 항상 초기값("User1", "user1234@gmail.com")으로 표시되는 문제 발생.
+
+### 원인
+- `UserDefaultsManager`의 `getUser()` 메서드 호출 누락.
+- 사용자 정보 저장 로직이 제대로 작동하지 않음.
+
+### 해결
+`UserDefaultsManager`를 통해 사용자 정보를 가져오고 닉네임 변경 시 데이터를 저장하도록 수정하였습니다.
+
+
+
+
+---
+
+## 🛠️ 3. 더미 데이터 UI 반영 문제
+### 문제
+`HistorySectionView`에 전달한 더미 데이터가 UI에 표시되지 않는 문제 발생.
+
+### 원인
+- `HistorySectionView`의 `configure(with:)` 메서드가 호출되지 않음.
+
+### 해결
+`configure(with:)` 메서드를 호출하여 더미 데이터를 전달하고 UI를 업데이트하도록 수정하였습니다.
+
+
+---
+
+## 🛠️ 4. KickboardSectionView 버튼 액션 문제
+### 문제
+"내가 등록한 킥보드 >" 버튼 클릭 시 상세 화면으로 이동하지 않는 문제 발생.
+
+### 원인
+- `KickboardSectionView`의 `configure` 메서드에서 `onTap` 클로저 설정이 누락됨.
+
+### 해결
+클로저를 설정하여 버튼 클릭 시 상세 화면으로 이동하도록 구현하였습니다.
+
+
+---
+
+## 🛠️ 5. Core Data 데이터 필터링 문제
+### 문제
+"내가 등록한 킥보드"에서 올바른 데이터가 표시되지 않는 문제 발생.
+
+### 원인
+- Core Data Fetch Request에서 `NSPredicate` 설정이 누락됨.
+
+### 해결
+`isOccupied` 필터를 추가하여 Fetch된 데이터가 올바르게 필터링되도록 수정하였습니다.
+
+
+---
+
+## 🛠️ 6. ModalViewDelegate 미구현 문제
+### 문제
+`ModalViewDelegate` 프로토콜의 필수 메서드가 구현되지 않아 컴파일 오류가 발생.
+
+### 원인
+- `AddKickboardViewController`와 `MyKickboardDetailViewController`에서 필수 메서드가 누락됨.
+
+### 해결
+필수 메서드를 구현하여 컴파일 오류를 해결하였습니다.
+
+
+---
+
+## 🛠️ 7. 로그아웃 후 화면 전환 문제
+### 문제
+로그아웃 이후 로그인 화면으로 전환되지 않는 문제 발생.
+
+### 원인
+- 로그아웃 후 새로운 Root View Controller 설정 누락.
+
+### 해결
+`LoginViewController`를 Root View Controller로 설정하여 로그아웃 이후 화면이 전환되도록 구현하였습니다.
+
+
+---
+
+## 🛠️ 8. UI 레이아웃 문제
+### 문제
+`HistorySectionView`와 `KickboardSectionView`의 UI 간격 및 레이아웃이 어긋나는 문제 발생.
+
+### 원인
+- AutoLayout 제약 조건에서 상하 간격 및 좌우 마진이 통일되지 않음.
+
+### 해결
+AutoLayout 제약 조건을 조정하여 간격 및 마진을 통일하였습니다.
+
+---
+
+## 🛠️ 9. UIButton offset 문제
 ### 문제
 ![Screenshot 2024-12-16 at 17 36 05](https://github.com/user-attachments/assets/deaa3c29-4a08-4040-98f6-03cb3f06ae77)
 <br>`systemImage`로 구성한 `UIButton`에 `backgroundColor`를 지정했을 때 자동으로 `Baseline offset`이 생겨 원치 않는 흰 테두리가 생기는 문제
@@ -155,7 +252,10 @@ button.imageView?.contentMode = .center
 ```
 ![Screenshot 2024-12-19 at 21 18 44](https://github.com/user-attachments/assets/1fc1c21e-800c-4178-b645-0a93e4395a2a)
 <br>버튼 내 이미지 뷰가 `button`의 `bounds`의 중앙에 있겠다는 명령으로, `baseline offset`을 무시하게 됨.
-## 3. addressLabel font 문제
+
+---
+
+## 🛠️ 10. addressLabel font 문제
 ### 문제
 ![Screenshot 2024-12-19 at 21 13 00](https://github.com/user-attachments/assets/850b4e6d-d689-4f3c-ae9a-58cb8713296a)
 <br>주소가 길어질 경우 `label.text`가 컨테이너 밖으로 벗어나는 문제
@@ -173,3 +273,87 @@ addressLabel.snp.makeConstraints {
 }
 ```
 ![Screenshot 2024-12-19 at 21 20 28](https://github.com/user-attachments/assets/e1ef323e-1579-4f88-b063-b7a73f6a6e48)
+
+---
+
+## 🛠️ 11. 터치 이벤트 전달 문제
+### 문제
+
+![](https://velog.velcdn.com/images/myungjilee/post/5fe4146c-b37b-478d-a844-d48ca953f375/image.gif)
+
+`SearchLocationBarView`에서 `searchResultsTableView`의 `cell`을 터치해도 터치 이벤트 메서드가 호출되지 않는 문제.
+
+
+### 원인
+- 터치 이벤트가 `searchResultsTableView`의 `cell`로 전달되는 것이 아니라 다른 뷰로 전달되는 것.
+
+### 해결
+- hitTest를 오버라이드 해 터치가 `searchResultsTableView`의 `cell` 영역 내에 발생하면 해당 뷰로 이벤트 전달하도록 수정.
+
+```swift
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if !searchResultsTableView.isHidden {
+            let convertedPoint = convert(point, to: searchResultsTableView)
+
+            if searchResultsTableView.bounds.contains(convertedPoint) {
+                if let hitView = searchResultsTableView.hitTest(convertedPoint, with: event) {
+                    print("TableView cell hit at point: \(point)")
+                    return hitView
+                }
+            }
+        }
+
+        return super.hitTest(point, with: event)
+    }
+```
+---
+
+## 🛠️ 12. 상세 페이지에서 데이터 수정 시 모달 버튼 비활성화 버그
+
+### 문제
+
+- 상세페이지에서 수정을 위해 모달뷰를 열면 해당 킥보드에 대한 정보(닉네임, 타입 등)를 가져오는데, 데이터를 수정해도 '등록하기' 버튼이 비활성화 되는 버그
+- 텍스트 필드(닉네임)를 지우는 행동을 하면 버튼이 활성화 되는 현상 확인
+- 타입 버튼을 선택해도 버튼은 비활성화 상태
+
+### 원인
+
+원인을 이해하려면 우선 '등록하기' 버튼의 활성화 조건을 이해해야 하는데, '등록하기' 버튼은 '닉네임' 텍스트 필드가 채워져 있고, '킥보드 타입'이 선택되어 있을 때 활성화 된다.
+```swift
+/// 등록하기 버튼을 활성화 하는 메소드
+func activateButton() {
+    guard self.typeSelected, self.haveNickNameText else {
+        self.addButton.activateButton(false)
+        return
+    }
+        
+    self.addButton.activateButton(true)
+}
+```
+이 때, `typeSelected`와 `haveNickNameText`는 델리게이트가 가진 프로토콜이고, 닉네임 텍스트 필드의 텍스트 수가 0보다 크고 킥보드 타입이 선택 되어 있을 때 `true`로 설정된다.
+왜 활성화가 안될까 싶어서 브레이크 포인트를 걸고 출력을 해봤는데...
+
+![스크린샷 2024-12-20 11 43 13](https://github.com/user-attachments/assets/059837c9-2731-4b16-8060-920cd58c51e7)
+
+조건이 충족되지 않는 모습을 볼 수 있었다.
+분명 메소드를 통해 `Bool` 값을 바꿔주도록 했는데 제대로 작동이 되질 않는다...
+
+### 해결
+
+메소드를 수정해보고 값도 수정해 보고 여러 시도를 했지만 제대로 동작하지 않아서
+결국 직접 값을 수정하도록 메소드를 수정하였다.
+
+```swift
+/// 내 킥보드 관리에서 cell을 탭했을 때 킥보드 유형과 별명을 전달 받는 메소드
+func editKickboardData(_ type: Bool, _ text: String, _ id: NSManagedObjectID) {
+    self.kickboardID = id
+    self._sendNickName = text
+    self._kickboardType = type
+    self._haveNickNameText = true
+    self._typeSelected = true
+    self.typeButton.updateData(type)
+    self.textField.updateData(text)
+    self.addButton.modalMode = .edit
+    self.addButton.activateButton(true)
+}
+```
