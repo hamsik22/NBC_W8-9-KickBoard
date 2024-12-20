@@ -146,7 +146,7 @@ private func loadKickboards() {
 ## 🛠️ 2. UIButton offset 문제
 ### 문제
 ![Screenshot 2024-12-16 at 17 36 05](https://github.com/user-attachments/assets/deaa3c29-4a08-4040-98f6-03cb3f06ae77)
-`systemImage`로 구성한 `UIButton`에 `backgroundColor`를 지정했을 때 자동으로 `Baseline offset`이 생겨 원치 않는 흰 테두리가 생기는 문제
+<br>`systemImage`로 구성한 `UIButton`에 `backgroundColor`를 지정했을 때 자동으로 `Baseline offset`이 생겨 원치 않는 흰 테두리가 생기는 문제
 ### 원인
 `Baseline offset`이 `UIButton`의 default임
 ### 해결
@@ -169,7 +169,7 @@ label.adjustsFontSizeToFitWidth = true
 ```swift
 addressLabel.snp.makeConstraints {
     $0.leading.equalToSuperview().offset(8)
-	$0.trailing.equalToSuperview().offset(-8)
+    $0.trailing.equalToSuperview().offset(-8)
 }
 ```
 ![Screenshot 2024-12-19 at 21 20 28](https://github.com/user-attachments/assets/e1ef323e-1579-4f88-b063-b7a73f6a6e48)
